@@ -129,10 +129,10 @@
 		5037BB60235AFF9600FCBB82 /* VK Client */ = {
 			isa = PBXGroup;
 			children = (
-				5037BB61235AFF9600FCBB82 /* AppDelegate.swift */,
-				5037BB63235AFF9600FCBB82 /* SceneDelegate.swift */,
 				5037BB67235AFF9600FCBB82 /* Main.storyboard */,
 				5037BB6C235AFF9D00FCBB82 /* LaunchScreen.storyboard */,
+				5037BB61235AFF9600FCBB82 /* AppDelegate.swift */,
+				5037BB63235AFF9600FCBB82 /* SceneDelegate.swift */,
 				5037BB6F235AFF9D00FCBB82 /* Info.plist */,
 				50783C7523C7397500623F66 /* News */,
 				50783C7423C7393F00623F66 /* Photo */,

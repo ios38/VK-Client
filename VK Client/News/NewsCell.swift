@@ -16,23 +16,17 @@ class NewsCell: UITableViewCell {
     @IBOutlet var newsDataLabel: UILabel!
     
     @IBOutlet var newsTextLabel: UILabel!
-    @IBOutlet var newsPhoto: UIImageView!
-    
-    @IBOutlet var likeButton: UIButton!
+    @IBOutlet var CollectionView: UICollectionView!
+        
+    @IBOutlet var likeImage: UIImageView!
     @IBOutlet var likeCountLabel: UILabel!
-    @IBOutlet var commentButton: UIButton!
-    @IBOutlet var commentCountLabel: UILabel!
-    @IBOutlet var shareButton: UIButton!
-    @IBOutlet var viewsCountLabel: UILabel!
-    
-    var isLiked = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         self.newsTextLabel.sizeToFit()
     }
-    
+    /*
     @IBAction func like(_ sender: Any) {
         isLiked.toggle()
         
@@ -46,6 +40,6 @@ class NewsCell: UITableViewCell {
                                 }
                             }, completion: nil)
 
-    }
+    }*/
 
 }
