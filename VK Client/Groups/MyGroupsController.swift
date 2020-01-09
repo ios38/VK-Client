@@ -115,129 +115,135 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             }
         }
         
-        //Добавление группы из AllGroupsController
-        @IBAction func addGroup(unwindSegue: UIStoryboardSegue) {
-            
-            if let sourseController = unwindSegue.source as? AllGroupsController,
-                let indexPath = sourseController.tableView.indexPathForSelectedRow {
-                let group = sourseController.groups[indexPath.row]
-                if !groups.contains(where: {$0.id == group.id}) {
-                    groups.append(group)
-                    try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .all)
-                    self.searchBar(searchBar, textDidChange: searchBar.text ?? "")
-                }
-            }
-        }
-    
-        //Обработка выбора группы:
-        //из секции 0 (группы пользователя): переход к новостям группы
-        //из секции 1 (глобальный поиск): добавление группы
-        override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            //guard indexPath.section == 1 else { return }
-            let group = sections[indexPath.section].items[indexPath.row]
-            switch indexPath.section {
-            case 0:
-                let ownerId = -group.id
-                NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
-                    switch result {
-                    case let .success(news):
-                        try? RealmService.save(items: news, configuration: RealmService.deleteIfMigration, update: .all)
-                        news.forEach {
-                            //print($0.albumId)
-                            self.updateCellWith($0.ownerId, $0.albumId)
-                        }
-                    case let .failure(error):
-                        print(error)
-                    }
-                }
-            case 1:
-                if !groups.contains(where: {$0.id == group.id}) {
-                    do {
-                        let realm = try Realm()
-                        try realm.write {
-                            realm.add(group)
-                        }
-                        print("Добавили \(group.name) в Realm")
-                    } catch {
-                        print(error)
-                    }
-                }
-            default:
-                return
-            }
-        }
+    //Добавление группы из AllGroupsController
+    @IBAction func addGroup(unwindSegue: UIStoryboardSegue) {
         
-        func updateCellWith(_ ownerId: Int, _ albumId: Int) {
-            NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
+        if let sourseController = unwindSegue.source as? AllGroupsController,
+            let indexPath = sourseController.tableView.indexPathForSelectedRow {
+            let group = sourseController.groups[indexPath.row]
+            if !groups.contains(where: {$0.id == group.id}) {
+                groups.append(group)
+                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .all)
+                self.searchBar(searchBar, textDidChange: searchBar.text ?? "")
+            }
+        }
+    }
+
+    //Обработка выбора группы:
+    //из секции 0 (группы пользователя): переход к новостям группы
+    //из секции 1 (глобальный поиск): добавление группы
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //guard indexPath.section == 1 else { return }
+        let group = sections[indexPath.section].items[indexPath.row]
+        switch indexPath.section {
+        case 0:
+            let ownerId = -group.id
+            NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
                 switch result {
-                case let .success(photos):
-                    photos.forEach {
-                    print($0.image)
-                    //try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+                case let .success(news):
+                    try? RealmService.save(items: news, configuration: RealmService.deleteIfMigration, update: .all)
+                    news.forEach {
+                        //print($0.albumId)
+                        self.updateCellWith($0.ownerId, $0.albumId)
                     }
+                    self.performSegue(withIdentifier: "Show News", sender: nil)
                 case let .failure(error):
                     print(error)
                 }
             }
-
-            //self.CollectionView.reloadData()
-        }
-    
-        //Локальный и глобальный поиск групп
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
-            print ("Очистка секции 'Глобальный поиск'")
-            sections[1].items.removeAll()
-            //self.globalGroups.removeAll()
-
-            
-            if searchText.isEmpty {
-                groups = Array(realmGroups)
-                currentGroups = groups
-                sections[0].items = currentGroups
-                self.tableView.reloadData()
-            } else {
-                groups = Array(realmGroups)
-                currentGroups = groups.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-                sections[0].items = currentGroups
-                
-                NetworkService.searchGroups(token: Session.shared.accessToken, searchText: searchText.lowercased()) { /*[weak self]*/ result in
-                    //quard let self = self else {return}
-                    switch result {
-                    case let .success(groups):
-                        
-                        for group in groups {
-                            if !self.groups.contains(where: {$0.id == group.id}){
-                                self.globalGroups.append(group)
-                            } else {
-                                print ("Группа \(group.name) уже есть")
-                            }
-                        }
-                        
-                        self.sections[1].items = self.globalGroups
-                        print ("globalGroups.count = \(self.globalGroups.count)")
-                        
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            print ("Очистка globalGroups")
-                            self.globalGroups.removeAll()
-                        }
-
-                    case let .failure(error):
-                        print(error)
+        case 1:
+            if !groups.contains(where: {$0.id == group.id}) {
+                do {
+                    let realm = try Realm()
+                    try realm.write {
+                        realm.add(group)
                     }
+                    print("Добавили \(group.name) в Realm")
+                } catch {
+                    print(error)
+                }
+            }
+        default:
+            return
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show News",
+            let destination = segue.destination as? NewsController,
+            let indexPath = tableView.indexPathForSelectedRow {
+            //Выбираем группу для передачи
+            guard indexPath.section == 0 else { return }
+            let group = sections[indexPath.section].items[indexPath.row]
+            //Передаем id друга
+            destination.ownerId = -group.id
+        }
+    }
+    
+    func updateCellWith(_ ownerId: Int, _ albumId: Int) {
+        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
+            switch result {
+            case let .success(photos):
+                print("Альбом \(albumId) получен")
+                //print($0.image)
+                //try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+            case let .failure(error):
+                print(error)
+            }
+        }
+
+        //self.CollectionView.reloadData()
+    }
+
+    //Локальный и глобальный поиск групп
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        print ("Очистка секции 'Глобальный поиск'")
+        sections[1].items.removeAll()
+        //self.globalGroups.removeAll()
+
+        
+        if searchText.isEmpty {
+            groups = Array(realmGroups)
+            currentGroups = groups
+            sections[0].items = currentGroups
+            self.tableView.reloadData()
+        } else {
+            groups = Array(realmGroups)
+            currentGroups = groups.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+            sections[0].items = currentGroups
+            
+            NetworkService.searchGroups(token: Session.shared.accessToken, searchText: searchText.lowercased()) { /*[weak self]*/ result in
+                //quard let self = self else {return}
+                switch result {
+                case let .success(groups):
+                    
+                    for group in groups {
+                        if !self.groups.contains(where: {$0.id == group.id}){
+                            self.globalGroups.append(group)
+                        } else {
+                            print ("Группа \(group.name) уже есть")
+                        }
+                    }
+                    
+                    self.sections[1].items = self.globalGroups
+                    print ("globalGroups.count = \(self.globalGroups.count)")
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        print ("Очистка globalGroups")
+                        self.globalGroups.removeAll()
+                    }
+
+                case let .failure(error):
+                    print(error)
                 }
             }
         }
-        /*
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            //print("Row selected: \(indexPath.row)")
-            performSegue(withIdentifier: "addGroup", sender: nil)
-        >}*/
-
+    }
     
     deinit {
         notificationToken?.invalidate()
     }
 
-    }
+}

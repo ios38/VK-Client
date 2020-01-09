@@ -9,11 +9,13 @@
 import UIKit
 
 class NewsController: UITableViewController {
+    public var ownerId = Int()
             
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
+        print("NewsController: ownerId: \(ownerId)")
     }
 
     // MARK: - Table view data source

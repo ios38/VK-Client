@@ -50,7 +50,7 @@ extension AllGroupsController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print("Row selected: \(indexPath.row)")
-        performSegue(withIdentifier: "addGroup", sender: nil)
+        performSegue(withIdentifier: "Add Group", sender: nil)
     }
     
     //Ищем группы

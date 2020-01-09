@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="u3j-ix-jYY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qLH-VZ-eiH">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
@@ -483,6 +483,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="U2c-iD-lpk" id="XKu-qJ-I9m"/>
+                        <segue destination="u3j-ix-jYY" kind="show" identifier="Show News" id="UHt-VE-GBq"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EPK-TQ-UsD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -520,7 +521,7 @@
                     <connections>
                         <outlet property="searchBar" destination="iIf-w3-E3W" id="rLK-2v-ixa"/>
                         <outlet property="tableView" destination="jJZ-Kx-hBX" id="8Ld-Rh-BJq"/>
-                        <segue destination="4ib-tx-8sn" kind="unwind" identifier="addGroup" unwindAction="addGroupWithUnwindSegue:" id="NRR-mw-HxY"/>
+                        <segue destination="4ib-tx-8sn" kind="unwind" identifier="Add Group" unwindAction="addGroupWithUnwindSegue:" id="NRR-mw-HxY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5hc-40-brG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
