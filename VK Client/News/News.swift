@@ -18,7 +18,7 @@ class RealmNews: Object {
     
     @objc dynamic var albumId = -1
 
-    @objc dynamic var image = ""
+    //@objc dynamic var image = ""
     //@objc dynamic var type = ""
     @objc dynamic var isLiked = -1
     @objc dynamic var likeCount = -1

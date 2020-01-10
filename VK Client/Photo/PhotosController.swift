@@ -12,7 +12,7 @@ import RealmSwift
 
 class PhotosController: UICollectionViewController {
     private var notificationToken: NotificationToken?
-    private let networkSrvice = NetworkService()
+    //private let networkSrvice = NetworkService()
     public var ownerId = Int()
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@", ownerId)

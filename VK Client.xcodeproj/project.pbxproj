@@ -175,10 +175,10 @@
 			isa = PBXGroup;
 			children = (
 				50C9AB042368529900269405 /* Photo.swift */,
+				5097C7C62364375E008DE79B /* PhotoCell.swift */,
+				507675C3238E75B1008448AA /* PhotosLayout.swift */,
 				5097C7C4236436B8008DE79B /* PhotosController.swift */,
 				507675C5238E7EEC008448AA /* BigPhotoController.swift */,
-				507675C3238E75B1008448AA /* PhotosLayout.swift */,
-				5097C7C62364375E008DE79B /* PhotoCell.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
