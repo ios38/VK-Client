@@ -72,6 +72,9 @@ extension VKLoginController: WKNavigationDelegate {
         }
         
         Session.shared.accessToken = token
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
+
         performSegue(withIdentifier: "Login Segue", sender: nil)
         
         decisionHandler(.cancel)

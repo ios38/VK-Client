@@ -9,11 +9,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsCell" id="KGk-i7-Jjw" customClass="NewsCell" customModule="VK_Client" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="445"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsCell" rowHeight="330" id="KGk-i7-Jjw" customClass="NewsCell" customModule="VK_Client" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="330"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="445"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="330"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oUt-ga-69R" userLabel="Owner View">
@@ -54,16 +54,16 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News Text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ssn-Kc-JMk" userLabel="News Text Label">
-                        <rect key="frame" x="5" y="49" width="310" height="25"/>
+                        <rect key="frame" x="5" y="49" width="310" height="35"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="iSx-uy-yLq">
-                        <rect key="frame" x="0.0" y="79" width="320" height="320"/>
+                        <rect key="frame" x="0.0" y="89" width="320" height="200"/>
                         <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="iSx-uy-yLq" secondAttribute="height" multiplier="1:1" id="TJw-bq-t60"/>
+                            <constraint firstAttribute="height" constant="200" id="HUT-Jc-PjW"/>
                         </constraints>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ThQ-5H-8lK">
                             <size key="itemSize" width="50" height="50"/>
@@ -71,9 +71,13 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
+                        <connections>
+                            <outlet property="dataSource" destination="KGk-i7-Jjw" id="Ze8-rK-Q6G"/>
+                            <outlet property="delegate" destination="KGk-i7-Jjw" id="MXn-y0-brA"/>
+                        </connections>
                     </collectionView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PWp-TU-G9h" userLabel="Control View">
-                        <rect key="frame" x="5" y="404" width="310" height="31"/>
+                        <rect key="frame" x="5" y="294" width="310" height="31"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="IfJ-IJ-sBx">
                                 <rect key="frame" x="5" y="3.5" width="27" height="24.5"/>
@@ -103,11 +107,11 @@
                     <constraint firstItem="iSx-uy-yLq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="2KH-4k-r7y"/>
                     <constraint firstItem="ssn-Kc-JMk" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="D6x-bU-ivZ"/>
                     <constraint firstItem="oUt-ga-69R" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="E4v-jd-Awb"/>
-                    <constraint firstAttribute="bottom" secondItem="PWp-TU-G9h" secondAttribute="bottom" constant="10" id="FKb-QV-ZDY"/>
                     <constraint firstItem="ssn-Kc-JMk" firstAttribute="top" secondItem="oUt-ga-69R" secondAttribute="bottom" constant="5" id="WAX-GZ-uTW"/>
                     <constraint firstAttribute="trailing" secondItem="ssn-Kc-JMk" secondAttribute="trailing" constant="5" id="jfv-cb-V16"/>
                     <constraint firstItem="PWp-TU-G9h" firstAttribute="top" secondItem="iSx-uy-yLq" secondAttribute="bottom" constant="5" id="k8g-14-MYw"/>
                     <constraint firstItem="oUt-ga-69R" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="lqk-OO-uFD"/>
+                    <constraint firstAttribute="bottom" secondItem="PWp-TU-G9h" secondAttribute="bottom" constant="5" id="mEg-kT-fEf"/>
                     <constraint firstAttribute="trailing" secondItem="PWp-TU-G9h" secondAttribute="trailing" constant="5" id="sSa-JW-0hU"/>
                     <constraint firstItem="PWp-TU-G9h" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="yF1-pE-QWg"/>
                     <constraint firstAttribute="trailing" secondItem="oUt-ga-69R" secondAttribute="trailing" constant="5" id="yyV-Of-hUM"/>
@@ -117,9 +121,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="CollectionView" destination="iSx-uy-yLq" id="Mgj-ms-iri"/>
-                <outlet property="UserNameLabel" destination="kzg-ll-wgw" id="Mvr-1S-2c1"/>
-                <outlet property="UserPhoto" destination="SCO-tf-8ld" id="XrE-xw-SRn"/>
+                <outlet property="albumView" destination="iSx-uy-yLq" id="mQd-rp-fkL"/>
                 <outlet property="likeCountLabel" destination="DYU-DZ-cbI" id="sy0-7o-5NM"/>
                 <outlet property="likeImage" destination="IfJ-IJ-sBx" id="P6E-Jn-3gc"/>
                 <outlet property="newsDataLabel" destination="TPT-WR-tQg" id="wON-fP-pjy"/>
@@ -127,7 +129,7 @@
                 <outlet property="userNameLabel" destination="kzg-ll-wgw" id="bzd-dd-vbl"/>
                 <outlet property="userPhoto" destination="SCO-tf-8ld" id="3x9-FF-szz"/>
             </connections>
-            <point key="canvasLocation" x="111.59420289855073" y="256.13839285714283"/>
+            <point key="canvasLocation" x="111.59420289855073" y="217.63392857142856"/>
         </tableViewCell>
     </objects>
     <resources>

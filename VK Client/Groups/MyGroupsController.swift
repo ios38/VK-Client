@@ -137,20 +137,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
         let group = sections[indexPath.section].items[indexPath.row]
         switch indexPath.section {
         case 0:
-            let ownerId = -group.id
-            NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
-                switch result {
-                case let .success(news):
-                    try? RealmService.save(items: news, configuration: RealmService.deleteIfMigration, update: .all)
-                    news.forEach {
-                        //print($0.albumId)
-                        self.updateCellWith($0.ownerId, $0.albumId)
-                    }
-                    self.performSegue(withIdentifier: "Show News", sender: nil)
-                case let .failure(error):
-                    print(error)
-                }
-            }
+            self.performSegue(withIdentifier: "Show News", sender: nil)
         case 1:
             if !groups.contains(where: {$0.id == group.id}) {
                 do {
@@ -178,21 +165,6 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             //Передаем id друга
             destination.ownerId = -group.id
         }
-    }
-    
-    func updateCellWith(_ ownerId: Int, _ albumId: Int) {
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
-            switch result {
-            case let .success(photos):
-                print("Альбом \(albumId) получен")
-                //print($0.image)
-                //try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
-            case let .failure(error):
-                print(error)
-            }
-        }
-
-        //self.CollectionView.reloadData()
     }
 
     //Локальный и глобальный поиск групп

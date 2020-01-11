@@ -19,8 +19,18 @@ class NewsController: UITableViewController {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
-        print("NewsController: ownerId: \(ownerId)")
+        //print("NewsController: ownerId: \(ownerId)")
+        //print("NewsController: realmNews: \(realmNews)")
         news = Array(self.realmNews)
+        
+        NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
+            switch result {
+            case let .success(news):
+                try? RealmService.save(items: news, configuration: RealmService.deleteIfMigration, update: .all)
+            case let .failure(error):
+                print(error)
+            }
+        }
         
         self.notificationToken = realmNews.observe({ [weak self] change in
             guard let self = self else { return }
@@ -45,10 +55,10 @@ class NewsController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-
+    /*
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->  CGFloat {
-        return 500
-    }
+        return 300
+    }*/
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsCell else {
@@ -63,8 +73,29 @@ class NewsController: UITableViewController {
         cell.likeCountLabel.text = String(news[indexPath.section].likeCount)
         //cell.commentCountLabel.text = String(99)
         //cell.viewsCountLabel.text = String(99)
-
+        //cell.ownerId = news[indexPath.section].ownerId
+        //cell.albumId = news[indexPath.section].albumId
+        saveAlbumToRealm(ownerId: news[indexPath.section].ownerId, albumId: news[indexPath.section].albumId)
+        cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].albumId)
+        
         return cell
+    }
+    
+    func saveAlbumToRealm (ownerId: Int, albumId: Int) {
+
+        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
+            switch result {
+            case let .success(photos):
+                print("saveAlbumToRealm: owner: \(ownerId), album: \(albumId), photos: \(photos.count)")
+                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+            case let .failure(error):
+                print(error)
+            }
+        }
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
 
 }

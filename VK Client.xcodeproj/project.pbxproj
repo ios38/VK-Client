@@ -25,6 +25,8 @@
 		507675C4238E75B1008448AA /* PhotosLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507675C3238E75B1008448AA /* PhotosLayout.swift */; };
 		507675C6238E7EEC008448AA /* BigPhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507675C5238E7EEC008448AA /* BigPhotoController.swift */; };
 		50783C7823C7426C00623F66 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50783C7723C7426C00623F66 /* RealmService.swift */; };
+		50783C7B23C883ED00623F66 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50783C7923C883ED00623F66 /* AlbumCell.swift */; };
+		50783C7C23C883ED00623F66 /* AlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50783C7A23C883ED00623F66 /* AlbumCell.xib */; };
 		5082976C2396816C0006BB6E /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5082976B2396816C0006BB6E /* VKLoginController.swift */; };
 		5082976E2396863B0006BB6E /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5082976D2396863B0006BB6E /* NetworkService.swift */; };
 		508D26402378314600EAA5BA /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508D263E2378314600EAA5BA /* NewsCell.swift */; };
@@ -71,6 +73,8 @@
 		507675C3238E75B1008448AA /* PhotosLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosLayout.swift; sourceTree = "<group>"; };
 		507675C5238E7EEC008448AA /* BigPhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigPhotoController.swift; sourceTree = "<group>"; };
 		50783C7723C7426C00623F66 /* RealmService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
+		50783C7923C883ED00623F66 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
+		50783C7A23C883ED00623F66 /* AlbumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCell.xib; sourceTree = "<group>"; };
 		5082976B2396816C0006BB6E /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		5082976D2396863B0006BB6E /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		508D263E2378314600EAA5BA /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 		50783C7523C7397500623F66 /* News */ = {
 			isa = PBXGroup;
 			children = (
+				50783C7923C883ED00623F66 /* AlbumCell.swift */,
+				50783C7A23C883ED00623F66 /* AlbumCell.xib */,
 				501A18492377F25500BDE950 /* News.swift */,
 				508D263E2378314600EAA5BA /* NewsCell.swift */,
 				508D263F2378314600EAA5BA /* NewsCell.xib */,
@@ -315,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				508D26412378314600EAA5BA /* NewsCell.xib in Resources */,
+				50783C7C23C883ED00623F66 /* AlbumCell.xib in Resources */,
 				5037BB6E235AFF9D00FCBB82 /* LaunchScreen.storyboard in Resources */,
 				501A18202374516200BDE950 /* GroupCellXib.xib in Resources */,
 				5037BB6B235AFF9D00FCBB82 /* Assets.xcassets in Resources */,
@@ -388,6 +395,7 @@
 				50D835612362F414009C0295 /* Group.swift in Sources */,
 				50BB6308238A6F0D00758C16 /* CustomNavigationController.swift in Sources */,
 				508D26402378314600EAA5BA /* NewsCell.swift in Sources */,
+				50783C7B23C883ED00623F66 /* AlbumCell.swift in Sources */,
 				50D8355D236298BC009C0295 /* AllGroupsController.swift in Sources */,
 				5037BB62235AFF9600FCBB82 /* AppDelegate.swift in Sources */,
 				5037BB64235AFF9600FCBB82 /* SceneDelegate.swift in Sources */,
