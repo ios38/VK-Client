@@ -95,15 +95,15 @@ class NetworkService {
         }
     }
     
-    static func loadAlbums(token: String, owner: Int, album: [Int], completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
+    static func loadPhotosWithAlbums(token: String, owner: Int, albums: [Int], completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
         let params: Parameters = [
             "access_token": token,
             "owner_id": owner,
-            "album_id": album,
-            "count": 100,
+            "album_id": albums,
+            "count": 200,
             "extended": 1,
             "v": "5.92"
         ]
@@ -122,7 +122,33 @@ class NetworkService {
         }
     }
 
-    
+    static func loadNews(token: String, owner: Int, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.getAlbums"
+        
+        let params: Parameters = [
+            "access_token": token,
+            "owner_id": owner,
+            "count": 3,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(data):
+                let json = JSON(data)
+                //print(json)
+                let newsJSONs = json["response"]["items"].arrayValue
+                let news = newsJSONs.map {RealmNews(from: $0)}
+                completion?(.success(news))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
+    /*
     static func loadNews(token: String, owner: Int, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/wall.search"
@@ -147,7 +173,7 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
-    }
+    }*/
 
     static func searchGroups(token: String, searchText: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"

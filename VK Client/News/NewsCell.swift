@@ -23,11 +23,12 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     @IBOutlet var likeImage: UIImageView!
     @IBOutlet var likeCountLabel: UILabel!
     
-    public var ownerId = Int()
-    public var albumId = Int()
+    var ownerId = Int()
+    var albumId = Int()
     
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
+    //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("albumId == %@", albumId)
 
 
     class var customCell : NewsCell {
@@ -54,13 +55,13 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     func updateCellWith(owner: Int, album: Int) {
         self.ownerId = owner
         self.albumId = album
+        print(photos.count)
         photos = Array(realmPhotos)
 
         /*
         NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
             switch result {
             case let .success(photos):
-                print("saveAlbumToRealm: owner: \(self.ownerId), album: \(self.albumId), photos: \(photos)")
                 try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
             case let .failure(error):
                 print(error)

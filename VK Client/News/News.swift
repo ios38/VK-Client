@@ -15,27 +15,21 @@ class RealmNews: Object {
     @objc dynamic var ownerId = -1
     @objc dynamic var date = -1
     @objc dynamic var text = ""
-    
-    @objc dynamic var albumId = -1
 
-    //@objc dynamic var image = ""
-    //@objc dynamic var type = ""
-    @objc dynamic var isLiked = -1
-    @objc dynamic var likeCount = -1
+    //@objc dynamic var albumId = -1
+    //@objc dynamic var isLiked = -1
+    //@objc dynamic var likeCount = -1
     
     convenience init(from json: JSON) {
         self.init()
         self.id = json["id"].intValue
         self.ownerId = json["owner_id"].intValue
-        self.date = json["date"].intValue
-        self.text = json["text"].stringValue
+        self.date = json["updated"].intValue
+        self.text = json["title"].stringValue
         
-        self.albumId = json["attachments"][0]["album"]["id"].intValue
-
-        //let maxImageSize = json["attachments"][0]["album"]["thumb"]["sizes"].count - 1
-        //self.image = json["attachments"][0]["album"]["thumb"]["sizes"][maxImageSize]["url"].stringValue
-        self.isLiked = json["likes"]["user_likes"].intValue
-        self.likeCount = json["likes"]["count"].intValue
+        //self.albumId = json["attachments"][0]["album"]["id"].intValue
+        //self.isLiked = json["likes"]["user_likes"].intValue
+        //self.likeCount = json["likes"]["count"].intValue
     }
     
     override static func primaryKey() -> String? {
@@ -45,6 +39,28 @@ class RealmNews: Object {
 }
 
 /*
+ //Загружаем альбомы
+ {
+     "response": {
+         "count": 1,
+         "items": [
+             {
+                 "id": 264108767,
+                 "thumb_id": 457244498,
+                 "owner_id": -39968672,
+                 "title": "Grill Fest 2019",
+                 "description": "",
+                 "created": 1562038618,
+                 "updated": 1562732943,
+                 "size": 310,
+                 "thumb_is_last": 1,
+                 "can_upload": 0
+             }
+         ]
+     }
+ }
+ 
+ //Загружаем записи со стены с типом "Альбом"
  {
      "response": {
          "count": 73,

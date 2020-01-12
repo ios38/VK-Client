@@ -47,15 +47,17 @@ class NewsController: UITableViewController {
             }
         })
         
-        var newsAlbums = [Int]()
+        print(news)
+        var albums = [Int]()
         news.forEach {
-            newsAlbums.append($0.albumId)
+            albums.append($0.id)
         }
-        print(newsAlbums)
+        print(albums)
         
-        NetworkService.loadAlbums(token: Session.shared.accessToken, owner: ownerId, album: newsAlbums) { result in
+        NetworkService.loadPhotosWithAlbums(token: Session.shared.accessToken, owner: ownerId, albums: albums) { result in
             switch result {
             case let .success(photos):
+                print(photos.count)
                 try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
             case let .failure(error):
                 print(error)
@@ -85,31 +87,13 @@ class NewsController: UITableViewController {
         
         //cell.userPhoto.image = userPhoto
         cell.userNameLabel.text = String(news[indexPath.section].ownerId)
-        cell.newsDataLabel.text = String(news[indexPath.section].albumId)
+        cell.newsDataLabel.text = String(news[indexPath.section].date)
         cell.newsTextLabel.text = news[indexPath.section].text
-        //cell.newsPhoto.image = userNews[0].newsPhoto[0]
-        cell.likeCountLabel.text = String(news[indexPath.section].likeCount)
-        //cell.commentCountLabel.text = String(99)
-        //cell.viewsCountLabel.text = String(99)
         //cell.ownerId = news[indexPath.section].ownerId
         //cell.albumId = news[indexPath.section].albumId
-        //saveAlbumToRealm(ownerId: news[indexPath.section].ownerId, albumId: news[indexPath.section].albumId)
-        cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].albumId)
+        cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].id)
         
         return cell
-    }
-    
-    func saveAlbumToRealm (ownerId: Int, albumId: Int) {
-
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
-            switch result {
-            case let .success(photos):
-                print("saveAlbumToRealm: owner: \(ownerId), album: \(albumId), photos: \(photos.count)")
-                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
-            case let .failure(error):
-                print(error)
-            }
-        }
     }
     
     deinit {
