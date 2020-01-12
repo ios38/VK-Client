@@ -95,6 +95,34 @@ class NetworkService {
         }
     }
     
+    static func loadAlbums(token: String, owner: Int, album: [Int], completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.getAll"
+        
+        let params: Parameters = [
+            "access_token": token,
+            "owner_id": owner,
+            "album_id": album,
+            "count": 100,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(data):
+                let json = JSON(data)
+                let photosJSONs = json["response"]["items"].arrayValue
+                let photos = photosJSONs.map {RealmPhoto(from: $0)}
+                //print("owner_id \(owner) photos: \(photos)")
+                completion?(.success(photos))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
+    
     static func loadNews(token: String, owner: Int, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/wall.search"

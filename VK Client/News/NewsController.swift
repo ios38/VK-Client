@@ -12,6 +12,8 @@ import RealmSwift
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     public var ownerId = Int()
+    var albumId = Int()
+
     var news = [RealmNews]()
     private lazy var realmNews: Results<RealmNews> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmNews.self).filter("ownerId == %@", ownerId)
             
@@ -44,6 +46,22 @@ class NewsController: UITableViewController {
                 print(error)
             }
         })
+        
+        var newsAlbums = [Int]()
+        news.forEach {
+            newsAlbums.append($0.albumId)
+        }
+        print(newsAlbums)
+        
+        NetworkService.loadAlbums(token: Session.shared.accessToken, owner: ownerId, album: newsAlbums) { result in
+            switch result {
+            case let .success(photos):
+                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+            case let .failure(error):
+                print(error)
+            }
+        }
+        
     }
 
     // MARK: - Table view data source
@@ -75,7 +93,7 @@ class NewsController: UITableViewController {
         //cell.viewsCountLabel.text = String(99)
         //cell.ownerId = news[indexPath.section].ownerId
         //cell.albumId = news[indexPath.section].albumId
-        saveAlbumToRealm(ownerId: news[indexPath.section].ownerId, albumId: news[indexPath.section].albumId)
+        //saveAlbumToRealm(ownerId: news[indexPath.section].ownerId, albumId: news[indexPath.section].albumId)
         cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].albumId)
         
         return cell

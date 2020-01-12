@@ -29,7 +29,7 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
 
-    
+
     class var customCell : NewsCell {
         let cell = Bundle.main.loadNibNamed("NewsCell", owner: self, options: nil)?.last
         return cell as! NewsCell
@@ -54,11 +54,18 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     func updateCellWith(owner: Int, album: Int) {
         self.ownerId = owner
         self.albumId = album
-        //print("NewsCell: updateCellWith: ownerId: \(ownerId)")
-        //print("NewsCell: updateCellWith: albumId: \(albumId)")
         photos = Array(realmPhotos)
-        //print("NewsCell: updateCellWith: photos.count: \(photos.count)")
 
+        /*
+        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
+            switch result {
+            case let .success(photos):
+                print("saveAlbumToRealm: owner: \(self.ownerId), album: \(self.albumId), photos: \(photos)")
+                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+            case let .failure(error):
+                print(error)
+            }
+        }*/
         
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
@@ -79,7 +86,6 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     //MARK: Collection view datasource and Delegate
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //print("NewsCell: Collection view datasource: photos.count: \(photos.count)")
         return photos.count
     }
     
