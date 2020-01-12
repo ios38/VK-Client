@@ -70,13 +70,13 @@ class NetworkService {
 
     static func loadPhotos(token: String, owner: Int, album: Int?, completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
-        let path = "/method/photos.getAll"
+        let path = "/method/photos.get"
         
         let params: Parameters = [
             "access_token": token,
             "owner_id": owner,
             "album_id": album,
-            "count": 5,
+            "count": 10,
             "extended": 1,
             "v": "5.92"
         ]
@@ -98,7 +98,8 @@ class NetworkService {
     static func loadPhotosWithAlbums(token: String, owner: Int, albums: [Int], completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
-        
+        //let path = "/method/photos.get"
+
         let params: Parameters = [
             "access_token": token,
             "owner_id": owner,

@@ -13,15 +13,12 @@ import Kingfisher
 class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var notificationToken: NotificationToken?
     
-    @IBOutlet var userPhoto: UIImageView!
-    @IBOutlet var userNameLabel: UILabel!
+    @IBOutlet var ownerImage: UIImageView!
+    @IBOutlet var ownerNameLabel: UILabel!
     @IBOutlet var newsDataLabel: UILabel!
     
     @IBOutlet var newsTextLabel: UILabel!
     @IBOutlet var albumView: UICollectionView!
-        
-    @IBOutlet var likeImage: UIImageView!
-    @IBOutlet var likeCountLabel: UILabel!
     
     var ownerId = Int()
     var albumId = Int()
@@ -55,10 +52,10 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     func updateCellWith(owner: Int, album: Int) {
         self.ownerId = owner
         self.albumId = album
-        print(photos.count)
+        //print(photos.count)
         photos = Array(realmPhotos)
 
-        /*
+        
         NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
             switch result {
             case let .success(photos):
@@ -66,7 +63,7 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
             case let .failure(error):
                 print(error)
             }
-        }*/
+        }
         
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }

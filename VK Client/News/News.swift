@@ -13,18 +13,15 @@ import RealmSwift
 class RealmNews: Object {
     @objc dynamic var id = -1
     @objc dynamic var ownerId = -1
-    @objc dynamic var date = -1
+    @objc dynamic var date = Date.distantPast
     @objc dynamic var text = ""
 
-    //@objc dynamic var albumId = -1
-    //@objc dynamic var isLiked = -1
-    //@objc dynamic var likeCount = -1
-    
     convenience init(from json: JSON) {
         self.init()
         self.id = json["id"].intValue
         self.ownerId = json["owner_id"].intValue
-        self.date = json["updated"].intValue
+        let dateDouble = json["updated"].doubleValue
+        self.date = Date(timeIntervalSince1970: dateDouble)
         self.text = json["title"].stringValue
         
         //self.albumId = json["attachments"][0]["album"]["id"].intValue

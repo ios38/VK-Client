@@ -13,6 +13,12 @@ class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     public var ownerId = Int()
     var albumId = Int()
+    
+    private var dateFormatter: DateFormatter = {
+        let dt = DateFormatter()
+        dt.dateFormat = "dd MMMM yyyy" //nsdateformatter.com
+        return dt
+    }()
 
     var news = [RealmNews]()
     private lazy var realmNews: Results<RealmNews> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmNews.self).filter("ownerId == %@", ownerId)
@@ -21,8 +27,6 @@ class NewsController: UITableViewController {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
-        //print("NewsController: ownerId: \(ownerId)")
-        //print("NewsController: realmNews: \(realmNews)")
         news = Array(self.realmNews)
         
         NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
@@ -46,24 +50,6 @@ class NewsController: UITableViewController {
                 print(error)
             }
         })
-        
-        print(news)
-        var albums = [Int]()
-        news.forEach {
-            albums.append($0.id)
-        }
-        print(albums)
-        
-        NetworkService.loadPhotosWithAlbums(token: Session.shared.accessToken, owner: ownerId, albums: albums) { result in
-            switch result {
-            case let .success(photos):
-                print(photos.count)
-                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
-            case let .failure(error):
-                print(error)
-            }
-        }
-        
     }
 
     // MARK: - Table view data source
@@ -75,10 +61,6 @@ class NewsController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    /*
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->  CGFloat {
-        return 300
-    }*/
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsCell else {
@@ -86,8 +68,8 @@ class NewsController: UITableViewController {
         }
         
         //cell.userPhoto.image = userPhoto
-        cell.userNameLabel.text = String(news[indexPath.section].ownerId)
-        cell.newsDataLabel.text = String(news[indexPath.section].date)
+        cell.ownerNameLabel.text = String(news[indexPath.section].ownerId)
+        cell.newsDataLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
         cell.newsTextLabel.text = news[indexPath.section].text
         //cell.ownerId = news[indexPath.section].ownerId
         //cell.albumId = news[indexPath.section].albumId
