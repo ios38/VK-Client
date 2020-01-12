@@ -65,6 +65,8 @@ class PhotoCell: UICollectionViewCell {
         //isLiked.toggle()
         delegate?.likePhoto()
         
+        
+        
         UIView.transition(with: likeImage, duration: 0.5,
                           options: .transitionCrossDissolve,
                           animations: {

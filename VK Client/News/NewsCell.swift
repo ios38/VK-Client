@@ -54,7 +54,7 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
         photos = Array(realmPhotos)
 
         
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
+        NetworkService.loadAlbum(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
             switch result {
             case let .success(photos):
                 try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
