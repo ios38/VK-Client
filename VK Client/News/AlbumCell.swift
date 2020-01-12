@@ -18,7 +18,7 @@ class AlbumCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.backgroundColor = UIColor.red
+        self.backgroundColor = UIColor.darkGray
     }
     /*
     func updateCellWithImage(name:String) {

@@ -26,14 +26,14 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kzg-ll-wgw" userLabel="Owner Name Label">
-                                <rect key="frame" x="49" y="0.0" width="261" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="49" y="0.0" width="261" height="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TPT-WR-tQg">
-                                <rect key="frame" x="49" y="18" width="261" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="49" y="21" width="261" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -95,7 +95,7 @@
                 <outlet property="albumView" destination="iSx-uy-yLq" id="mQd-rp-fkL"/>
                 <outlet property="newsDataLabel" destination="TPT-WR-tQg" id="wON-fP-pjy"/>
                 <outlet property="newsTextLabel" destination="ssn-Kc-JMk" id="5oI-H9-Z2L"/>
-                <outlet property="ownerImage" destination="SCO-tf-8ld" id="3x9-FF-szz"/>
+                <outlet property="ownerImageView" destination="SCO-tf-8ld" id="3x9-FF-szz"/>
                 <outlet property="ownerNameLabel" destination="kzg-ll-wgw" id="bzd-dd-vbl"/>
             </connections>
             <point key="canvasLocation" x="111.59420289855073" y="213.28125"/>

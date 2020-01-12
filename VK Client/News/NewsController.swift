@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Kingfisher
 
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
@@ -21,14 +22,19 @@ class NewsController: UITableViewController {
     }()
 
     var news = [RealmNews]()
+    var owner = [RealmGroup]()
+    
     private lazy var realmNews: Results<RealmNews> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmNews.self).filter("ownerId == %@", ownerId)
-            
+    private lazy var realmOwner: Results<RealmGroup> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmGroup.self).filter("id == %@", -ownerId)
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         news = Array(self.realmNews)
-        
+        owner = Array(self.realmOwner)
+
         NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
             switch result {
             case let .success(news):
@@ -67,12 +73,10 @@ class NewsController: UITableViewController {
             preconditionFailure("NewsCell cannot be dequeued")
         }
         
-        //cell.userPhoto.image = userPhoto
-        cell.ownerNameLabel.text = String(news[indexPath.section].ownerId)
+        cell.ownerImageView.kf.setImage(with: URL(string: owner.first?.image ?? ""))
+        cell.ownerNameLabel.text = String(owner.first?.name ?? "")
         cell.newsDataLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
         cell.newsTextLabel.text = news[indexPath.section].text
-        //cell.ownerId = news[indexPath.section].ownerId
-        //cell.albumId = news[indexPath.section].albumId
         cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].id)
         
         return cell

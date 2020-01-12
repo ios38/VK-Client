@@ -13,7 +13,7 @@ import Kingfisher
 class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var notificationToken: NotificationToken?
     
-    @IBOutlet var ownerImage: UIImageView!
+    @IBOutlet var ownerImageView: UIImageView!
     @IBOutlet var ownerNameLabel: UILabel!
     @IBOutlet var newsDataLabel: UILabel!
     
@@ -25,8 +25,6 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
-    //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("albumId == %@", albumId)
-
 
     class var customCell : NewsCell {
         let cell = Bundle.main.loadNibNamed("NewsCell", owner: self, options: nil)?.last
