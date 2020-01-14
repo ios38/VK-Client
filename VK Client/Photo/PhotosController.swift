@@ -15,8 +15,9 @@ class PhotosController: UICollectionViewController {
     //private let networkSrvice = NetworkService()
     public var ownerId = Int()
     var photos = [RealmPhoto]()
-    private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@", ownerId)
-        
+    //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@", ownerId)
+    private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == %@", ownerId)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         photos = sort(Array(realmPhotos))
@@ -24,7 +25,7 @@ class PhotosController: UICollectionViewController {
         NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: nil) { result in
             switch result {
             case let .success(photos):
-                try? RealmService.save(items: photos, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: photos)
             case let .failure(error):
                 print(error)
             }

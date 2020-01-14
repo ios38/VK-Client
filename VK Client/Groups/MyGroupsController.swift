@@ -23,8 +23,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     var currentGroups = [RealmGroup]()
     var globalGroups = [RealmGroup]()
 
-    private lazy var realmGroups: Results<RealmGroup> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmGroup.self)
-    //private lazy var globalGroups: Results<RealmGroup> = try! Realm().objects(RealmGroup.self).filter(NSPredicate(value: false))
+    private lazy var realmGroups: Results<RealmGroup> = try! RealmService.get(RealmGroup.self)
+
     
     struct groupCategory {
         let name: String
@@ -51,7 +51,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             //quard let self = self else {return}
             switch result {
             case let .success(groups):
-                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: groups)
             case let .failure(error):
                 print(error)
             }
@@ -102,7 +102,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
         //Удаление группы
         override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-            if editingStyle == .delete {
+            guard editingStyle == .delete, indexPath.section == 0 else { return }
                 let group = currentGroups[indexPath.row]
                 do {
                     let realm = try Realm()
@@ -112,7 +112,6 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                 } catch {
                     print(error)
                 }
-            }
         }
         
     //Добавление группы из AllGroupsController
@@ -170,7 +169,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     //Локальный и глобальный поиск групп
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
-        print ("Очистка секции 'Глобальный поиск'")
+        //print ("Очистка секции 'Глобальный поиск'")
         sections[1].items.removeAll()
         //self.globalGroups.removeAll()
 
@@ -199,11 +198,11 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                     }
                     
                     self.sections[1].items = self.globalGroups
-                    print ("globalGroups.count = \(self.globalGroups.count)")
+                    //print ("globalGroups.count = \(self.globalGroups.count)")
                     
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-                        print ("Очистка globalGroups")
+                        //print ("Очистка globalGroups")
                         self.globalGroups.removeAll()
                     }
 

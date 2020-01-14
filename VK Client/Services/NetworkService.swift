@@ -76,7 +76,7 @@ class NetworkService {
             "access_token": token,
             "owner_id": owner,
             "album_id": album,
-            "count": 10,
+            "count": 15,
             "extended": 1,
             "v": "5.92"
         ]

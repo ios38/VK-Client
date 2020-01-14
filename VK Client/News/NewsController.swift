@@ -24,9 +24,8 @@ class NewsController: UITableViewController {
     var news = [RealmNews]()
     var owner = [RealmGroup]()
     
-    private lazy var realmNews: Results<RealmNews> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmNews.self).filter("ownerId == %@", ownerId)
-    private lazy var realmOwner: Results<RealmGroup> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmGroup.self).filter("id == %@", -ownerId)
-
+    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self).filter("ownerId == %@", ownerId)
+    private lazy var realmOwner: Results<RealmGroup> = try! RealmService.get(RealmGroup.self).filter("id == %@", -ownerId)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +37,7 @@ class NewsController: UITableViewController {
         NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
             switch result {
             case let .success(news):
-                try? RealmService.save(items: news, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: news)
             case let .failure(error):
                 print(error)
             }

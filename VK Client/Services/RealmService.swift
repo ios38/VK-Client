@@ -22,15 +22,23 @@ class RealmService {
             //print("RealmService: saved \(items.count) items")
         }
     }
-    /*
-    static func delete<T: Object>(items: [T],
-        configuration: Realm.Configuration = deleteIfMigration,
-        update: Realm.UpdatePolicy = .modified) throws {
+    
+    static func get<T: Object>(
+        _ type: T.Type,
+        configuration: Realm.Configuration = deleteIfMigration
+    ) throws -> Results<T> {
         let realm = try Realm(configuration: configuration)
-        print(configuration.fileURL ?? "")
+        return realm.objects(type)
+    }
+    
+    static func delete<T: Object>(
+        _ object: T,
+        configuration: Realm.Configuration = deleteIfMigration
+    ) throws {
+        let realm = try Realm(configuration: configuration)
         try realm.write {
-            realm.delete(items)
+            realm.delete(object)
         }
-    }*/
+    }
 
 }

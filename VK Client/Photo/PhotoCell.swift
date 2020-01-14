@@ -35,7 +35,7 @@ class PhotoCell: UICollectionViewCell {
         }
     }
     
-    //Не работает обработка значения isLiked
+    //Не работает счетчик
     public func configure(with photo: RealmPhoto) {
         cellImage.kf.setImage(with: URL(string: photo.image))
         likeCount.text = String(photo.likeCount)

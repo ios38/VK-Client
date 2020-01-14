@@ -12,20 +12,21 @@ import RealmSwift
 class FriendsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let networkSrvice = NetworkService()
-    var friends: Results<RealmUser> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmUser.self)
-    var sortedFriends = [Character: [RealmUser]]()
+    private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self)
+    private var sortedFriends = [Character: [RealmUser]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
-        
+
         sortedFriends = self.sort(friends: friends)
-        
+
         NetworkService.loadFriends(token: Session.shared.accessToken) { /*[weak self]*/ result in
-            //quard let self = self else {return}
+            //quard let self = self else { return }
             switch result {
             case let .success(friends):
-                try? RealmService.save(items: friends, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: friends)
+                print("FriendsController: viewDidLoad: friends saved to Realm")
             case let .failure(error):
                 print(error)
             }
@@ -43,7 +44,7 @@ class FriendsController: UITableViewController {
                 print(error)
             }
         })
-
+        
     }
     
     private func sort(friends: Results<RealmUser>) -> [Character: [RealmUser]] {

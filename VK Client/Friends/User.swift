@@ -15,7 +15,8 @@ class RealmUser: Object {
     @objc dynamic var firstName = ""
     @objc dynamic var lastName = ""
     @objc dynamic var photo = ""
-    
+    //@objc dynamic var online = -1
+
     let photos = List<RealmPhoto>()
 
     convenience init(from json: JSON) {
@@ -24,7 +25,8 @@ class RealmUser: Object {
         self.firstName = json["first_name"].stringValue
         self.lastName = json["last_name"].stringValue
         self.photo = json["photo_200"].stringValue
-        
+        //self.online = json["online"].intValue
+
         self.photos.append(objectsIn: photos)
     }
     
