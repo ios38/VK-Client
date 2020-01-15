@@ -11,13 +11,20 @@ import RealmSwift
 
 class FriendsController: UITableViewController {
     private var notificationToken: NotificationToken?
-    //private let networkSrvice = NetworkService()
     private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self)
+    //private var friends: Results<RealmUser>?
     private var sortedFriends = [Character: [RealmUser]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        /*
+        do {
+            friends = try RealmService.get(RealmUser.self)
+            sortedFriends = self.sort(friends: friends!)
+        } catch {
+            print(error)
+        }*/
 
         sortedFriends = self.sort(friends: friends)
 
