@@ -11,7 +11,7 @@ import RealmSwift
 
 class FriendsController: UITableViewController {
     private var notificationToken: NotificationToken?
-    private let networkSrvice = NetworkService()
+    //private let networkSrvice = NetworkService()
     private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self)
     private var sortedFriends = [Character: [RealmUser]]()
 

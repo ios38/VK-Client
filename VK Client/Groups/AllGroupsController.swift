@@ -10,7 +10,7 @@ import UIKit
 
 class AllGroupsController: UIViewController, UISearchBarDelegate{
     var groups = [RealmGroup]()
-    private let networkSrvice = NetworkService()
+    //private let networkSrvice = NetworkService()
 
 
     @IBOutlet var tableView: UITableView! {

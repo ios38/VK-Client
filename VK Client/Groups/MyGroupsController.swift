@@ -18,7 +18,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
 
     private var notificationToken: NotificationToken?
-    private let networkService = NetworkService()
+    //private let networkService = NetworkService()
     var groups = [RealmGroup]()
     var currentGroups = [RealmGroup]()
     var globalGroups = [RealmGroup]()

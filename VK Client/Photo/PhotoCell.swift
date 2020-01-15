@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 
 protocol PhotoCellDelegate: class {
-    func likePhoto()
+    func likePhoto(photoId: Int, isLiked: Int, likeCount: Int)
 }
 
 class PhotoCell: UICollectionViewCell {
@@ -18,10 +18,12 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeView: UIView!
     @IBOutlet var likeImage: UIImageView!
-    @IBOutlet var likeCount: UILabel!
+    @IBOutlet var likeCountLabel: UILabel!
     
     @IBOutlet var isLikedLabel: UILabel!
     
+    var photoId = -1
+    var likeCount = 0
     public weak var delegate: PhotoCellDelegate?
     
     
@@ -35,10 +37,10 @@ class PhotoCell: UICollectionViewCell {
         }
     }
     
-    //Не работает счетчик
+    /*
     public func configure(with photo: RealmPhoto) {
         cellImage.kf.setImage(with: URL(string: photo.image))
-        likeCount.text = String(photo.likeCount)
+        likeCountLabel.text = String(photo.likeCount)
         isLikedLabel.text = String(photo.isLiked)
 
         if isLiked == 1 {
@@ -49,7 +51,7 @@ class PhotoCell: UICollectionViewCell {
             self.likeImage.image = UIImage(systemName: "heart")
         }
 
-    }
+    }*/
 
     
     override func awakeFromNib() {
@@ -62,22 +64,21 @@ class PhotoCell: UICollectionViewCell {
     }
     
     @objc func likeTapped(_ tapGesture: UITapGestureRecognizer) {
-        //isLiked.toggle()
-        delegate?.likePhoto()
-        
-        
-        
         UIView.transition(with: likeImage, duration: 0.5,
                           options: .transitionCrossDissolve,
                           animations: {
-                            if self.isLiked == 1 {
-                                self.likeImage.image = UIImage(systemName: "heart")
-                                self.isLiked = 0
+                                if self.isLiked == 1 {
+                                    self.likeImage.image = UIImage(systemName: "heart")
+                                    self.isLiked = 0
+                                    self.likeCount -= 1
                                 } else {
-                                self.likeImage.image = UIImage(systemName: "heart.fill")
-                                self.isLiked = 1
+                                    self.likeImage.image = UIImage(systemName: "heart.fill")
+                                    self.isLiked = 1
+                                    self.likeCount += 1
                                 }
-                            }, completion: nil)
+                          }, completion: nil)
+        
+        delegate?.likePhoto(photoId: photoId, isLiked: isLiked, likeCount: likeCount)
     }
 
 }

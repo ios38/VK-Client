@@ -15,7 +15,6 @@ class PhotosController: UICollectionViewController {
     //private let networkSrvice = NetworkService()
     public var ownerId = Int()
     var photos = [RealmPhoto]()
-    //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@", ownerId)
     private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == %@", ownerId)
     
     override func viewDidLoad() {
@@ -88,9 +87,11 @@ class PhotosController: UICollectionViewController {
         }
         
         cell.cellImage.kf.setImage(with: URL(string: photos[indexPath.row].image))
-        cell.likeCount.text = String(photos[indexPath.row].likeCount)
+        cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
+        cell.likeCount = photos[indexPath.row].likeCount
         cell.isLiked = photos[indexPath.row].isLiked
         cell.isLikedLabel.text = String(photos[indexPath.row].isLiked)
+        cell.photoId = photos[indexPath.row].id
         
         cell.delegate = self
                
@@ -104,8 +105,19 @@ class PhotosController: UICollectionViewController {
 }
 
 extension PhotosController: PhotoCellDelegate {
-    func likePhoto() {
-        print("Photo is liked")
+    func likePhoto(photoId: Int, isLiked: Int, likeCount: Int) {
+        //print("PhotosController: like tapped: \(photoId), likeCount: \(likeCount)")
+        let photo = photos.first(where: { $0.id == photoId })!        
+        do {
+            let realm = try Realm()
+            try realm.write {
+                photo.isLiked = isLiked
+                photo.likeCount = likeCount
+                realm.add(photo, update: .modified)
+            }
+        } catch {
+            print(error)
+        }
     }
 }
 

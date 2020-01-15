@@ -384,7 +384,7 @@
                                 <connections>
                                     <outlet property="cellImage" destination="8uA-G4-9Af" id="4yj-AO-Plp"/>
                                     <outlet property="isLikedLabel" destination="cGO-YN-sUT" id="yKI-xI-jSd"/>
-                                    <outlet property="likeCount" destination="Gsh-9p-TH2" id="qAT-G4-nwm"/>
+                                    <outlet property="likeCountLabel" destination="Gsh-9p-TH2" id="T0a-gi-H8F"/>
                                     <outlet property="likeImage" destination="kIV-nT-bW7" id="joX-Fg-Igq"/>
                                     <outlet property="likeView" destination="vyp-TD-I2O" id="0ED-Hg-bsB"/>
                                     <segue destination="frO-4a-nzA" kind="show" identifier="Show Big Photo" id="xyz-ex-mDJ"/>
