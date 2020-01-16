@@ -75,7 +75,7 @@ class NetworkService {
         let params: Parameters = [
             "access_token": token,
             "owner_id": owner,
-            "album_id": album,
+            "album_id": album as Any,
             "count": 15,
             "extended": 1,
             "v": "5.92"
@@ -98,7 +98,6 @@ class NetworkService {
     static func loadAlbum(token: String, owner: Int, album: Int, completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
-        //let path = "/method/photos.get"
 
         let params: Parameters = [
             "access_token": token,
@@ -123,7 +122,7 @@ class NetworkService {
         }
     }
 
-    static func loadNews(token: String, owner: Int, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
+    static func loadAlbums(token: String, owner: Int, completion: ((Result<[RealmAlbums], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAlbums"
         
@@ -141,7 +140,7 @@ class NetworkService {
                 let json = JSON(data)
                 //print(json)
                 let newsJSONs = json["response"]["items"].arrayValue
-                let news = newsJSONs.map {RealmNews(from: $0)}
+                let news = newsJSONs.map {RealmAlbums(from: $0)}
                 completion?(.success(news))
             case let .failure(error):
                 completion?(.failure (error))

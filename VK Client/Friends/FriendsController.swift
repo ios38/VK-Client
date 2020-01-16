@@ -44,7 +44,7 @@ class FriendsController: UITableViewController {
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.sortedFriends = self.sort(friends: self.friends)
                 self.tableView.reloadData()
             case let .error(error):

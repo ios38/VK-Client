@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import Kingfisher
 
-class NewsController: UITableViewController {
+class AlbumsController: UITableViewController {
     private var notificationToken: NotificationToken?
     public var ownerId = Int()
     var albumId = Int()
@@ -21,20 +21,20 @@ class NewsController: UITableViewController {
         return dt
     }()
 
-    var news = [RealmNews]()
+    var news = [RealmAlbums]()
     var owner = [RealmGroup]()
     
-    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self).filter("ownerId == %@", ownerId)
+    private lazy var realmAlbums: Results<RealmAlbums> = try! RealmService.get(RealmAlbums.self).filter("ownerId == %@", ownerId)
     private lazy var realmOwner: Results<RealmGroup> = try! RealmService.get(RealmGroup.self).filter("id == %@", -ownerId)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
-        tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
-        news = Array(self.realmNews)
+        tableView.register(UINib(nibName: "AlbumsCell", bundle: nil), forCellReuseIdentifier: "AlbumsCell")
+        news = Array(self.realmAlbums)
         owner = Array(self.realmOwner)
 
-        NetworkService.loadNews(token: Session.shared.accessToken, owner: ownerId) { result in
+        NetworkService.loadAlbums(token: Session.shared.accessToken, owner: ownerId) { result in
             switch result {
             case let .success(news):
                 try? RealmService.save(items: news)
@@ -43,13 +43,13 @@ class NewsController: UITableViewController {
             }
         }
         
-        self.notificationToken = realmNews.observe({ [weak self] change in
+        self.notificationToken = realmAlbums.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
-                self.news = Array(self.realmNews)
+            case .update(_, _, _, _):
+                self.news = Array(self.realmAlbums)
                 self.tableView.reloadData()
             case let .error(error):
                 print(error)
@@ -68,8 +68,8 @@ class NewsController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsCell else {
-            preconditionFailure("NewsCell cannot be dequeued")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumsCell", for: indexPath) as? AlbumsCell else {
+            preconditionFailure("AlbumsCell cannot be dequeued")
         }
         
         cell.ownerImageView.kf.setImage(with: URL(string: owner.first?.image ?? ""))

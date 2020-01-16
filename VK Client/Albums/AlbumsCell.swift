@@ -1,5 +1,5 @@
 //
-//  NewsCell.swift
+//  AlbumsCell.swift
 //  VK Client
 //
 //  Created by Maksim Romanov on 10.11.2019.
@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import Kingfisher
 
-class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var notificationToken: NotificationToken?
     
     @IBOutlet var ownerImageView: UIImageView!
@@ -26,9 +26,9 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
 
-    class var customCell : NewsCell {
-        let cell = Bundle.main.loadNibNamed("NewsCell", owner: self, options: nil)?.last
-        return cell as! NewsCell
+    class var customCell : AlbumsCell {
+        let cell = Bundle.main.loadNibNamed("AlbumsCell", owner: self, options: nil)?.last
+        return cell as! AlbumsCell
     }
     
     override func awakeFromNib() {
@@ -68,7 +68,7 @@ class NewsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDel
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.photos = Array(self.realmPhotos)
                 self.albumView.reloadData()
             case let .error(error):

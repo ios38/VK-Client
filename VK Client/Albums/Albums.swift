@@ -1,5 +1,5 @@
 //
-//  News.swift
+//  Albums.swift
 //  VK Client
 //
 //  Created by Maksim Romanov on 10.11.2019.
@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-class RealmNews: Object {
+class RealmAlbums: Object {
     @objc dynamic var id = -1
     @objc dynamic var ownerId = -1
     @objc dynamic var date = Date.distantPast
