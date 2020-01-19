@@ -41,7 +41,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uAB-pr-GMK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2269.5999999999999" y="136.69950738916256"/>
+            <point key="canvasLocation" x="2271" y="501"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="7HI-aq-1e0">
@@ -57,11 +57,12 @@
                     <connections>
                         <segue destination="wLl-tr-Uby" kind="relationship" relationship="viewControllers" id="hiz-RG-Lod"/>
                         <segue destination="IRE-d8-cLV" kind="relationship" relationship="viewControllers" id="Ocs-mx-gnr"/>
+                        <segue destination="Lr6-ur-7HM" kind="relationship" relationship="viewControllers" id="Ppi-Yp-29W"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zBd-R7-SQ3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3050" y="137"/>
+            <point key="canvasLocation" x="3050" y="501"/>
         </scene>
         <!--Друзья-->
         <scene sceneID="zT1-aF-6jE">
@@ -368,6 +369,25 @@
             </objects>
             <point key="canvasLocation" x="5433" y="501"/>
         </scene>
+        <!--News-->
+        <scene sceneID="2X9-vR-jEQ">
+            <objects>
+                <tableViewController id="Lr6-ur-7HM" customClass="NewsController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="jFA-ZY-GjU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <connections>
+                            <outlet property="dataSource" destination="Lr6-ur-7HM" id="Zmh-1q-XUo"/>
+                            <outlet property="delegate" destination="Lr6-ur-7HM" id="bVi-ZH-joH"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="News" image="book.fill" catalog="system" id="qYG-tu-iXl"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9sS-iw-3HQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3049" y="1196"/>
+        </scene>
         <!--Друзья-->
         <scene sceneID="H1g-WX-9XQ">
             <objects>
@@ -408,6 +428,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="book.fill" catalog="system" width="64" height="50"/>
         <image name="heart" catalog="system" width="64" height="54"/>
         <image name="person.3.fill" catalog="system" width="71" height="34"/>
         <image name="person.fill" catalog="system" width="64" height="60"/>
