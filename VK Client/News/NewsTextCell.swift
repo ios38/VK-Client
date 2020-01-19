@@ -13,6 +13,7 @@ class NewsTextCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        //self.newsTextLabel.sizeToFit()
         // Initialization code
     }
 

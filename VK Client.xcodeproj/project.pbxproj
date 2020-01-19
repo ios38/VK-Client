@@ -44,6 +44,7 @@
 		50AE73A223D40DE7007DA388 /* NewsImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50AE73A023D40DE7007DA388 /* NewsImageCell.xib */; };
 		50AE73A523D41153007DA388 /* NewsControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE73A323D41153007DA388 /* NewsControlCell.swift */; };
 		50AE73A623D41153007DA388 /* NewsControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50AE73A423D41153007DA388 /* NewsControlCell.xib */; };
+		50AE73A823D41B91007DA388 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE73A723D41B90007DA388 /* News.swift */; };
 		50BB62CA2388FFA600758C16 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB62C92388FFA600758C16 /* Animator.swift */; };
 		50BB62CE238914E900758C16 /* PushPopAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB62CD238914E900758C16 /* PushPopAnimators.swift */; };
 		50BB6306238A6E8100758C16 /* PushPopTurnAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB6305238A6E8100758C16 /* PushPopTurnAnimator.swift */; };
@@ -99,6 +100,7 @@
 		50AE73A023D40DE7007DA388 /* NewsImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsImageCell.xib; sourceTree = "<group>"; };
 		50AE73A323D41153007DA388 /* NewsControlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsControlCell.swift; sourceTree = "<group>"; };
 		50AE73A423D41153007DA388 /* NewsControlCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsControlCell.xib; sourceTree = "<group>"; };
+		50AE73A723D41B90007DA388 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = News.swift; path = "VK Client/News/News.swift"; sourceTree = SOURCE_ROOT; };
 		50BB62C92388FFA600758C16 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Animator.swift; path = "VK Client/Helpers/Animator.swift"; sourceTree = SOURCE_ROOT; };
 		50BB62CD238914E900758C16 /* PushPopAnimators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPopAnimators.swift; sourceTree = "<group>"; };
 		50BB6305238A6E8100758C16 /* PushPopTurnAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPopTurnAnimator.swift; sourceTree = "<group>"; };
@@ -204,9 +206,9 @@
 		50783C7523C7397500623F66 /* Albums */ = {
 			isa = PBXGroup;
 			children = (
+				501A18492377F25500BDE950 /* Albums.swift */,
 				50783C7923C883ED00623F66 /* AlbumCell.swift */,
 				50783C7A23C883ED00623F66 /* AlbumCell.xib */,
-				501A18492377F25500BDE950 /* Albums.swift */,
 				508D263E2378314600EAA5BA /* AlbumsCell.swift */,
 				508D263F2378314600EAA5BA /* AlbumsCell.xib */,
 				501A18472377F14500BDE950 /* AlbumsController.swift */,
@@ -226,12 +228,13 @@
 		50783CA523D2D38B00623F66 /* News */ = {
 			isa = PBXGroup;
 			children = (
+				50AE73A723D41B90007DA388 /* News.swift */,
 				50AE736923D2DFFF007DA388 /* NewsHeaderCell.swift */,
 				50AE736A23D2DFFF007DA388 /* NewsHeaderCell.xib */,
 				50AE739B23D40B63007DA388 /* NewsTextCell.swift */,
+				50AE739C23D40B63007DA388 /* NewsTextCell.xib */,
 				50AE739F23D40DE7007DA388 /* NewsImageCell.swift */,
 				50AE73A023D40DE7007DA388 /* NewsImageCell.xib */,
-				50AE739C23D40B63007DA388 /* NewsTextCell.xib */,
 				50AE73A323D41153007DA388 /* NewsControlCell.swift */,
 				50AE73A423D41153007DA388 /* NewsControlCell.xib */,
 				50AE736323D2DD1F007DA388 /* NewsController.swift */,
@@ -435,6 +438,7 @@
 				50783C7B23C883ED00623F66 /* AlbumCell.swift in Sources */,
 				50D8355D236298BC009C0295 /* AllGroupsController.swift in Sources */,
 				5037BB62235AFF9600FCBB82 /* AppDelegate.swift in Sources */,
+				50AE73A823D41B91007DA388 /* News.swift in Sources */,
 				5037BB64235AFF9600FCBB82 /* SceneDelegate.swift in Sources */,
 				50EC5F342397D5DF005D6034 /* Session.swift in Sources */,
 				505965F02371A6A70014B451 /* FriendView.swift in Sources */,

@@ -148,6 +148,34 @@ class NetworkService {
         }
     }
 
+    static func loadNews(token: String, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/newsfeed.get"
+        
+        let params: Parameters = [
+            "access_token": token,
+            "source_ids": 13807983,
+            "filters": "post",
+            "count": 3,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(data):
+                let json = JSON(data)
+                //print(json)
+                let newsJSONs = json["response"]["items"].arrayValue
+                let news = newsJSONs.map {RealmNews(from: $0)}
+                //print("NetworkService: loadNews: \(news)")
+                completion?(.success(news))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+    
     static func searchGroups(token: String, searchText: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.search"

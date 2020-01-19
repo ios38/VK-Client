@@ -21,7 +21,7 @@ class AlbumsController: UITableViewController {
         return dt
     }()
 
-    var news = [RealmAlbums]()
+    var albums = [RealmAlbums]()
     var owner = [RealmGroup]()
     
     private lazy var realmAlbums: Results<RealmAlbums> = try! RealmService.get(RealmAlbums.self).filter("ownerId == %@", ownerId)
@@ -31,13 +31,13 @@ class AlbumsController: UITableViewController {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(UINib(nibName: "AlbumsCell", bundle: nil), forCellReuseIdentifier: "AlbumsCell")
-        news = Array(self.realmAlbums)
+        albums = Array(self.realmAlbums)
         owner = Array(self.realmOwner)
 
         NetworkService.loadAlbums(token: Session.shared.accessToken, owner: ownerId) { result in
             switch result {
-            case let .success(news):
-                try? RealmService.save(items: news)
+            case let .success(albums):
+                try? RealmService.save(items: albums)
             case let .failure(error):
                 print(error)
             }
@@ -49,7 +49,7 @@ class AlbumsController: UITableViewController {
             case .initial:
                 break
             case .update(_, _, _, _):
-                self.news = Array(self.realmAlbums)
+                self.albums = Array(self.realmAlbums)
                 self.tableView.reloadData()
             case let .error(error):
                 print(error)
@@ -60,7 +60,7 @@ class AlbumsController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return news.count
+        return albums.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -74,9 +74,9 @@ class AlbumsController: UITableViewController {
         
         cell.ownerImageView.kf.setImage(with: URL(string: owner.first?.image ?? ""))
         cell.ownerNameLabel.text = String(owner.first?.name ?? "")
-        cell.newsDataLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
-        cell.newsTextLabel.text = news[indexPath.section].text
-        cell.updateCellWith(owner: news[indexPath.section].ownerId, album: news[indexPath.section].id)
+        cell.albumDateLabel.text = dateFormatter.string(from: (albums[indexPath.section].date))
+        cell.albumTextLabel.text = albums[indexPath.section].text
+        cell.updateCellWith(owner: albums[indexPath.section].ownerId, album: albums[indexPath.section].id)
         
         return cell
     }

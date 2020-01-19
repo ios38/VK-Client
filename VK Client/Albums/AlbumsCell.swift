@@ -15,9 +15,9 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
     
     @IBOutlet var ownerImageView: UIImageView!
     @IBOutlet var ownerNameLabel: UILabel!
-    @IBOutlet var newsDataLabel: UILabel!
+    @IBOutlet var albumDateLabel: UILabel!
     
-    @IBOutlet var newsTextLabel: UILabel!
+    @IBOutlet var albumTextLabel: UILabel!
     @IBOutlet var albumView: UICollectionView!
     
     var ownerId = Int()
@@ -33,7 +33,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.newsTextLabel.sizeToFit()
+        self.albumTextLabel.sizeToFit()
                 
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal

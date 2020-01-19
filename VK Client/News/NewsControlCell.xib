@@ -93,6 +93,10 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="newsLikeCountLabel" destination="yBC-zF-VyP" id="ixh-na-6fl"/>
+                <outlet property="newsLikeImageView" destination="HLG-aH-cjP" id="uHV-FT-xup"/>
+            </connections>
             <point key="canvasLocation" x="185.50724637681162" y="153.34821428571428"/>
         </tableViewCell>
     </objects>

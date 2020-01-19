@@ -9,6 +9,14 @@
 import UIKit
 
 class NewsControlCell: UITableViewCell {
+    @IBOutlet var newsLikeImageView: UIImageView!
+    @IBOutlet var newsLikeCountLabel: UILabel!
+
+    public func configure(with item: RealmNews) {
+        newsLikeCountLabel.text = String(item.likeCount)
+        let imageName = item.isLiked == 1 ? "heart.fill" : "heart"
+        newsLikeImageView.image = UIImage(systemName: imageName)        
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()

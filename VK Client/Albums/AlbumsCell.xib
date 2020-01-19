@@ -31,7 +31,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TPT-WR-tQg">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TPT-WR-tQg">
                                 <rect key="frame" x="49" y="21" width="261" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -53,7 +53,7 @@
                             <constraint firstItem="kzg-ll-wgw" firstAttribute="top" secondItem="oUt-ga-69R" secondAttribute="top" id="x1B-AN-xay"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News Text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ssn-Kc-JMk" userLabel="News Text Label">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ssn-Kc-JMk" userLabel="News Text Label">
                         <rect key="frame" x="5" y="49" width="310" height="58"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
@@ -92,9 +92,9 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="albumDateLabel" destination="TPT-WR-tQg" id="4t7-p0-k7P"/>
+                <outlet property="albumTextLabel" destination="ssn-Kc-JMk" id="lor-uW-tLB"/>
                 <outlet property="albumView" destination="iSx-uy-yLq" id="mQd-rp-fkL"/>
-                <outlet property="newsDataLabel" destination="TPT-WR-tQg" id="wON-fP-pjy"/>
-                <outlet property="newsTextLabel" destination="ssn-Kc-JMk" id="5oI-H9-Z2L"/>
                 <outlet property="ownerImageView" destination="SCO-tf-8ld" id="3x9-FF-szz"/>
                 <outlet property="ownerNameLabel" destination="kzg-ll-wgw" id="bzd-dd-vbl"/>
             </connections>
