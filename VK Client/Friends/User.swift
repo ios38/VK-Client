@@ -27,7 +27,7 @@ class RealmUser: Object {
         self.photo = json["photo_100"].stringValue
         //self.online = json["online"].intValue
 
-        self.photos.append(objectsIn: photos)
+        //self.photos.append(objectsIn: photos)
     }
     
     override static func primaryKey() -> String? {

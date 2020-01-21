@@ -22,12 +22,8 @@ class NewsController: UITableViewController {
     }()
 
     var news = [RealmNews]()
-//    var users = [RealmUser]()
-//    var newsItems = [RealmNews]()
-//    var newsUsers = [RealmUser]()
 
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,35 +36,39 @@ class NewsController: UITableViewController {
         
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
 
-        //loadNews(token: Session.shared.accessToken)
+        loadNews(token: Session.shared.accessToken)
 
-        NetworkService.loadNews(token: Session.shared.accessToken) { result in
-            switch result {
-            case let .success(news):
-                try? RealmService.save(items: news)
-            case let .failure(error):
-                print(error)
-            }
-        }
-
-        self.notificationToken = realmNews.observe({ [weak self] change in
-            guard let self = self else { return }
-            switch change {
-            case .initial:
-                break
-            case .update(_, _, _, _):
-                self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-                self.tableView.reloadData()
-            case let .error(error):
-                print(error)
-            }
-        })
+//        NetworkService.loadNews(token: Session.shared.accessToken) { result in
+//            switch result {
+//            case let .success(news):
+//                try? RealmService.save(items: news)
+//            case let .failure(error):
+//                print(error)
+//            }
+//        }
+//
+//        self.notificationToken = realmNews.observe({ [weak self] change in
+//            guard let self = self else { return }
+//            switch change {
+//            case .initial:
+//                break
+//            case .update(_, _, _, _):
+//                self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+//                self.tableView.reloadData()
+//            case let .error(error):
+//                print(error)
+//            }
+//        })
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return news.count
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,7 +79,8 @@ class NewsController: UITableViewController {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderCell", for: indexPath) as? NewsHeaderCell else { preconditionFailure("NewsHeaderCell cannot be dequeued") }
-            cell.newsSourceLabel.text = "News source id: " + String(news[indexPath.section].source)
+            cell.newsImageView.kf.setImage(with: URL(string: newsSourceDetails(news[indexPath.section].source).image))
+            cell.newsSourceLabel.text = newsSourceDetails(news[indexPath.section].source).name
             cell.newsDateLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
             return cell
         case 1:
@@ -101,7 +102,24 @@ class NewsController: UITableViewController {
             return cell
         }
     }
-    /*
+    
+    func newsSourceDetails(_ source: Int) -> (name: String, image: String) {
+        var name = ""
+        var image = ""
+        if source > 0 {
+            let realmNewsSource = Array(try! RealmService.get(RealmUser.self).filter("id == %@", source))
+            let firstName = realmNewsSource.first?.firstName ?? ""
+            let lastName = realmNewsSource.first?.lastName ?? ""
+            name = lastName + " " + firstName
+            image = realmNewsSource.first?.photo ?? ""
+        } else {
+            let realmNewsSource = Array(try! RealmService.get(RealmGroup.self).filter("id == %@", -source))
+            name = realmNewsSource.first?.name ?? ""
+            image = realmNewsSource.first?.image ?? ""
+        }
+        return (name, image)
+    }
+    
     func loadNews(token: String/*, completion: ((Result<[RealmNews], Error>) -> Void)? = nil*/) {
         
         let baseUrl = "https://api.vk.com"
@@ -109,80 +127,49 @@ class NewsController: UITableViewController {
         
         let params: Parameters = [
             "access_token": token,
-            "source_ids": -15365973,
-            //"filters": "post",
+            //"source_ids": 13807983,
+            "filters": "post",
             "count": 3,
             "extended": 1,
             "v": "5.92"
         ]
         
         let dispatchGroup = DispatchGroup()
-        let queue = DispatchQueue(label: "ru.mr-vk-client.news-queue", attributes: .concurrent)
 
-        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON(queue: queue, completionHandler: { response in
-            switch response.result {
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+        switch response.result {
             case let .success(data):
-                let json = JSON(data)
-                let newsJSONs = json["response"]["items"].arrayValue
-                print("NewsController: loadNews: session.request: news.count: \(newsJSONs.count)")
-                //let usersJSONs = json["response"]["profiles"].arrayValue
-                
-                //completion?(.success(news))
+                DispatchQueue.main.async {
+                    let json = JSON(data)
+                    
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        let newsJSONs = json["response"]["items"].arrayValue
+                        let news = newsJSONs.map {RealmNews(from: $0)}
+                        try? RealmService.save(items: news)
+                    }
+                    
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        let usersJSONs = json["response"]["profiles"].arrayValue
+                        let users = usersJSONs.map {RealmUser(from: $0)}
+                        try? RealmService.save(items: users)
+                    }
+                    
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        let groupsJSONs = json["response"]["groups"].arrayValue
+                        let groups = groupsJSONs.map {RealmGroup(from: $0)}
+                        try? RealmService.save(items: groups)
+                    }
+
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+                        self.tableView.reloadData()
+                    }
+                }
             case let .failure(error):
                 print(error)
-                //completion?(.failure (error))
             }
-        })
-                
-        dispatchGroup.notify(queue: DispatchQueue.main) {
-            print("all tasks in the group are completed")
-            print("NewsController: loadNews: dispatchGroup.notify: news.count: \(self.news.count)")
-            print("NewsController: loadNews: dispatchGroup.notify: users.count: \(self.users.count)")
-            self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-            self.tableView.reloadData()
-
         }
-        
-    }*/
+                
+    }
     
 }
-
-/*
-DispatchQueue.global().async(group: dispatchGroup) {
-    let news = newsJSONs.map {RealmNews(from: $0)}
-    try? RealmService.save(items: news)
-    print("NewsController: loadNews: session.request: news.count: \(news.count)")
-}
-
-DispatchQueue.global().async(group: dispatchGroup) {
-    self.users = usersJSONs.map {RealmUser(from: $0)}
-    //try? RealmService.save(items: news)
-    print("NewsController: loadNews: session.request: users.count: \(self.users.count)")
-}
-*/
-
-
-/*
-DispatchQueue.global().async(group: dispatchGroup) {
-    NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
-        switch response.result {
-        case let .success(data):
-            let json = JSON(data)
-            let usersJSONs = json["response"]["profiles"].arrayValue
-            //print(usersJSONs)
-            self.newsUsers = usersJSONs.map {RealmUser(from: $0)}
-            print("NewsController: loadNews: users.count: \(self.newsUsers.count)")
-            //print(self.newsUsers)
-            //completion?(.success(users))
-        case let .failure(error):
-            print(error)
-            //completion?(.failure (error))
-        }
-    }
-}*/
-
-/*
-func printNews () {
-    print("NewsController: printNews: \(self.newsUsers)")
-
-}*/
