@@ -17,9 +17,7 @@ class RealmNews: Object {
     @objc dynamic var text = ""
     @objc dynamic var isLiked = -1
     @objc dynamic var likeCount = -1
-
-
-    //@objc dynamic var image = ""
+    @objc dynamic var image = ""
 
     convenience init(from json: JSON) {
         self.init()
@@ -30,8 +28,9 @@ class RealmNews: Object {
         self.text = json["text"].stringValue
         self.isLiked = json["likes"]["user_likes"].intValue
         self.likeCount = json["likes"]["count"].intValue
-
-        //self.image = json["photo_100"].stringValue
+        let sizesCount = json["attachments"][0]["photo"]["sizes"].count
+        self.image = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["url"].stringValue
+        //print("RealmNews: init: image: \(self.image)")
     }
     
     override static func primaryKey() -> String? {

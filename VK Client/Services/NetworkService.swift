@@ -43,13 +43,39 @@ class NetworkService {
         }
     }
     
+    static func searchGroups(token: String, searchText: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/groups.search"
+        
+        let params: Parameters = [
+            "access_token": token,
+            "q": searchText,
+            "count": 10,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(data):
+                let json = JSON(data)
+                let groupsJSONs = json["response"]["items"].arrayValue
+                let groups = groupsJSONs.map {RealmGroup(from: $0)}
+                //print("NetworkService: searchGroups: \(groups)")
+                completion?(.success(groups))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
     static func loadFriends(token: String, completion: ((Result<[RealmUser], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/friends.get"
         
         let params: Parameters = [
             "access_token": token,
-            "fields": "photo_200",
+            "fields": "photo_100",
             "extended": 1,
             "v": "5.92"
         ]
@@ -167,6 +193,7 @@ class NetworkService {
                 let json = JSON(data)
                 //print(json)
                 let newsJSONs = json["response"]["items"].arrayValue
+                //print(newsJSONs)
                 let news = newsJSONs.map {RealmNews(from: $0)}
                 //print("NetworkService: loadNews: \(news)")
                 completion?(.success(news))
@@ -176,30 +203,4 @@ class NetworkService {
         }
     }
     
-    static func searchGroups(token: String, searchText: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
-        let baseUrl = "https://api.vk.com"
-        let path = "/method/groups.search"
-        
-        let params: Parameters = [
-            "access_token": token,
-            "q": searchText,
-            "count": 10,
-            "extended": 1,
-            "v": "5.92"
-        ]
-        
-        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
-            switch response.result {
-            case let .success(data):
-                let json = JSON(data)
-                let groupsJSONs = json["response"]["items"].arrayValue
-                let groups = groupsJSONs.map {RealmGroup(from: $0)}
-                //print("NetworkService: searchGroups: \(groups)")
-                completion?(.success(groups))
-            case let .failure(error):
-                completion?(.failure (error))
-            }
-        }
-    }
-
 }

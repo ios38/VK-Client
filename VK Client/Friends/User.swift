@@ -24,7 +24,7 @@ class RealmUser: Object {
         self.id = json["id"].intValue
         self.firstName = json["first_name"].stringValue
         self.lastName = json["last_name"].stringValue
-        self.photo = json["photo_200"].stringValue
+        self.photo = json["photo_100"].stringValue
         //self.online = json["online"].intValue
 
         self.photos.append(objectsIn: photos)
