@@ -130,7 +130,7 @@ class NewsController: UITableViewController {
             "access_token": token,
             //"source_ids": 13807983,
             "filters": "post",
-            "count": 10,
+            "count": 15,
             "extended": 1,
             "v": "5.92"
         ]

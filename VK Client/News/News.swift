@@ -15,7 +15,8 @@ class RealmNews: Object {
     @objc dynamic var source = -1
     @objc dynamic var date = Date.distantPast
     @objc dynamic var text = ""
-    
+    @objc dynamic var attachments = ""
+
     @objc dynamic var imageLabel = ""
     @objc dynamic var image = ""
 
@@ -32,14 +33,24 @@ class RealmNews: Object {
         let dateDouble = json["date"].doubleValue
         self.date = Date(timeIntervalSince1970: dateDouble)
         self.text = json["text"].stringValue
+        self.attachments = json["attachments"][0]["type"].stringValue
         
-        switch json["attachments"][0]["type"].stringValue {
+        switch attachments {
         case "photo":
             let sizesCount = json["attachments"][0]["photo"]["sizes"].count
             self.image = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["url"].stringValue
         case "album":
             let sizesCount = json["attachments"][0]["album"]["thumb"]["sizes"].count
             self.image = json["attachments"][0]["album"]["thumb"]["sizes"][sizesCount - 1]["url"].stringValue
+        case "link":
+            //let sizesCount = json["attachments"][0]["link"]["photo"]["sizes"].count
+            self.image = json["attachments"][0]["link"]["photo"]["sizes"][1]["url"].stringValue
+        case "video":
+            if json["attachments"][0]["video"]["photo_640"].stringValue != "" {
+                self.image = json["attachments"][0]["video"]["photo_640"].stringValue
+            } else if json["attachments"][0]["video"]["photo_800"].stringValue != "" {
+                self.image = json["attachments"][0]["video"]["photo_800"].stringValue
+            }
         default:
             self.imageLabel = "Attachment type '\(json["attachments"][0]["type"].stringValue)' is not supported now 🙁\n Parsing of this type will appear later"
         }
