@@ -11,11 +11,17 @@ import UIKit
 class NewsControlCell: UITableViewCell {
     @IBOutlet var newsLikeImageView: UIImageView!
     @IBOutlet var newsLikeCountLabel: UILabel!
-
+    @IBOutlet var newsCommentsCountLabel: UILabel!
+    @IBOutlet var newsRepostsCountLabel: UILabel!
+    @IBOutlet var newsViewsCount: UILabel!
+    
     public func configure(with item: RealmNews) {
         newsLikeCountLabel.text = String(item.likeCount)
         let imageName = item.isLiked == 1 ? "heart.fill" : "heart"
-        newsLikeImageView.image = UIImage(systemName: imageName)        
+        newsLikeImageView.image = UIImage(systemName: imageName)
+        newsCommentsCountLabel.text = String(item.commentsCount)
+        newsRepostsCountLabel.text = String(item.repostsCount)
+        newsViewsCount.text = String(item.viewsCount)
     }
 
     override func awakeFromNib() {

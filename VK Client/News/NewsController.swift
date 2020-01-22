@@ -90,6 +90,7 @@ class NewsController: UITableViewController {
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsImageCell", for: indexPath) as? NewsImageCell else { preconditionFailure("NewsImageCell cannot be dequeued") }
             cell.newsImageView.kf.setImage(with: URL(string: news[indexPath.section].image))
+            cell.newsImageLabel.text = news[indexPath.section].imageLabel
             return cell
         case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsControlCell", for: indexPath) as? NewsControlCell else { preconditionFailure("NewsControlCell cannot be dequeued") }
@@ -129,7 +130,7 @@ class NewsController: UITableViewController {
             "access_token": token,
             //"source_ids": 13807983,
             "filters": "post",
-            "count": 3,
+            "count": 10,
             "extended": 1,
             "v": "5.92"
         ]

@@ -10,6 +10,7 @@ import UIKit
 
 class NewsImageCell: UITableViewCell {
     @IBOutlet var newsImageView: UIImageView!
+    @IBOutlet var newsImageLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
