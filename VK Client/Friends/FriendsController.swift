@@ -33,7 +33,7 @@ class FriendsController: UITableViewController {
             switch result {
             case let .success(friends):
                 try? RealmService.save(items: friends)
-                print("FriendsController: viewDidLoad: friends saved to Realm")
+                //print("FriendsController: viewDidLoad: friends saved to Realm")
             case let .failure(error):
                 print(error)
             }
@@ -44,7 +44,7 @@ class FriendsController: UITableViewController {
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.sortedFriends = self.sort(friends: self.friends)
                 self.tableView.reloadData()
             case let .error(error):

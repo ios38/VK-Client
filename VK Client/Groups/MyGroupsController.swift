@@ -62,7 +62,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.searchBar(self.searchBar, textDidChange: self.searchBar.text ?? "")
             case let .error(error):
                 print(error)
@@ -136,7 +136,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
         let group = sections[indexPath.section].items[indexPath.row]
         switch indexPath.section {
         case 0:
-            self.performSegue(withIdentifier: "Show News", sender: nil)
+            self.performSegue(withIdentifier: "Show Albums", sender: nil)
         case 1:
             if !groups.contains(where: {$0.id == group.id}) {
                 do {
@@ -155,8 +155,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Show News",
-            let destination = segue.destination as? NewsController,
+        if segue.identifier == "Show Albums",
+            let destination = segue.destination as? AlbumsController,
             let indexPath = tableView.indexPathForSelectedRow {
             //Выбираем группу для передачи
             guard indexPath.section == 0 else { return }

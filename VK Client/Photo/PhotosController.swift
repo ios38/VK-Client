@@ -35,7 +35,7 @@ class PhotosController: UICollectionViewController {
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.photos = self.sort(Array(self.realmPhotos))
                 self.collectionView.reloadData()
             case let .error(error):
@@ -90,7 +90,6 @@ class PhotosController: UICollectionViewController {
         cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
         cell.likeCount = photos[indexPath.row].likeCount
         cell.isLiked = photos[indexPath.row].isLiked
-        cell.isLikedLabel.text = String(photos[indexPath.row].isLiked)
         cell.photoId = photos[indexPath.row].id
         
         cell.delegate = self
