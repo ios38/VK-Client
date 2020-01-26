@@ -1,8 +1,8 @@
 //
-//  NewsController.swift
+//  NewsDetailsController.swift
 //  VK Client
 //
-//  Created by Maksim Romanov on 18.01.2020.
+//  Created by Maksim Romanov on 22.01.2020.
 //  Copyright © 2020 Maksim Romanov. All rights reserved.
 //
 
@@ -12,8 +12,9 @@ import SwiftyJSON
 import RealmSwift
 import Kingfisher
 
-class NewsController: UITableViewController {
+class NewsDetailsController: UITableViewController {
     private var notificationToken: NotificationToken?
+    public var newsId = Int()
 
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
@@ -23,7 +24,7 @@ class NewsController: UITableViewController {
 
     var news = [RealmNews]()
 
-    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
+    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self).filter("id == %@", newsId)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +47,7 @@ class NewsController: UITableViewController {
 //                print(error)
 //            }
 //        }
-//
+
         self.notificationToken = realmNews.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
@@ -172,22 +173,5 @@ class NewsController: UITableViewController {
         }
                 
     }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print("NewsController: News selected: \(indexPath.section)")
-        performSegue(withIdentifier: "ShowNewsDetails", sender: nil)
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowNewsDetails",
-            let destination = segue.destination as? NewsDetailsController,
-            let indexPath = tableView.indexPathForSelectedRow {
-            destination.newsId = news[indexPath.section].id
-        }
-    }
-
-    deinit {
-        notificationToken?.invalidate()
-    }
-
+    
 }
