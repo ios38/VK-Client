@@ -121,6 +121,29 @@ class NetworkService {
         }
     }
     
+    static func fetchPhotos(owner: Int, album: Int?, completion: ((Result<Data, Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.getAll"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            "owner_id": owner,
+            "album_id": album as Any,
+            "count": 15,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData { response in
+            switch response.result {
+            case let .success(data):
+                completion?(.success(data))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+    
     static func loadAlbum(token: String, owner: Int, album: Int, completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"

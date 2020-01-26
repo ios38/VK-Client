@@ -47,18 +47,18 @@ class NewsController: UITableViewController {
 //            }
 //        }
 //
-//        self.notificationToken = realmNews.observe({ [weak self] change in
-//            guard let self = self else { return }
-//            switch change {
-//            case .initial:
-//                break
-//            case .update(_, _, _, _):
-//                self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-//                self.tableView.reloadData()
-//            case let .error(error):
-//                print(error)
-//            }
-//        })
+        self.notificationToken = realmNews.observe({ [weak self] change in
+            guard let self = self else { return }
+            switch change {
+            case .initial:
+                break
+            case .update(_, _, _, _):
+                self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+                self.tableView.reloadData()
+            case let .error(error):
+                print(error)
+            }
+        })
     }
 
     // MARK: - Table view data source
@@ -160,11 +160,11 @@ class NewsController: UITableViewController {
                         let groups = groupsJSONs.map {RealmGroup(from: $0)}
                         try? RealmService.save(items: groups)
                     }
-
+                    /*
                     dispatchGroup.notify(queue: DispatchQueue.main) {
                         self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
                         self.tableView.reloadData()
-                    }
+                    }*/
                 }
             case let .failure(error):
                 print(error)
