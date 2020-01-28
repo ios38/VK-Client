@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class ParsingService {
     
-    func parsingPhoto(data: Any) -> [RealmPhoto] {
+    func parsingPhoto(data: Data) -> [RealmPhoto] {
         let json = JSON(data)
         let photosJSONs = json["response"]["items"].arrayValue
         let photos = photosJSONs.map {RealmPhoto(from: $0)}

@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import PromiseKit
 
 class NetworkService {
     static let session: Alamofire.Session = {
@@ -17,13 +18,43 @@ class NetworkService {
         let session = Alamofire.Session(configuration: config)
         return session
     }()
-
-    static func loadGroups(token: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
+    
+    static func loadGroups() -> Promise<[RealmGroup]> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.get"
         
         let params: Parameters = [
-            "access_token": token,
+            "access_token": Session.shared.accessToken,
+            //"count": 5,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        let promise = Promise<[RealmGroup]> { resolver in
+            NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+                switch response.result {
+                case let .success(data):
+                    let json = JSON(data)
+                    let groupsJSONs = json["response"]["items"].arrayValue
+                    let groups = groupsJSONs.map {RealmGroup(from: $0)}
+                    print("NetworkService: loadGroups: fulfill")
+                    resolver.fulfill(groups)
+                case let .failure(error):
+                    resolver.reject(error)
+                }
+            }
+        }
+        return promise
+        
+    }
+
+    /*
+    static func loadGroups(completion: ((Swift.Result<[RealmGroup], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/groups.get"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
             //"count": 5,
             "extended": 1,
             "v": "5.92"
@@ -41,9 +72,9 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
-    }
+    }*/
     
-    static func searchGroups(token: String, searchText: String, completion: ((Result<[RealmGroup], Error>) -> Void)? = nil) {
+    static func searchGroups(token: String, searchText: String, completion: ((Swift.Result<[RealmGroup], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.search"
         
@@ -69,7 +100,7 @@ class NetworkService {
         }
     }
 
-    static func loadFriends(token: String, completion: ((Result<[RealmUser], Error>) -> Void)? = nil) {
+    static func loadFriends(token: String, completion: ((Swift.Result<[RealmUser], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/friends.get"
         
@@ -94,7 +125,7 @@ class NetworkService {
         }
     }
 
-    static func loadPhotos(token: String, owner: Int, album: Int?, completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
+    static func loadPhotos(token: String, owner: Int, album: Int?, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
@@ -121,7 +152,7 @@ class NetworkService {
         }
     }
     
-    static func fetchPhotos(owner: Int, album: Int?, completion: ((Result<Data, Error>) -> Void)? = nil) {
+    static func fetchPhotos(owner: Int, album: Int?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
@@ -144,7 +175,7 @@ class NetworkService {
         }
     }
     
-    static func loadAlbum(token: String, owner: Int, album: Int, completion: ((Result<[RealmPhoto], Error>) -> Void)? = nil) {
+    static func loadAlbum(token: String, owner: Int, album: Int, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
 
@@ -171,7 +202,7 @@ class NetworkService {
         }
     }
 
-    static func loadAlbums(token: String, owner: Int, completion: ((Result<[RealmAlbums], Error>) -> Void)? = nil) {
+    static func loadAlbums(token: String, owner: Int, completion: ((Swift.Result<[RealmAlbums], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAlbums"
         
@@ -197,7 +228,7 @@ class NetworkService {
         }
     }
 
-    static func loadNews(token: String, completion: ((Result<[RealmNews], Error>) -> Void)? = nil) {
+    static func loadNews(token: String, completion: ((Swift.Result<[RealmNews], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/newsfeed.get"
         

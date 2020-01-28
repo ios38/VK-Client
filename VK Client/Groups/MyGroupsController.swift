@@ -46,8 +46,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             groupCategory(name: "", items: currentGroups),
             groupCategory(name: "Глобальный поиск", items: globalGroups)
         ]
-        
-        NetworkService.loadGroups(token: Session.shared.accessToken) { /*[weak self]*/ result in
+        /*
+        NetworkService.loadGroups() { /*[weak self]*/ result in
             //quard let self = self else {return}
             switch result {
             case let .success(groups):
@@ -55,8 +55,16 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
         
+        NetworkService
+            .loadGroups()
+            .done { groups in
+                try? RealmService.save(items: groups)
+            }.catch { error in
+                self.show(error: error)
+            }
+
         self.notificationToken = realmGroups.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
