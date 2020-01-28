@@ -45,7 +45,6 @@ class NetworkService {
             }
         }
         return promise
-        
     }
 
     /*
@@ -99,7 +98,7 @@ class NetworkService {
             }
         }
     }
-
+    /*
     static func loadFriends(token: String, completion: ((Swift.Result<[RealmUser], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/friends.get"
@@ -123,6 +122,33 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
+    }*/
+
+    static func loadFriends() -> Promise<[RealmUser]> {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/friends.get"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            "fields": "photo_100",
+            "extended": 1,
+            "v": "5.92"
+        ]
+        let promise = Promise<[RealmUser]> { resolver in
+            NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+                switch response.result {
+                case let .success(data):
+                    let json = JSON(data)
+                    let friendsJSONs = json["response"]["items"].arrayValue
+                    let friends = friendsJSONs.map {RealmUser(from: $0)}
+                    print("NetworkService: loadFriends: fulfill")
+                    resolver.fulfill(friends)
+                case let .failure(error):
+                    resolver.reject(error)
+                }
+            }
+        }
+        return promise
     }
 
     static func loadPhotos(token: String, owner: Int, album: Int?, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {

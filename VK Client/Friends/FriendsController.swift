@@ -27,7 +27,7 @@ class FriendsController: UITableViewController {
         }*/
 
         sortedFriends = self.sort(friends: friends)
-
+        /*
         NetworkService.loadFriends(token: Session.shared.accessToken) { /*[weak self]*/ result in
             //quard let self = self else { return }
             switch result {
@@ -37,7 +37,15 @@ class FriendsController: UITableViewController {
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
+        
+        NetworkService
+            .loadFriends()
+            .done { friends in
+                try? RealmService.save(items: friends)
+            }.catch { error in
+                self.show(error: error)
+            }
         
         self.notificationToken = friends.observe({ [weak self] change in
             guard let self = self else { return }
