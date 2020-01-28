@@ -30,21 +30,15 @@ class NetworkService {
             "v": "5.92"
         ]
         
-        let promise = Promise<[RealmGroup]> { resolver in
-            NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
-                switch response.result {
-                case let .success(data):
-                    let json = JSON(data)
-                    let groupsJSONs = json["response"]["items"].arrayValue
-                    let groups = groupsJSONs.map {RealmGroup(from: $0)}
-                    print("NetworkService: loadGroups: fulfill")
-                    resolver.fulfill(groups)
-                case let .failure(error):
-                    resolver.reject(error)
-                }
-            }
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params)
+            .responseJSON()
+            .map{ (data, response) -> [RealmGroup] in
+                let json = JSON(data)
+                let groupsJSONs = json["response"]["items"].arrayValue
+                let groups = groupsJSONs.map {RealmGroup(from: $0)}
+                print("NetworkService: loadGroups: fulfill")
+                return groups
         }
-        return promise
     }
 
     /*
