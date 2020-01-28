@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.0.0-rc.3)
+  - Alamofire (4.9.1)
   - Kingfisher (5.11.0):
     - Kingfisher/Core (= 5.11.0)
   - Kingfisher/Core (5.11.0)
@@ -7,6 +7,9 @@ PODS:
     - PromiseKit/CorePromise (= 6.13.1)
     - PromiseKit/Foundation (= 6.13.1)
     - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/Alamofire (6.13.1):
+    - Alamofire (~> 4.0)
+    - PromiseKit/CorePromise
   - PromiseKit/CorePromise (6.13.1)
   - PromiseKit/Foundation (6.13.1):
     - PromiseKit/CorePromise
@@ -20,9 +23,10 @@ PODS:
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.0.0-rc.3)
+  - Alamofire
   - Kingfisher (~> 5.11.0)
-  - PromiseKit
+  - PromiseKit (~> 6.13.1)
+  - PromiseKit/Alamofire
   - RealmSwift (~> 4.1.1)
   - SwiftyJSON (~> 5.0.0)
 
@@ -36,13 +40,13 @@ SPEC REPOS:
     - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: ca8c0de6906873be89d6deec5c8de279e00bf872
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   Kingfisher: 4569606189149e19c7d9439f47e885d0679b7a90
   PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
   Realm: 25f0a8244cbb1c2271c922963ea8666fc2d8104d
   RealmSwift: 9e2657b33764f80e4a4dffd6d440e24715782052
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 4155f0ad6a313c5cd83eeeb7b1f814efe3e1a8f6
+PODFILE CHECKSUM: 3369dfe813f8bac94ff673df2a3db8e0ac4b4e8c
 
 COCOAPODS: 1.8.4

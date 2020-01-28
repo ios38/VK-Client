@@ -12,10 +12,10 @@ import SwiftyJSON
 import PromiseKit
 
 class NetworkService {
-    static let session: Alamofire.Session = {
+    static let session: Alamofire.SessionManager = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 20
-        let session = Alamofire.Session(configuration: config)
+        let session = Alamofire.SessionManager(configuration: config)
         return session
     }()
     
