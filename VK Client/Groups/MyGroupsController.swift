@@ -18,6 +18,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
 
     private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
     //private let networkService = NetworkService()
     var groups = [RealmGroup]()
     var currentGroups = [RealmGroup]()
@@ -56,10 +57,12 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                 print(error)
             }
         }*/
-        
+
         NetworkService
             .loadGroups()
-            .done { groups in
+            .map { data in
+                try self.parsingService.parsingGroups(data)
+            }.done { groups in
                 try? RealmService.save(items: groups)
             }.catch { error in
                 self.show(error: error)

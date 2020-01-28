@@ -11,11 +11,11 @@ import SwiftyJSON
 
 class ParsingService {
     
-    func parsingPhoto(data: Data) -> [RealmPhoto] {
-        let json = JSON(data)
-        let photosJSONs = json["response"]["items"].arrayValue
-        let photos = photosJSONs.map {RealmPhoto(from: $0)}
-        return photos
+    func parsingGroups(_ data: Data) throws -> [RealmGroup] {
+        let json = try JSON(data: data)
+        let groupsJSONs = json["response"]["items"].arrayValue
+        let groups = groupsJSONs.map {RealmGroup(from: $0)}
+        return groups
     }
 
 }

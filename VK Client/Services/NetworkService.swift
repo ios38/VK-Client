@@ -18,7 +18,7 @@ class NetworkService {
         let session = Alamofire.SessionManager(configuration: config)
         return session
     }()
-    
+    /*
     static func loadGroups() -> Promise<[RealmGroup]> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.get"
@@ -39,6 +39,20 @@ class NetworkService {
                 print("NetworkService: loadGroups: fulfill")
                 return groups
         }
+    }*/
+
+    static func loadGroups() -> Promise<Data> {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/groups.get"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            //"count": 5,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
 
     /*
