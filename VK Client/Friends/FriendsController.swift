@@ -11,6 +11,8 @@ import RealmSwift
 
 class FriendsController: UITableViewController {
     private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
+
     private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self)
     //private var friends: Results<RealmUser>?
     private var sortedFriends = [Character: [RealmUser]]()
@@ -18,33 +20,25 @@ class FriendsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
-        /*
-        do {
-            friends = try RealmService.get(RealmUser.self)
-            sortedFriends = self.sort(friends: friends!)
-        } catch {
-            print(error)
-        }*/
 
         sortedFriends = self.sort(friends: friends)
-
-        NetworkService.loadFriends(token: Session.shared.accessToken) { /*[weak self]*/ result in
-            //quard let self = self else { return }
-            switch result {
-            case let .success(friends):
-                try? RealmService.save(items: friends)
-                print("FriendsController: viewDidLoad: friends saved to Realm")
-            case let .failure(error):
-                print(error)
-            }
-        }
         
+        NetworkService
+            .loadFriends()
+            .map(on: DispatchQueue.global()) { data in
+                try self.parsingService.parsingFriends(data)
+            }.done { friends in
+                try? RealmService.save(items: friends)
+            }.catch { error in
+                self.show(error: error)
+            }
+
         self.notificationToken = friends.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.sortedFriends = self.sort(friends: self.friends)
                 self.tableView.reloadData()
             case let .error(error):
