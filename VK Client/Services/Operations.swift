@@ -18,7 +18,7 @@ class GetData : AsyncOperation {
     
     override func main() {
         
-        NetworkService.fetchPhotos(owner: ownerId, album: albumId) { [weak self] result in
+        NetworkService.loadPhotos(owner: ownerId, album: albumId) { [weak self] result in
             guard let self = self else { return }
             guard case let .success(data) = result else { return }
             self.data = data

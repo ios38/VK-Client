@@ -26,3 +26,14 @@ extension UITableViewController {
         present(alertVC, animated: true)
     }
 }
+/*
+extension UITableViewCell {    
+    func show(error: Error) {
+        let alertVC = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true)
+    }
+}*/
+

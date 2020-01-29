@@ -31,5 +31,13 @@ class ParsingService {
         let photos = photosJSONs.map {RealmPhoto(from: $0)}
         return photos
     }
+    
+    func parsingAlbums(_ data: Data) throws -> [RealmAlbums] {
+        let json = try JSON(data: data)
+        let photosJSONs = json["response"]["items"].arrayValue
+        let photos = photosJSONs.map {RealmAlbums(from: $0)}
+        return photos
+    }
+
 
 }

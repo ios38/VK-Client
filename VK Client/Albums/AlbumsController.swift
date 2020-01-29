@@ -1,5 +1,5 @@
 //
-//  NewsController.swift
+//  AlbumsController.swift
 //  VK Client
 //
 //  Created by Maksim Romanov on 10.11.2019.
@@ -12,6 +12,8 @@ import Kingfisher
 
 class AlbumsController: UITableViewController {
     private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
+
     public var ownerId = Int()
     var albumId = Int()
     
@@ -33,15 +35,25 @@ class AlbumsController: UITableViewController {
         tableView.register(UINib(nibName: "AlbumsCell", bundle: nil), forCellReuseIdentifier: "AlbumsCell")
         albums = Array(self.realmAlbums)
         owner = Array(self.realmOwner)
-
-        NetworkService.loadAlbums(token: Session.shared.accessToken, owner: ownerId) { result in
+        
+        NetworkService
+            .loadAlbums(owner: ownerId)
+            .map(on: DispatchQueue.global()) { data in
+                try self.parsingService.parsingAlbums(data)
+            }.done { albums in
+                try? RealmService.save(items: albums)
+            }.catch { error in
+                self.show(error: error)
+            }
+        /*
+        NetworkService.loadAlbums(owner: ownerId) { result in
             switch result {
             case let .success(albums):
                 try? RealmService.save(items: albums)
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
         
         self.notificationToken = realmAlbums.observe({ [weak self] change in
             guard let self = self else { return }

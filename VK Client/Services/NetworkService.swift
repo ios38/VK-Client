@@ -150,7 +150,7 @@ class NetworkService {
         }
     }*/
     
-    static func fetchPhotos(owner: Int, album: Int?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
+    static func loadPhotos(owner: Int, album: Int?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
@@ -172,7 +172,7 @@ class NetworkService {
             }
         }
     }
-    
+    /*
     static func loadAlbum(token: String, owner: Int, album: Int, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
@@ -198,8 +198,25 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
+    }*/
+    
+    static func loadAlbum(owner: Int, album: Int) -> Promise<Data> {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.get"
+
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            "owner_id": owner,
+            "album_id": album,
+            "count": 10,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
 
+    /*
     static func loadAlbums(token: String, owner: Int, completion: ((Swift.Result<[RealmAlbums], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAlbums"
@@ -224,6 +241,21 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
+    }*/
+
+    static func loadAlbums(owner: Int) -> Promise<Data> {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.getAlbums"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            "owner_id": owner,
+            "count": 3,
+            "extended": 1,
+            "v": "5.92"
+        ]
+
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
 
     static func loadNews(token: String, completion: ((Swift.Result<[RealmNews], Error>) -> Void)? = nil) {

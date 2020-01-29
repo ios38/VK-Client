@@ -12,7 +12,8 @@ import Kingfisher
 
 class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var notificationToken: NotificationToken?
-    
+    private let parsingService = ParsingService()
+
     @IBOutlet var ownerImageView: UIImageView!
     @IBOutlet var ownerNameLabel: UILabel!
     @IBOutlet var albumDateLabel: UILabel!
@@ -52,8 +53,19 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
         self.albumId = album
         //print(photos.count)
         photos = Array(realmPhotos)
-
         
+        NetworkService
+            .loadAlbum(owner: ownerId, album: albumId)
+            .map(on: DispatchQueue.global()) { data in
+                try self.parsingService.parsingPhotos(data)
+            }.done { photos in
+                try? RealmService.save(items: photos)
+            }.catch { error in
+                print(error)
+                //self.show(error: error)
+            }
+
+        /*
         NetworkService.loadAlbum(token: Session.shared.accessToken, owner: ownerId, album: albumId) { result in
             switch result {
             case let .success(photos):
@@ -61,7 +73,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
         
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
