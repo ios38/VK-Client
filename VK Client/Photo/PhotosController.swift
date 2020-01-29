@@ -30,27 +30,21 @@ class PhotosController: UICollectionViewController {
         photos = sort(Array(realmPhotos))
         
         let getData = GetData(ownerId: ownerId, albumId: nil)
-        getData.completionBlock = {
-            print ("2_PhotosController: getData.data: \(getData.data as Any)")
-        }
+        //getData.completionBlock = {print ("2_PhotosController: getData.data: \(getData.data as Any)")}
         photoQueue.addOperation(getData)
 
         let parseData = ParseData()
         parseData.addDependency(getData)
-        parseData.completionBlock = {
-            print ("4_PhotosController: parseData.outputData.count: \(parseData.outputData.count)")
-        }
+        //parseData.completionBlock = {print ("4_PhotosController: parseData.outputData.count:\(parseData.outputData.count)")}
         photoQueue.addOperation(parseData)
         
         let saveData = SaveData()
         saveData.addDependency(parseData)
-        saveData.completionBlock = {
-            print ("6_PhotosController: saveData: data saved to Realm")
-        }
+        //saveData.completionBlock = {print ("6_PhotosController: saveData: data saved to Realm")}
         photoQueue.addOperation(saveData)
 
         /*
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: nil) { result in
+        NetworkService.loadPhotos(owner: ownerId, album: nil) { result in
             switch result {
             case let .success(photos):
                 try? RealmService.save(items: photos)

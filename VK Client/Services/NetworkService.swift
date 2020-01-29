@@ -19,43 +19,6 @@ class NetworkService {
         return session
     }()
     /*
-    static func loadGroups() -> Promise<[RealmGroup]> {
-        let baseUrl = "https://api.vk.com"
-        let path = "/method/groups.get"
-        
-        let params: Parameters = [
-            "access_token": Session.shared.accessToken,
-            //"count": 5,
-            "extended": 1,
-            "v": "5.92"
-        ]
-        
-        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params)
-            .responseJSON()
-            .map{ (data, response) -> [RealmGroup] in
-                let json = JSON(data)
-                let groupsJSONs = json["response"]["items"].arrayValue
-                let groups = groupsJSONs.map {RealmGroup(from: $0)}
-                print("NetworkService: loadGroups: fulfill")
-                return groups
-        }
-    }*/
-
-    static func loadGroups() -> Promise<Data> {
-        let baseUrl = "https://api.vk.com"
-        let path = "/method/groups.get"
-        
-        let params: Parameters = [
-            "access_token": Session.shared.accessToken,
-            //"count": 5,
-            "extended": 1,
-            "v": "5.92"
-        ]
-        
-        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
-    }
-
-    /*
     static func loadGroups(completion: ((Swift.Result<[RealmGroup], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.get"
@@ -81,6 +44,20 @@ class NetworkService {
         }
     }*/
     
+    static func loadGroups() -> Promise<Data> {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/groups.get"
+        
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            //"count": 5,
+            "extended": 1,
+            "v": "5.92"
+        ]
+        
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
+    }
+
     static func searchGroups(token: String, searchText: String, completion: ((Swift.Result<[RealmGroup], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.search"
@@ -132,7 +109,7 @@ class NetworkService {
         }
     }*/
 
-    static func loadFriends() -> Promise<[RealmUser]> {
+    static func loadFriends() -> Promise<Data> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/friends.get"
         
@@ -142,29 +119,16 @@ class NetworkService {
             "extended": 1,
             "v": "5.92"
         ]
-        let promise = Promise<[RealmUser]> { resolver in
-            NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
-                switch response.result {
-                case let .success(data):
-                    let json = JSON(data)
-                    let friendsJSONs = json["response"]["items"].arrayValue
-                    let friends = friendsJSONs.map {RealmUser(from: $0)}
-                    print("NetworkService: loadFriends: fulfill")
-                    resolver.fulfill(friends)
-                case let .failure(error):
-                    resolver.reject(error)
-                }
-            }
-        }
-        return promise
+        
+        return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
-
-    static func loadPhotos(token: String, owner: Int, album: Int?, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {
+    /*
+    static func loadPhotos(owner: Int, album: Int?, completion: ((Swift.Result<[RealmPhoto], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
         let params: Parameters = [
-            "access_token": token,
+            "access_token": Session.shared.accessToken,
             "owner_id": owner,
             "album_id": album as Any,
             "count": 15,
@@ -184,7 +148,7 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
-    }
+    }*/
     
     static func fetchPhotos(owner: Int, album: Int?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"

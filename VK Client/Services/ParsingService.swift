@@ -18,4 +18,18 @@ class ParsingService {
         return groups
     }
 
+    func parsingFriends(_ data: Data) throws -> [RealmUser] {
+        let json = try JSON(data: data)
+        let friendsJSONs = json["response"]["items"].arrayValue
+        let friends = friendsJSONs.map {RealmUser(from: $0)}
+        return friends
+    }
+
+    func parsingPhotos(_ data: Data) throws -> [RealmPhoto] {
+        let json = try JSON(data: data)
+        let photosJSONs = json["response"]["items"].arrayValue
+        let photos = photosJSONs.map {RealmPhoto(from: $0)}
+        return photos
+    }
+
 }

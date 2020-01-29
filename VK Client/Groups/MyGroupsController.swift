@@ -60,7 +60,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
 
         NetworkService
             .loadGroups()
-            .map { data in
+            .map(on: DispatchQueue.global()) { data in
                 try self.parsingService.parsingGroups(data)
             }.done { groups in
                 try? RealmService.save(items: groups)
@@ -155,7 +155,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                     try realm.write {
                         realm.add(group)
                     }
-                    print("Добавили \(group.name) в Realm")
+                    //print("Добавили \(group.name) в Realm")
                 } catch {
                     print(error)
                 }
@@ -204,7 +204,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                         if !self.groups.contains(where: {$0.id == group.id}){
                             self.globalGroups.append(group)
                         } else {
-                            print ("Группа \(group.name) уже есть")
+                            //print ("Группа \(group.name) уже есть")
                         }
                     }
                     

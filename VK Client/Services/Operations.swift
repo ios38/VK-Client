@@ -22,7 +22,7 @@ class GetData : AsyncOperation {
             guard let self = self else { return }
             guard case let .success(data) = result else { return }
             self.data = data
-            print("1_Operations: GetData: \(String(describing: self.data))")
+            //print("1_Operations: GetData: \(String(describing: self.data))")
             self.state = .finished
         }
         /*
@@ -45,16 +45,20 @@ class GetData : AsyncOperation {
 }
 
 class ParseData: Operation {
+    private let parsingService = ParsingService()
     var outputData: [RealmPhoto] = []
     
     override func main() {
         guard let getData = dependencies.first as? GetData, let data = getData.data else { return }
         do {
+            outputData = try self.parsingService.parsingPhotos(data)
+            /*
             let json = try JSON(data: data)
             let postsJSONs = json["response"]["items"].arrayValue
             let posts = postsJSONs.map {RealmPhoto(from: $0)}
             outputData = posts
             print("3_Operations: ParseData: \(outputData.count)")
+             */
         } catch {
             print(error)
         }
@@ -68,7 +72,7 @@ class SaveData: Operation {
     override func main() {
         guard let parseData = dependencies.first as? ParseData else { return }
         try? RealmService.save(items: parseData.outputData)
-        print("5_Operations: SaveData: \(parseData.outputData.count) items")
+        //print("5_Operations: SaveData: \(parseData.outputData.count) items")
     }
             
 }
