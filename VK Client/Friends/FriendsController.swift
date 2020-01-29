@@ -22,17 +22,6 @@ class FriendsController: UITableViewController {
         overrideUserInterfaceStyle = .dark
 
         sortedFriends = self.sort(friends: friends)
-        /*
-        NetworkService.loadFriends(token: Session.shared.accessToken) { /*[weak self]*/ result in
-            //quard let self = self else { return }
-            switch result {
-            case let .success(friends):
-                try? RealmService.save(items: friends)
-                //print("FriendsController: viewDidLoad: friends saved to Realm")
-            case let .failure(error):
-                print(error)
-            }
-        }*/
         
         NetworkService
             .loadFriends()

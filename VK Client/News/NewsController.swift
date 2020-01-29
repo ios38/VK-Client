@@ -14,6 +14,7 @@ import Kingfisher
 
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
 
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
@@ -144,6 +145,7 @@ class NewsController: UITableViewController {
                     let json = JSON(data)
                     
                     DispatchQueue.global().async(group: dispatchGroup) {
+                        //try self.parsingService.parsingFriends(data)
                         let newsJSONs = json["response"]["items"].arrayValue
                         let news = newsJSONs.map {RealmNews(from: $0)}
                         try? RealmService.save(items: news)
