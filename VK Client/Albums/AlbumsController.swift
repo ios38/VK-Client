@@ -13,6 +13,7 @@ import Kingfisher
 class AlbumsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
+    //private var photoService = PhotoService()
 
     public var ownerId = Int()
     var albumId = Int()

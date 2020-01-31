@@ -8,11 +8,12 @@
 
 import UIKit
 import RealmSwift
-import Kingfisher
+//import Kingfisher
 
 class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
+    private var photoService = PhotoService()
 
     @IBOutlet var ownerImageView: UIImageView!
     @IBOutlet var ownerNameLabel: UILabel!
@@ -100,7 +101,12 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as? AlbumCell
         
-        cell?.cellImageView.kf.setImage(with: URL(string: photos[indexPath.item].image))
+        photoService.photo(urlString: photos[indexPath.item].image)
+            .done(on: .main) { /*[weak self]*/ image in
+                cell?.cellImageView.image = image
+        }.catch { print($0.localizedDescription ) }
+        
+        //cell?.cellImageView.kf.setImage(with: URL(string: photos[indexPath.item].image))
         //cell?.updateCellWithImage(name: albumPhoto)
         
         return cell!

@@ -13,14 +13,14 @@ import PromiseKit
 class PhotoService {
     private var cacheLifeTime: TimeInterval = 60*60*24*7
     private static var memoryCache = [String: UIImage]() //запретить многопоточную запись
-    private var isolatedQueue = DispatchQueue(label: "ru.maksim-romanov.vk-client.memoryCache")
+    private var isolatedQueue = DispatchQueue(label: "ru.romanov.vk-client.memoryCache")
     
     private var imageCacheUrl: URL? = {
         let dirName = "Images"
         
         guard let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
-        let url =  cacheDir.appendingPathComponent(dirName, isDirectory: true)
-        
+        let url = cacheDir.appendingPathComponent(dirName, isDirectory: true)
+
         if !FileManager.default.fileExists(atPath: url.path) {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
@@ -28,6 +28,8 @@ class PhotoService {
                 return nil
             }
         }
+        //print ("PhotoService: imageCacheUrl: url: \(url)")
+        //print ("PhotoService: imageCacheUrl: url.path: \(url.path)")
         return url
     }()
     
@@ -41,7 +43,9 @@ class PhotoService {
         guard let data = image.pngData(),
             let fileUrl = getFilePath(urlString: urlString) else { return }
         
-        FileManager.default.createFile(atPath: fileUrl.absoluteString, contents: data, attributes: nil)
+        //FileManager.default.createFile(atPath: fileUrl.absoluteString, contents: data, attributes: nil)
+        try! data.write(to: fileUrl)
+        //print("PhotoService: saveImageToFilesystem: \(fileUrl.absoluteString)")
     }
     
     private func loadImagesFromFilesystem(urlString: String) -> UIImage? {
@@ -71,11 +75,14 @@ class PhotoService {
     
     public func photo(urlString: String) -> Promise<UIImage> {
         if let image = PhotoService.memoryCache[urlString] {
+            print ("PhotoService: load from memoryCache: \(urlString)")
             return Promise.value(image)
         } else
             if let image = loadImagesFromFilesystem(urlString: urlString) {
+            print ("PhotoService: load from Filesystem: \(urlString)")
             return Promise.value(image)
         }
+        print ("PhotoService: load from Alamofire: \(urlString)")
         return loadImage(urlString: urlString)
     }
 }
