@@ -14,6 +14,7 @@
 		501A18482377F14500BDE950 /* AlbumsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A18472377F14500BDE950 /* AlbumsController.swift */; };
 		501A184A2377F25500BDE950 /* Albums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A18492377F25500BDE950 /* Albums.swift */; };
 		502F55DA23E066AC008DA333 /* TableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F55D923E066AC008DA333 /* TableViewControllerExtension.swift */; };
+		502F55DE23E3067A008DA333 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F55DD23E3067A008DA333 /* PhotoService.swift */; };
 		50364E22237BC25400C14D70 /* Dot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50364E21237BC25400C14D70 /* Dot.swift */; };
 		5037BB62235AFF9600FCBB82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5037BB61235AFF9600FCBB82 /* AppDelegate.swift */; };
 		5037BB64235AFF9600FCBB82 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5037BB63235AFF9600FCBB82 /* SceneDelegate.swift */; };
@@ -73,6 +74,7 @@
 		501A18472377F14500BDE950 /* AlbumsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsController.swift; sourceTree = "<group>"; };
 		501A18492377F25500BDE950 /* Albums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Albums.swift; sourceTree = "<group>"; };
 		502F55D923E066AC008DA333 /* TableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewControllerExtension.swift; sourceTree = "<group>"; };
+		502F55DD23E3067A008DA333 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		50364E21237BC25400C14D70 /* Dot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dot.swift; sourceTree = "<group>"; };
 		5037BB5E235AFF9600FCBB82 /* VK Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VK Client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5037BB61235AFF9600FCBB82 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				50783C7723C7426C00623F66 /* RealmService.swift */,
 				508A4CEC23DA884D00378922 /* ParsingService.swift */,
 				508A4D1623DBF20100378922 /* AsyncOperation.swift */,
+				502F55DD23E3067A008DA333 /* PhotoService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				50517D472392936F002D7677 /* Account.swift in Sources */,
 				5082976E2396863B0006BB6E /* NetworkService.swift in Sources */,
 				50D8355B23629863009C0295 /* MyGroupsController.swift in Sources */,
+				502F55DE23E3067A008DA333 /* PhotoService.swift in Sources */,
 				50D835612362F414009C0295 /* Group.swift in Sources */,
 				50BB6308238A6F0D00758C16 /* CustomNavigationController.swift in Sources */,
 				508D26402378314600EAA5BA /* AlbumsCell.swift in Sources */,
