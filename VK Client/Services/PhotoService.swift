@@ -11,7 +11,7 @@ import Alamofire
 import PromiseKit
 
 class PhotoService {
-    private var cacheLifeTime: TimeInterval = 60*60*24*7
+    private var cacheLifeTime: TimeInterval = 60*60*24
     private static var memoryCache = [String: UIImage]() //запретить многопоточную запись
     private var isolatedQueue = DispatchQueue(label: "ru.romanov.vk-client.memoryCache")
     
@@ -28,8 +28,6 @@ class PhotoService {
                 return nil
             }
         }
-        //print ("PhotoService: imageCacheUrl: url: \(url)")
-        //print ("PhotoService: imageCacheUrl: url.path: \(url.path)")
         return url
     }()
     
@@ -43,20 +41,20 @@ class PhotoService {
         guard let data = image.pngData(),
             let fileUrl = getFilePath(urlString: urlString) else { return }
         
-        //FileManager.default.createFile(atPath: fileUrl.absoluteString, contents: data, attributes: nil)
-        try! data.write(to: fileUrl)
-        //print("PhotoService: saveImageToFilesystem: \(fileUrl.absoluteString)")
+        FileManager.default.createFile(atPath: fileUrl.path, contents: data, attributes: nil)
+        //try! data.write(to: fileUrl)
     }
     
-    private func loadImagesFromFilesystem(urlString: String) -> UIImage? {
+    private func loadImagesFromFilesystem(urlString: String) -> UIImage? {        
         guard let fileUrl = getFilePath(urlString: urlString),
-            let info = try? FileManager.default.attributesOfItem(atPath: fileUrl.absoluteString),
+            let info = try? FileManager.default.attributesOfItem(atPath: fileUrl.path),
             let modificationDate = info[.modificationDate] as? Date else { return nil }
-        
+
         let imageLifeTime = Date().distance(to: modificationDate)
-        
+
         guard imageLifeTime < cacheLifeTime,
-            let image = UIImage(contentsOfFile: fileUrl.absoluteString) else { return nil }
+            let image = UIImage(contentsOfFile: fileUrl.path) else { return nil }
+        
         isolatedQueue.async {
             PhotoService.memoryCache[urlString] = image
         }
