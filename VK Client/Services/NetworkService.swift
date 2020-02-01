@@ -159,9 +159,9 @@ class NetworkService {
         
         let params: Parameters = [
             "access_token": Session.shared.accessToken,
-            "source_ids": 13807983,
+            //"source_ids": 13807983,
             "filters": "post",
-            "count": 3,
+            "count": 15,
             "extended": 1,
             "v": "5.92"
         ]

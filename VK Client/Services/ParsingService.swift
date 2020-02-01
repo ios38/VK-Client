@@ -13,9 +13,9 @@ class ParsingService {
     
     func parsingGroups(_ data: Data) throws -> [RealmGroup] {
         let json = try JSON(data: data)
-        let groupsJSONs = json["response"]["items"].arrayValue
-        let groups = groupsJSONs.map {RealmGroup(from: $0)}
-        return groups
+        let itemsJSONs = json["response"]["items"].arrayValue
+        let items = itemsJSONs.map {RealmGroup(from: $0)}
+        return items
     }
 
     func parsingFriends(_ data: Data) throws -> [RealmUser] {
@@ -46,5 +46,18 @@ class ParsingService {
         return news
     }
 
+    func parsingProfiles(_ data: Data) throws -> [RealmUser] {
+        let json = try JSON(data: data)
+        let itemsJSONs = json["response"]["profiles"].arrayValue
+        let items = itemsJSONs.map {RealmUser(from: $0)}
+        return items
+    }
+
+    func parsingNewsGroups(_ data: Data) throws -> [RealmGroup] {
+        let json = try JSON(data: data)
+        let itemsJSONs = json["response"]["groups"].arrayValue
+        let items = itemsJSONs.map {RealmGroup(from: $0)}
+        return items
+    }
 
 }

@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import RealmSwift
+import PromiseKit
 import Kingfisher
 
 class NewsController: UITableViewController {
@@ -36,8 +37,16 @@ class NewsController: UITableViewController {
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
         
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-
-        loadNews(token: Session.shared.accessToken)
+        
+        NetworkService
+            .loadNews()
+            .map(on: DispatchQueue.global()) { data in
+                self.newsData(data)
+            //}.done { data in
+            //    try? RealmService.save(items: friends)
+            }.catch { error in
+                self.show(error: error)
+            }
 
 //        NetworkService.loadNews(token: Session.shared.accessToken) { result in
 //            switch result {
@@ -122,57 +131,41 @@ class NewsController: UITableViewController {
         return (name, image)
     }
     
-    func loadNews(token: String/*, completion: ((Result<[RealmNews], Error>) -> Void)? = nil*/) {
-        
-        let baseUrl = "https://api.vk.com"
-        let path = "/method/newsfeed.get"
-        
-        let params: Parameters = [
-            "access_token": token,
-            //"source_ids": 13807983,
-            "filters": "post",
-            "count": 15,
-            "extended": 1,
-            "v": "5.92"
-        ]
-        
+    
+    func newsData(_ data: Data) {
         let dispatchGroup = DispatchGroup()
-
-        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
-        switch response.result {
-            case let .success(data):
-                DispatchQueue.main.async {
-                    let json = JSON(data)
-                    
-                    DispatchQueue.global().async(group: dispatchGroup) {
-                        //try self.parsingService.parsingFriends(data)
-                        let newsJSONs = json["response"]["items"].arrayValue
-                        let news = newsJSONs.map {RealmNews(from: $0)}
-                        try? RealmService.save(items: news)
-                    }
-                    
-                    DispatchQueue.global().async(group: dispatchGroup) {
-                        let usersJSONs = json["response"]["profiles"].arrayValue
-                        let users = usersJSONs.map {RealmUser(from: $0)}
-                        try? RealmService.save(items: users)
-                    }
-                    
-                    DispatchQueue.global().async(group: dispatchGroup) {
-                        let groupsJSONs = json["response"]["groups"].arrayValue
-                        let groups = groupsJSONs.map {RealmGroup(from: $0)}
-                        try? RealmService.save(items: groups)
-                    }
-                    /*
-                    dispatchGroup.notify(queue: DispatchQueue.main) {
-                        self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-                        self.tableView.reloadData()
-                    }*/
-                }
-            case let .failure(error):
+        
+        DispatchQueue.global().async(group: dispatchGroup) {
+            do {
+                let news = try self.parsingService.parsingNews(data)
+                try? RealmService.save(items: news)
+            } catch {
                 print(error)
             }
         }
-                
+
+        DispatchQueue.global().async(group: dispatchGroup) {
+            do {
+                let items = try self.parsingService.parsingProfiles(data)
+                try? RealmService.save(items: items)
+            } catch {
+                print(error)
+            }
+        }
+        
+        DispatchQueue.global().async(group: dispatchGroup) {
+            do {
+                let items = try self.parsingService.parsingNewsGroups(data)
+                try? RealmService.save(items: items)
+            } catch {
+                print(error)
+            }
+        }
+        /*
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+            self.tableView.reloadData()
+        }*/
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
