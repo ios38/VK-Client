@@ -28,11 +28,6 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
 
-    class var customCell : AlbumsCell {
-        let cell = Bundle.main.loadNibNamed("AlbumsCell", owner: self, options: nil)?.last
-        return cell as! AlbumsCell
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.albumTextLabel.sizeToFit()
@@ -42,11 +37,9 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
         flowLayout.itemSize = CGSize(width: 200, height: 200)
         flowLayout.minimumLineSpacing = 1.0
         flowLayout.minimumInteritemSpacing = 1.0
-        self.albumView.collectionViewLayout = flowLayout
-        
         let cellNib = UINib(nibName: "AlbumCell", bundle: nil)
         self.albumView.register(cellNib, forCellWithReuseIdentifier: "AlbumCell")
-        
+        self.albumView.collectionViewLayout = flowLayout        
     }
 
     func updateCellWith(owner: Int, album: Int) {

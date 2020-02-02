@@ -11,11 +11,6 @@ import UIKit
 class AlbumCell: UICollectionViewCell {
     @IBOutlet var cellImageView: UIImageView!
     
-    class var CustomCell : AlbumCell {
-        let cell = Bundle.main.loadNibNamed("AlbumCell", owner: self, options: nil)?.last
-        return cell as! AlbumCell
-    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = UIColor.darkGray

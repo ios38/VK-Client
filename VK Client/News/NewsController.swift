@@ -16,7 +16,7 @@ import Kingfisher
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
-
+        
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
         dt.dateFormat = "dd MMMM yyyy" //nsdateformatter.com
@@ -24,7 +24,8 @@ class NewsController: UITableViewController {
     }()
 
     var news = [RealmNews]()
-
+    var newsSources = [Int]()
+    
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 
     override func viewDidLoad() {
@@ -35,28 +36,23 @@ class NewsController: UITableViewController {
         tableView.register(UINib(nibName: "NewsTextCell", bundle: nil), forCellReuseIdentifier: "NewsTextCell")
         tableView.register(UINib(nibName: "NewsImageCell", bundle: nil), forCellReuseIdentifier: "NewsImageCell")
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
-        
+
+        let newsTableHeader = NewsTableHeader()
+        tableView.tableHeaderView = newsTableHeader
+        tableView.tableHeaderView?.backgroundColor = .darkGray
+
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
         
         NetworkService
             .loadNews()
-            .map(on: DispatchQueue.global()) { data in
+//            .map(on: DispatchQueue.global()) { data in
+//                self.newsData(data)
+            .done(on: DispatchQueue.global()) { data in
                 self.newsData(data)
-            //}.done { data in
-            //    try? RealmService.save(items: friends)
             }.catch { error in
                 self.show(error: error)
             }
 
-//        NetworkService.loadNews(token: Session.shared.accessToken) { result in
-//            switch result {
-//            case let .success(news):
-//                try? RealmService.save(items: news)
-//            case let .failure(error):
-//                print(error)
-//            }
-//        }
-//
         self.notificationToken = realmNews.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
@@ -138,6 +134,7 @@ class NewsController: UITableViewController {
         DispatchQueue.global().async(group: dispatchGroup) {
             do {
                 let news = try self.parsingService.parsingNews(data)
+                news.forEach{ self.addNewsSources($0.source) }
                 try? RealmService.save(items: news)
             } catch {
                 print(error)
@@ -161,11 +158,11 @@ class NewsController: UITableViewController {
                 print(error)
             }
         }
-        /*
+        
         dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-            self.tableView.reloadData()
-        }*/
+            print("newsSources.count: \(self.newsSources.count)")
+            //self.fillHeader(self.newsSources)
+        }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -180,6 +177,28 @@ class NewsController: UITableViewController {
             destination.newsId = news[indexPath.section].id
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        //tableView.tableHeaderView!.frame.size.height = 100
+        updateHeaderViewHeight(for: tableView.tableHeaderView)
+    }
+
+    func updateHeaderViewHeight(for header: UIView?) {
+        guard let header = header else { return }
+        header.frame.size.height = 50
+    }
+
+    func addNewsSources(_ id: Int) {
+        guard !newsSources.contains(id) else { return }
+        newsSources.append(id)
+    }
+    /*
+    func fillHeader(_ newsSources: [Int]) {
+        guard let headerView = tableView.tableHeaderView as? NewsTableViewHeader else { return }
+        for _ in 1...5 {headerView.stackView.addArrangedSubview(UIImageView(image: UIImage(systemName: "person.circle")))
+        }
+    }*/
 
     deinit {
         notificationToken?.invalidate()
