@@ -9,6 +9,15 @@
 import UIKit
 
 class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    let collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        //flowLayout.itemSize = CGSize(width: 50, height: 50)
+        flowLayout.minimumLineSpacing = 1.0
+        flowLayout.minimumInteritemSpacing = 1.0
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,13 +28,7 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         label.text = "NewsTableHeader"
         addSubview(label)
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.itemSize = CGSize(width: 50, height: 50)
-        flowLayout.minimumLineSpacing = 1.0
-        flowLayout.minimumInteritemSpacing = 1.0
 
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flowLayout)
         let cellNib = UINib(nibName: "NewsTableHeaderCell", bundle: nil)
         collectionView.register(cellNib, forCellWithReuseIdentifier: "NewsTableHeaderCell")
         collectionView.delegate = self
@@ -47,5 +50,10 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         cell.backgroundColor = .lightGray
         return cell
     }
-
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        collectionView.frame = bounds
+    }
 }
