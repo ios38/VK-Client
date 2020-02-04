@@ -16,6 +16,7 @@ import Kingfisher
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
+    //let newsTableHeader = NewsTableHeader()
         
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
@@ -24,7 +25,7 @@ class NewsController: UITableViewController {
     }()
 
     var news = [RealmNews]()
-    var newsSources = [Int]()
+    var newsSources = [NewsSource]()
     
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 
@@ -37,12 +38,12 @@ class NewsController: UITableViewController {
         tableView.register(UINib(nibName: "NewsImageCell", bundle: nil), forCellReuseIdentifier: "NewsImageCell")
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
 
+        news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
         let newsTableHeader = NewsTableHeader()
+        newsTableHeader.sources = newsSources(news)
         tableView.tableHeaderView = newsTableHeader
         tableView.tableHeaderView?.backgroundColor = .darkGray
 
-        news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-        
         NetworkService
             .loadNews()
 //            .map(on: DispatchQueue.global()) { data in
@@ -60,6 +61,7 @@ class NewsController: UITableViewController {
                 break
             case .update(_, _, _, _):
                 self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+                newsTableHeader.sources = self.newsSources(self.news)
                 self.tableView.reloadData()
             case let .error(error):
                 print(error)
@@ -134,7 +136,6 @@ class NewsController: UITableViewController {
         DispatchQueue.global().async(group: dispatchGroup) {
             do {
                 let news = try self.parsingService.parsingNews(data)
-                news.forEach{ self.addNewsSources($0.source) }
                 try? RealmService.save(items: news)
             } catch {
                 print(error)
@@ -189,15 +190,23 @@ class NewsController: UITableViewController {
         header.frame.size.height = 50
     }
 
-    func addNewsSources(_ id: Int) {
-        guard !newsSources.contains(id) else { return }
-        newsSources.append(id)
+    func newsSources(_ news: [RealmNews]) -> [NewsSource]{
+        var sources = [NewsSource]()
+        news.forEach {
+            //guard !newsSources.contains($0.source) else { return }
+            sources.append(NewsSource(
+                id: $0.source,
+                name: newsSourceDetails($0.source).name,
+                image: newsSourceDetails($0.source).image
+            ))
+        }
+        print("NewsController: newsSources: \(sources)")
+        return sources
     }
     /*
     func fillHeader(_ newsSources: [Int]) {
-        guard let headerView = tableView.tableHeaderView as? NewsTableViewHeader else { return }
-        for _ in 1...5 {headerView.stackView.addArrangedSubview(UIImageView(image: UIImage(systemName: "person.circle")))
-        }
+        guard let headerView = tableView.tableHeaderView as? NewsTableHeader else { return }
+            headerView.sources = newsSources
     }*/
 
     deinit {

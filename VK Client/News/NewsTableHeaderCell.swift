@@ -14,12 +14,12 @@ class NewsTableHeaderCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("NewsTableHeaderCell: init")
+        //print("NewsTableHeaderCell: awakeFromNib")
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("NewsTableHeaderCell: init")
+        //print("NewsTableHeaderCell: init")
     }
 
     required init?(coder: NSCoder) {

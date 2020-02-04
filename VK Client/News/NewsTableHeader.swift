@@ -9,6 +9,7 @@
 import UIKit
 
 class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    var sources = [NewsSource]()
     let collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -18,6 +19,11 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         return collectionView
     }()
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        print("NewsTableHeader: awakeFromNib: sources.count: \(sources.count)")
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +40,6 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
-
     }
     
     required init?(coder: NSCoder) {
@@ -42,15 +47,28 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return sources.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsTableHeaderCell", for: indexPath) as! NewsTableHeaderCell
+        print("NewsTableHeader: collectionView: sources.count: \(sources.count)")
         cell.backgroundColor = .lightGray
         return cell
     }
     
+    func newsSourceImage(_ source: Int) -> (String) {
+        var image = ""
+        if source > 0 {
+            let realmNewsSource = Array(try! RealmService.get(RealmUser.self).filter("id == %@", source))
+            image = realmNewsSource.first?.photo ?? ""
+        } else {
+            let realmNewsSource = Array(try! RealmService.get(RealmGroup.self).filter("id == %@", -source))
+            image = realmNewsSource.first?.image ?? ""
+        }
+        return (image)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         
