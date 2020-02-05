@@ -27,6 +27,9 @@ class PhotosController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.register(PhotoWithFramesCell.self, forCellWithReuseIdentifier: "PhotoWithFramesCell")
+        
         photos = sort(Array(realmPhotos))
         
         let getData = GetData(ownerId: ownerId, albumId: nil)
@@ -105,16 +108,17 @@ class PhotosController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoWithFramesCell", for: indexPath) as? PhotoWithFramesCell else {
             preconditionFailure("PhotoCell cannot be dequeued")
         }
         
-        cell.cellImage.kf.setImage(with: URL(string: photos[indexPath.row].image))
-        cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
-        cell.likeCount = photos[indexPath.row].likeCount
-        cell.isLiked = photos[indexPath.row].isLiked
-        cell.photoId = photos[indexPath.row].id
+//        cell.cellImage.kf.setImage(with: URL(string: photos[indexPath.row].image))
+//        cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
+//        cell.likeCount = photos[indexPath.row].likeCount
+//        cell.isLiked = photos[indexPath.row].isLiked
+//        cell.photoId = photos[indexPath.row].id
         
+        cell.configure(with: photos[indexPath.row])
         cell.delegate = self
                
         return cell
@@ -126,7 +130,8 @@ class PhotosController: UICollectionViewController {
 
 }
 
-extension PhotosController: PhotoCellDelegate {
+extension PhotosController: PhotoWithFramesCellDelegate {
+//extension PhotosController: PhotoCellDelegate {
     func likePhoto(photoId: Int, isLiked: Int, likeCount: Int) {
         //print("PhotosController: like tapped: \(photoId), likeCount: \(likeCount)")
         let photo = photos.first(where: { $0.id == photoId })!        
@@ -153,4 +158,15 @@ extension PhotosController {
             collectionView.deselectItem(at: selectedPhotoIndexPath, animated: true)
         }
     }
+}
+
+extension PhotosController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: collectionView.frame.width/2, height: collectionView.frame.width/2)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+        
 }
