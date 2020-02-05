@@ -12,6 +12,7 @@ import RealmSwift
 
 class RealmUser: Object {
     @objc dynamic var id = -1
+    @objc dynamic var my = 0
     @objc dynamic var firstName = ""
     @objc dynamic var lastName = ""
     @objc dynamic var photo = ""

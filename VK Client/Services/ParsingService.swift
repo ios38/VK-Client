@@ -15,6 +15,7 @@ class ParsingService {
         let json = try JSON(data: data)
         let itemsJSONs = json["response"]["items"].arrayValue
         let items = itemsJSONs.map {RealmGroup(from: $0)}
+        items.forEach { $0.my = 1 }
         return items
     }
 
@@ -22,6 +23,7 @@ class ParsingService {
         let json = try JSON(data: data)
         let friendsJSONs = json["response"]["items"].arrayValue
         let friends = friendsJSONs.map {RealmUser(from: $0)}
+        friends.forEach { $0.my = 1 }
         return friends
     }
 

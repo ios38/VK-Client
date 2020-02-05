@@ -24,7 +24,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     var currentGroups = [RealmGroup]()
     var globalGroups = [RealmGroup]()
 
-    private lazy var realmGroups: Results<RealmGroup> = try! RealmService.get(RealmGroup.self)
+    private lazy var realmGroups: Results<RealmGroup> = try! RealmService.get(RealmGroup.self).filter("my == 1")
 
     
     struct groupCategory {

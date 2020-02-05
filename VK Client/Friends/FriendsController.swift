@@ -13,7 +13,7 @@ class FriendsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
 
-    private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self)
+    private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self).filter("my == 1")
     //private var friends: Results<RealmUser>?
     private var sortedFriends = [Character: [RealmUser]]()
 
