@@ -14,9 +14,10 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         //flowLayout.itemSize = CGSize(width: 50, height: 50)
-        flowLayout.minimumLineSpacing = 1.0
-        flowLayout.minimumInteritemSpacing = 1.0
+        flowLayout.minimumLineSpacing = 3.0
+        flowLayout.minimumInteritemSpacing = 3.0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
 
@@ -27,14 +28,6 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        let label = UILabel(frame: .zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.text = "NewsTableHeader"
-        addSubview(label)
-        
-
         let cellNib = UINib(nibName: "NewsTableHeaderCell", bundle: nil)
         collectionView.register(cellNib, forCellWithReuseIdentifier: "NewsTableHeaderCell")
         collectionView.delegate = self
@@ -52,26 +45,16 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsTableHeaderCell", for: indexPath) as! NewsTableHeaderCell
-        print("NewsTableHeader: collectionView: sources.count: \(sources.count)")
-        cell.backgroundColor = .lightGray
+//        print("NewsTableHeader: collectionView: sources.count: \(sources.count)")
+//        cell.backgroundColor = .lightGray
+        cell.cellImageView.kf.setImage(with: URL(string: sources[indexPath.item].image))
         return cell
-    }
-    
-    func newsSourceImage(_ source: Int) -> (String) {
-        var image = ""
-        if source > 0 {
-            let realmNewsSource = Array(try! RealmService.get(RealmUser.self).filter("id == %@", source))
-            image = realmNewsSource.first?.photo ?? ""
-        } else {
-            let realmNewsSource = Array(try! RealmService.get(RealmGroup.self).filter("id == %@", -source))
-            image = realmNewsSource.first?.image ?? ""
-        }
-        return (image)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        collectionView.frame = bounds
+        //collectionView.frame = bounds
+        collectionView.frame = CGRect(x: 5, y: 5, width: self.bounds.width - 10, height: self.bounds.height - 10)
     }
 }

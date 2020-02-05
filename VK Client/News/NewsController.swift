@@ -42,7 +42,7 @@ class NewsController: UITableViewController {
         let newsTableHeader = NewsTableHeader()
         newsTableHeader.sources = newsSources(news)
         tableView.tableHeaderView = newsTableHeader
-        tableView.tableHeaderView?.backgroundColor = .darkGray
+        //tableView.tableHeaderView?.backgroundColor = .darkGray
 
         NetworkService
             .loadNews()
@@ -187,7 +187,7 @@ class NewsController: UITableViewController {
 
     func updateHeaderViewHeight(for header: UIView?) {
         guard let header = header else { return }
-        header.frame.size.height = 50
+        header.frame.size.height = 60
     }
 
     func newsSources(_ news: [RealmNews]) -> [NewsSource]{
@@ -200,14 +200,20 @@ class NewsController: UITableViewController {
                 image: newsSourceDetails($0.source).image
             ))
         }
-        print("NewsController: newsSources: \(sources)")
         return sources
     }
-    /*
-    func fillHeader(_ newsSources: [Int]) {
-        guard let headerView = tableView.tableHeaderView as? NewsTableHeader else { return }
-            headerView.sources = newsSources
-    }*/
+    
+    func newsSourcesDict(_ news: [RealmNews]) -> [NewsSource]{
+        var sources = [NewsSource]()
+        news.forEach {
+            sources.append(NewsSource(
+                id: $0.source,
+                name: newsSourceDetails($0.source).name,
+                image: newsSourceDetails($0.source).image
+            ))
+        }
+        return sources
+    }
 
     deinit {
         notificationToken?.invalidate()

@@ -15,6 +15,7 @@ class NewsTableHeaderCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         //print("NewsTableHeaderCell: awakeFromNib")
+        cellImageView.layer.cornerRadius = bounds.width/2
     }
     
     override init(frame: CGRect) {
