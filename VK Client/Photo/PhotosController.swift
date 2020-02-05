@@ -123,7 +123,17 @@ class PhotosController: UICollectionViewController {
                
         return cell
     }
-    
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show Big Photo",
+            let selectedPhotoIndexPath = collectionView.indexPathsForSelectedItems?.first,
+            let destination = segue.destination as? BigPhotoController {
+            destination.bigPhotos = photos
+            destination.selectedPhotoIndex = selectedPhotoIndexPath.item
+            collectionView.deselectItem(at: selectedPhotoIndexPath, animated: true)
+        }
+    }
+
     deinit {
         notificationToken?.invalidate()
     }
@@ -147,7 +157,7 @@ extension PhotosController: PhotoWithFramesCellDelegate {
         }
     }
 }
-
+/*
 extension PhotosController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Big Photo",
@@ -158,7 +168,7 @@ extension PhotosController {
             collectionView.deselectItem(at: selectedPhotoIndexPath, animated: true)
         }
     }
-}
+}*/
 
 extension PhotosController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

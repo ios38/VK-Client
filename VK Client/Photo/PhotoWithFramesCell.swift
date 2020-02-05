@@ -48,26 +48,35 @@ class PhotoWithFramesCell: UICollectionViewCell {
     
     private func setupSubviews() {
         contentView.addSubview(cellImage)
+        cellImage.contentMode = .scaleAspectFill
         cellImage.backgroundColor = .gray
         contentView.addSubview(likeView)
         likeView.backgroundColor = .white
         likeView.layer.cornerRadius = likeView.bounds.height/2
-        likeView.layer.opacity = 0.5
+        likeView.layer.opacity = 0.6
         likeView.addSubview(likeImage)
+        likeImage.layer.opacity = 1
+        likeImage.contentMode = .scaleAspectFill
         likeView.addSubview(likeCountLabel)
+        likeCountLabel.layer.opacity = 1
         likeCountLabel.font = likeCountLabel.font.withSize(20)
         likeCountLabel.textColor = .black
+
+        let tapLike = UITapGestureRecognizer(target: self, action: #selector(likeTapped))
+        tapLike.numberOfTapsRequired = 1
+        likeView.addGestureRecognizer(tapLike)
 
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+//        let likeViewWidth = likeImage.bounds.width + 5 + likeCountLabel.bounds.width
         cellImage.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
-        likeView.frame = CGRect(x: 5, y: self.bounds.height - 35, width: 90, height: 30)
-        likeView.layer.cornerRadius = likeView.bounds.height/2
-        likeImage.frame = CGRect(x: 3, y: 3, width: likeView.bounds.height - 6, height: likeView.bounds.height - 6)
+        likeImage.frame = CGRect(x: 5, y: 5, width: 20, height: 20)
         layoutLikeCountLabel()
+        likeView.frame = CGRect(x: 5, y: self.bounds.height - 35, width:
+            5 + likeImage.bounds.width + 5 + likeCountLabel.bounds.width + 10, height: 30)
+        likeView.layer.cornerRadius = likeView.bounds.height/2
 
     }
     
@@ -86,26 +95,29 @@ class PhotoWithFramesCell: UICollectionViewCell {
 
         setNeedsLayout()
     }
-    /*
-    private func getLabelSize(text: String, font: UIFont) -> CGSize {
-        let maxWidth = contentView.bounds.width
-        let textblock = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        
-        let rect = text.boundingRect(with: textblock,
-                                     options: .usesLineFragmentOrigin,
-                                     attributes: [.font : font],
-                                     context: nil)
-        
-        let width = rect.width.rounded(.up)
-        let height = rect.height.rounded(.up)
-        return CGSize(width: width, height: height)
-    }*/
-        private func layoutLikeCountLabel() {
-    //        let likeCountLabelSize = getLabelSize(text: dateLabel.text ?? "", font: dateLabel.font)
+
+    private func layoutLikeCountLabel() {
             let likeCountLabelSize = likeCountLabel.intrinsicContentSize
-            
-            let origin = CGPoint(x: likeView.bounds.midX - likeCountLabelSize.width/2, y: 3)
+            let origin = CGPoint(x: likeImage.bounds.width + 10, y: 3)
             likeCountLabel.frame = CGRect(origin: origin, size: likeCountLabelSize)
-        }
+    }
+    
+    @objc func likeTapped(_ tapGesture: UITapGestureRecognizer) {
+        UIView.transition(with: likeImage, duration: 0.5,
+                          options: .transitionCrossDissolve,
+                          animations: {
+                                if self.isLiked == 1 {
+                                    self.likeImage.image = UIImage(systemName: "heart")
+                                    self.isLiked = 0
+                                    self.likeCount -= 1
+                                } else {
+                                    self.likeImage.image = UIImage(systemName: "heart.fill")
+                                    self.isLiked = 1
+                                    self.likeCount += 1
+                                }
+                          }, completion: nil)
+        
+        delegate?.likePhoto(photoId: photoId, isLiked: isLiked, likeCount: likeCount)
+    }
 
 }

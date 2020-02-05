@@ -232,7 +232,6 @@
                                     <outlet property="likeCountLabel" destination="Gsh-9p-TH2" id="T0a-gi-H8F"/>
                                     <outlet property="likeImage" destination="kIV-nT-bW7" id="joX-Fg-Igq"/>
                                     <outlet property="likeView" destination="vyp-TD-I2O" id="0ED-Hg-bsB"/>
-                                    <segue destination="frO-4a-nzA" kind="show" identifier="Show Big Photo" id="xyz-ex-mDJ"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -244,6 +243,7 @@
                     <navigationItem key="navigationItem" id="k8u-BP-rI4"/>
                     <connections>
                         <outlet property="collectionView" destination="RgO-Wd-a83" id="oIi-eF-s2X"/>
+                        <segue destination="frO-4a-nzA" kind="show" identifier="Show Big Photo" id="U8N-8f-kEA"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTB-Yo-JOT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
