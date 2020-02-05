@@ -16,18 +16,18 @@ import Kingfisher
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
-    //let newsTableHeader = NewsTableHeader()
-        
+    var news = [RealmNews]()
+    var newsSources = [NewsSource]()
+    var newsTableHeader = NewsTableHeader()
+
+    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
+
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
         dt.dateFormat = "dd MMMM yyyy" //nsdateformatter.com
         return dt
     }()
 
-    var news = [RealmNews]()
-    var newsSources = [NewsSource]()
-    
-    private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +39,9 @@ class NewsController: UITableViewController {
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
 
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-        let newsTableHeader = NewsTableHeader()
-        newsTableHeader.sources = newsSources(news)
         tableView.tableHeaderView = newsTableHeader
+        print("NewsController: viewDidLoad: sources.count: \(newsSources(news).count)")
+        newsTableHeader.sources = newsSources(news)
         //tableView.tableHeaderView?.backgroundColor = .darkGray
 
         NetworkService
@@ -61,8 +61,10 @@ class NewsController: UITableViewController {
                 break
             case .update(_, _, _, _):
                 self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-                newsTableHeader.sources = self.newsSources(self.news)
+                print("NewsController: notificationToken: sources.count: \(self.newsSources(self.news).count)")
+                self.newsTableHeader.sources = self.newsSources(self.news)
                 self.tableView.reloadData()
+                self.newsTableHeader.collectionView.reloadData()
             case let .error(error):
                 print(error)
             }
@@ -129,7 +131,6 @@ class NewsController: UITableViewController {
         return (name, image)
     }
     
-    
     func newsData(_ data: Data) {
         let dispatchGroup = DispatchGroup()
         
@@ -159,11 +160,9 @@ class NewsController: UITableViewController {
                 print(error)
             }
         }
-        
+        /*
         dispatchGroup.notify(queue: DispatchQueue.main) {
-            print("newsSources.count: \(self.newsSources.count)")
-            //self.fillHeader(self.newsSources)
-        }
+        }*/
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -193,27 +192,24 @@ class NewsController: UITableViewController {
     func newsSources(_ news: [RealmNews]) -> [NewsSource]{
         var sources = [NewsSource]()
         news.forEach {
-            //guard !newsSources.contains($0.source) else { return }
-            sources.append(NewsSource(
-                id: $0.source,
-                name: newsSourceDetails($0.source).name,
-                image: newsSourceDetails($0.source).image
-            ))
+            let newsSource = $0.source
+            if !sources.contains(where: { $0.id == newsSource} ) {
+                sources.append(NewsSource(
+                    id: $0.source,
+                    name: newsSourceDetails($0.source).name,
+                    image: newsSourceDetails($0.source).image
+            ))}
         }
         return sources
     }
-    
-    func newsSourcesDict(_ news: [RealmNews]) -> [NewsSource]{
-        var sources = [NewsSource]()
+    /*
+    func newsSourcesDict(_ news: [RealmNews]) -> [Int: String] {
+        var newsSourcesDict = [Int: String]()
         news.forEach {
-            sources.append(NewsSource(
-                id: $0.source,
-                name: newsSourceDetails($0.source).name,
-                image: newsSourceDetails($0.source).image
-            ))
+            newsSourcesDict[$0.source] = $0.image
         }
-        return sources
-    }
+        return newsSourcesDict
+    }*/
 
     deinit {
         notificationToken?.invalidate()

@@ -9,7 +9,12 @@
 import UIKit
 
 class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    var sources = [NewsSource]()
+    var sources = [NewsSource]()/*{
+        didSet {
+            collectionView.reloadData()
+        }
+    }*/
+
     let collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -20,11 +25,10 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
-
+    /*
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("NewsTableHeader: awakeFromNib: sources.count: \(sources.count)")
-    }
+    }*/
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,7 +57,6 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         //collectionView.frame = bounds
         collectionView.frame = CGRect(x: 5, y: 5, width: self.bounds.width - 10, height: self.bounds.height - 10)
     }

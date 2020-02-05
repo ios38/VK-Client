@@ -161,7 +161,7 @@ class NetworkService {
             "access_token": Session.shared.accessToken,
             //"source_ids": 13807983,
             "filters": "post",
-            "count": 15,
+            "count": 100,
             "extended": 1,
             "v": "5.92"
         ]
