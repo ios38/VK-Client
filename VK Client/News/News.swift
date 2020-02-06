@@ -19,6 +19,7 @@ class RealmNews: Object {
 
     @objc dynamic var imageLabel = ""
     @objc dynamic var image = ""
+    @objc dynamic var aspectRatio: Float = 0
 
     @objc dynamic var isLiked = -1
     @objc dynamic var likeCount = -1
@@ -39,6 +40,9 @@ class RealmNews: Object {
         case "photo":
             let sizesCount = json["attachments"][0]["photo"]["sizes"].count
             self.image = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["url"].stringValue
+            let width = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["width"].intValue
+            let height = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["height"].intValue
+            self.aspectRatio = width != 0 ? Float(height)/Float(width) : Float(0)
         case "album":
             let sizesCount = json["attachments"][0]["album"]["thumb"]["sizes"].count
             self.image = json["attachments"][0]["album"]["thumb"]["sizes"][sizesCount - 1]["url"].stringValue

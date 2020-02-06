@@ -114,6 +114,17 @@ class NewsController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 2:
+            let aspectRatio = CGFloat(news[indexPath.section].aspectRatio)
+            //let height = CGFloat(250) //aspectRatio * tableView.bounds.width
+            return aspectRatio * tableView.bounds.width
+        default:
+            return UITableView.automaticDimension
+        }
+    }
+    
     func newsSourceDetails(_ source: Int) -> (name: String, image: String) {
         var name = ""
         var image = ""
