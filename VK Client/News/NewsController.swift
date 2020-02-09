@@ -37,10 +37,11 @@ class NewsController: UITableViewController {
         overrideUserInterfaceStyle = .dark
         nextFromUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         nextFromUrl = nextFromUrl.appendingPathComponent("nextFrom.txt")
-        print("NewsController: viewDidLoad: nextFromUrl: \(String(describing: nextFromUrl))")
+        //print("NewsController: viewDidLoad: nextFromUrl: \(String(describing: nextFromUrl))")
 
         tableView.register(UINib(nibName: "NewsHeaderCell", bundle: nil), forCellReuseIdentifier: "NewsHeaderCell")
         tableView.register(UINib(nibName: "NewsTextCell", bundle: nil), forCellReuseIdentifier: "NewsTextCell")
+        //tableView.register(NewsTextWithFramesCell.self, forCellReuseIdentifier: "NewsTextWithFramesCell")
         tableView.register(UINib(nibName: "NewsImageCell", bundle: nil), forCellReuseIdentifier: "NewsImageCell")
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
         tableView.prefetchDataSource = self
@@ -55,7 +56,7 @@ class NewsController: UITableViewController {
         } catch {
             print(error)
         }
-        print("NewsController: viewDidLoad: nextFrom: \(nextFrom)")
+        //print("NewsController: viewDidLoad: nextFrom: \(nextFrom)")
 
         NetworkService
             .loadNews()
@@ -115,6 +116,8 @@ class NewsController: UITableViewController {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTextCell", for: indexPath) as? NewsTextCell else { preconditionFailure("NewsTextCell cannot be dequeued") }
             cell.newsTextLabel.text = news[indexPath.section].text
+            //cell.sectionIndex = indexPath.section
+            //print("NewsController: newsTextHeight from cell at section \(indexPath.section): \(cell.newsTextHeight)")
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsImageCell", for: indexPath) as? NewsImageCell else { preconditionFailure("NewsImageCell cannot be dequeued") }
@@ -135,6 +138,8 @@ class NewsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
+        case 1:
+            return newsTextSize(indexPath.section) + 10
         case 2:
             let aspectRatio = CGFloat(news[indexPath.section].aspectRatio)
             //let height = CGFloat(250) //aspectRatio * tableView.bounds.width
@@ -251,6 +256,18 @@ class NewsController: UITableViewController {
             self.refreshControl?.endRefreshing()
         }
     }
+
+    func newsTextSize(_ sectionIndex: Int) -> CGFloat {
+        let textLabel = UILabel()
+        textLabel.numberOfLines = 0
+        textLabel.lineBreakMode = .byWordWrapping
+        textLabel.font = textLabel.font.withSize(14)
+        textLabel.text = news[sectionIndex].text
+        let maxSize: CGSize = CGSize(width: tableView.bounds.width - 20, height: 9999)
+        let fitSize: CGSize = textLabel.sizeThatFits(maxSize)
+        //print("NewsController: newsTextSize.heigth for section \(sectionIndex): \(fitSize.height) ")
+        return fitSize.height
+    }
     
     deinit {
         notificationToken?.invalidate()
@@ -262,11 +279,11 @@ extension NewsController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
         if maxSection > news.count - 2, !isLoading {
-            print ("NewsController: DataSourcePrefetching: *** started ***")
+            //print ("NewsController: DataSourcePrefetching: *** started ***")
             isLoading = true
             NetworkService.loadNewsWithStart(startFrom: nextFrom) { news, data, nextFrom in
                 print ("NewsController: DataSourcePrefetching: result: \(news.count)")
-                print ("NewsController: DataSourcePrefetching: nextFrom: \(nextFrom)")
+                //print ("NewsController: DataSourcePrefetching: nextFrom: \(nextFrom)")
                 self.newsData(data)
                 self.nextFrom = nextFrom
                 self.refreshControl?.endRefreshing()

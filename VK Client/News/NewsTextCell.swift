@@ -13,8 +13,9 @@ class NewsTextCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        //self.newsTextLabel.sizeToFit()
-        // Initialization code
+        newsTextLabel.numberOfLines = 0
+        newsTextLabel.lineBreakMode = .byWordWrapping
+        newsTextLabel.font = newsTextLabel.font.withSize(14)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -22,5 +23,4 @@ class NewsTextCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
 }
