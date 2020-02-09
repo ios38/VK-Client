@@ -19,9 +19,7 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet var likeView: UIView!
     @IBOutlet var likeImage: UIImageView!
     @IBOutlet var likeCountLabel: UILabel!
-    
-    @IBOutlet var isLikedLabel: UILabel!
-    
+        
     var photoId = -1
     var likeCount = 0
     public weak var delegate: PhotoCellDelegate?
@@ -41,7 +39,6 @@ class PhotoCell: UICollectionViewCell {
     public func configure(with photo: RealmPhoto) {
         cellImage.kf.setImage(with: URL(string: photo.image))
         likeCountLabel.text = String(photo.likeCount)
-        isLikedLabel.text = String(photo.isLiked)
 
         if isLiked == 1 {
             print("configure: isLiked = 1")

@@ -16,8 +16,9 @@ class RealmPhoto: Object {
     @objc dynamic var albumId = -1
     @objc dynamic var image = ""
     @objc dynamic var type = ""
-    @objc dynamic var isLiked = -1
-    @objc dynamic var likeCount = -1
+    @objc dynamic var aspectRatio: Float = 0
+    @objc dynamic var isLiked = 0
+    @objc dynamic var likeCount = 0
     
     let friends = LinkingObjects(fromType: RealmUser.self, property: "photos")
 
@@ -33,6 +34,7 @@ class RealmPhoto: Object {
         let width = json["sizes"][json["sizes"].count - 1]["width"].intValue
         let height = json["sizes"][json["sizes"].count - 1]["height"].intValue
         self.type = width > height ? "landscape" : "portrait"
+        self.aspectRatio = width != 0 ? Float(height)/Float(width) : Float(0)
     }
     
     override static func primaryKey() -> String? {

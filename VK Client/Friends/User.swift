@@ -12,6 +12,7 @@ import RealmSwift
 
 class RealmUser: Object {
     @objc dynamic var id = -1
+    @objc dynamic var my = 0
     @objc dynamic var firstName = ""
     @objc dynamic var lastName = ""
     @objc dynamic var photo = ""
@@ -24,10 +25,10 @@ class RealmUser: Object {
         self.id = json["id"].intValue
         self.firstName = json["first_name"].stringValue
         self.lastName = json["last_name"].stringValue
-        self.photo = json["photo_200"].stringValue
+        self.photo = json["photo_100"].stringValue
         //self.online = json["online"].intValue
 
-        self.photos.append(objectsIn: photos)
+        //self.photos.append(objectsIn: photos)
     }
     
     override static func primaryKey() -> String? {
