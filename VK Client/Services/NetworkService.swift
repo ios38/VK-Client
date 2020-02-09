@@ -161,12 +161,49 @@ class NetworkService {
             "access_token": Session.shared.accessToken,
             //"source_ids": 13807983,
             "filters": "post",
-            "count": 100,
+            "count": 10,
             "extended": 1,
             "v": "5.92"
         ]
         
         return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
+    }
+    
+    static func loadNewsWithStart(startTime: Double? = nil, startFrom: String? = nil, completion: @escaping ([RealmNews], Data, String) -> Void) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.vk.com"
+        components.path = "/method/newsfeed.get"
+        components.queryItems = [
+            URLQueryItem(name: "access_token", value: Session.shared.accessToken),
+            URLQueryItem(name: "filters", value: "post"),
+            URLQueryItem(name: "count", value: "10"),
+            URLQueryItem(name: "extended", value: "1"),
+            URLQueryItem(name: "v", value: "5.92")
+        ]
+        if let startTime = startTime {
+            components.queryItems?.append(URLQueryItem(name: "start_time", value: String(startTime)))
+        }
+        if let startFrom = startFrom {
+            components.queryItems?.append(URLQueryItem(name: "start_from", value: startFrom))
+        }
+        let request = URLRequest(url: components.url!)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data,
+                let json = try? JSON(data: data) else { return }
+            //print ("NetworkService: loadNewsWithStart: \(json)")
+            let newsJSON = json["response"]["items"].arrayValue
+            let news = newsJSON.map { RealmNews(from: $0) }
+            let nextFrom = json["response"]["next_from"].stringValue
+            
+            DispatchQueue.main.async {
+                completion(news, data, nextFrom)
+            }
+            
+        }
+        task.resume()
     }
 
 }

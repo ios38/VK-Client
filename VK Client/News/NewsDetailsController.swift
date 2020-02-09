@@ -82,7 +82,7 @@ class NewsDetailsController: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderCell", for: indexPath) as? NewsHeaderCell else { preconditionFailure("NewsHeaderCell cannot be dequeued") }
             cell.newsImageView.kf.setImage(with: URL(string: newsSourceDetails(news[indexPath.section].source).image))
             cell.newsSourceLabel.text = newsSourceDetails(news[indexPath.section].source).name
-            cell.newsDateLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
+            cell.newsDateLabel.text = dateFormatter.string(from: (Date(timeIntervalSince1970: news[indexPath.section].date)))
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTextCell", for: indexPath) as? NewsTextCell else { preconditionFailure("NewsTextCell cannot be dequeued") }

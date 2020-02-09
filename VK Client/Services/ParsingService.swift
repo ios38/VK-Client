@@ -61,5 +61,11 @@ class ParsingService {
         let items = itemsJSONs.map {RealmGroup(from: $0)}
         return items
     }
+    
+    func parsingNextFrom(_ data: Data) throws -> String {
+        let json = try JSON(data: data)
+        let items = json["response"]["next_from"].stringValue
+        return items
+    }
 
 }

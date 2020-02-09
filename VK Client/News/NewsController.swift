@@ -19,7 +19,11 @@ class NewsController: UITableViewController {
     var news = [RealmNews]()
     var newsSources = [NewsSource]()
     var newsTableHeader = NewsTableHeader()
-
+    var nextFrom = ""
+    var nextFromUrl: URL!
+    var isLoading = false
+    var indexSet = IndexSet()
+    
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 
     private var dateFormatter: DateFormatter = {
@@ -28,21 +32,30 @@ class NewsController: UITableViewController {
         return dt
     }()
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        nextFromUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        nextFromUrl = nextFromUrl.appendingPathComponent("nextFrom.txt")
+        print("NewsController: viewDidLoad: nextFromUrl: \(String(describing: nextFromUrl))")
 
         tableView.register(UINib(nibName: "NewsHeaderCell", bundle: nil), forCellReuseIdentifier: "NewsHeaderCell")
         tableView.register(UINib(nibName: "NewsTextCell", bundle: nil), forCellReuseIdentifier: "NewsTextCell")
         tableView.register(UINib(nibName: "NewsImageCell", bundle: nil), forCellReuseIdentifier: "NewsImageCell")
         tableView.register(UINib(nibName: "NewsControlCell", bundle: nil), forCellReuseIdentifier: "NewsControlCell")
-
+        tableView.prefetchDataSource = self
+        
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
         tableView.tableHeaderView = newsTableHeader
         print("NewsController: viewDidLoad: sources.count: \(newsSources(news).count)")
         newsTableHeader.sources = newsSources(news)
         //tableView.tableHeaderView?.backgroundColor = .darkGray
+        do {
+            nextFrom = try String(contentsOf: nextFromUrl)
+        } catch {
+            print(error)
+        }
+        print("NewsController: viewDidLoad: nextFrom: \(nextFrom)")
 
         NetworkService
             .loadNews()
@@ -53,17 +66,23 @@ class NewsController: UITableViewController {
             }.catch { error in
                 self.show(error: error)
             }
-
+        
+        setupRefreshControl()
+                
         self.notificationToken = realmNews.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
             case .update(_, _, _, _):
+                let newsCountBeforeUpdate = self.news.count
                 self.news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
-                print("NewsController: notificationToken: sources.count: \(self.newsSources(self.news).count)")
+                self.indexSet = IndexSet(integersIn: newsCountBeforeUpdate..<self.news.count)
+                print("NewsController: notificationToken: indexSet: \(self.indexSet)")
+                //print("NewsController: notificationToken: sources.count: \(self.newsSources(self.news).count)")
                 self.newsTableHeader.sources = self.newsSources(self.news)
-                self.tableView.reloadData()
+                //self.tableView.reloadData()
+                self.tableView.insertSections(self.indexSet, with: .automatic)
                 self.newsTableHeader.collectionView.reloadData()
             case let .error(error):
                 print(error)
@@ -91,7 +110,7 @@ class NewsController: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderCell", for: indexPath) as? NewsHeaderCell else { preconditionFailure("NewsHeaderCell cannot be dequeued") }
             cell.newsImageView.kf.setImage(with: URL(string: newsSourceDetails(news[indexPath.section].source).image))
             cell.newsSourceLabel.text = newsSourceDetails(news[indexPath.section].source).name
-            cell.newsDateLabel.text = dateFormatter.string(from: (news[indexPath.section].date))
+            cell.newsDateLabel.text = dateFormatter.string(from: (Date(timeIntervalSince1970: news[indexPath.section].date)))
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTextCell", for: indexPath) as? NewsTextCell else { preconditionFailure("NewsTextCell cannot be dequeued") }
@@ -149,6 +168,8 @@ class NewsController: UITableViewController {
             do {
                 let news = try self.parsingService.parsingNews(data)
                 try? RealmService.save(items: news)
+                self.nextFrom = try self.parsingService.parsingNextFrom(data)
+                try self.nextFrom.write(to: self.nextFromUrl, atomically: true, encoding: .utf8)
             } catch {
                 print(error)
             }
@@ -213,17 +234,44 @@ class NewsController: UITableViewController {
         }
         return sources
     }
-    /*
-    func newsSourcesDict(_ news: [RealmNews]) -> [Int: String] {
-        var newsSourcesDict = [Int: String]()
-        news.forEach {
-            newsSourcesDict[$0.source] = $0.image
-        }
-        return newsSourcesDict
-    }*/
+    
+    private func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.tintColor = .systemGray
+        refreshControl?.attributedTitle = NSAttributedString(string: "Refreshing News...")
+        refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+    }
 
+    @objc private func refreshNews() {
+        print("NewsController: Refresh News triggered")
+        let startTime = news.first?.date ?? Date().timeIntervalSince1970
+        NetworkService.loadNewsWithStart(startTime: startTime + 1) { news, data, _ in
+            print ("NewsController: refreshNews: news: \(news.count)")
+            self.newsData(data)
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
     deinit {
         notificationToken?.invalidate()
     }
 
+}
+
+extension NewsController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+        if maxSection > news.count - 2, !isLoading {
+            print ("NewsController: DataSourcePrefetching: *** started ***")
+            isLoading = true
+            NetworkService.loadNewsWithStart(startFrom: nextFrom) { news, data, nextFrom in
+                print ("NewsController: DataSourcePrefetching: result: \(news.count)")
+                print ("NewsController: DataSourcePrefetching: nextFrom: \(nextFrom)")
+                self.newsData(data)
+                self.nextFrom = nextFrom
+                self.refreshControl?.endRefreshing()
+            }
+            isLoading = false
+        }
+    }
 }

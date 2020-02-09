@@ -19,8 +19,8 @@ class NewsTableHeader: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         //flowLayout.itemSize = CGSize(width: 50, height: 50)
-        flowLayout.minimumLineSpacing = 3.0
-        flowLayout.minimumInteritemSpacing = 3.0
+        flowLayout.minimumLineSpacing = 5.0
+        flowLayout.minimumInteritemSpacing = 5.0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView

@@ -13,13 +13,14 @@ import RealmSwift
 class RealmNews: Object {
     @objc dynamic var id = -1
     @objc dynamic var source = -1
-    @objc dynamic var date = Date.distantPast
+//    @objc dynamic var date = Date.distantPast
+    @objc dynamic var date: Double = 0
     @objc dynamic var text = ""
     @objc dynamic var attachments = ""
 
     @objc dynamic var imageLabel = ""
     @objc dynamic var image = ""
-    @objc dynamic var aspectRatio: Float = 0
+    @objc dynamic var aspectRatio: Float = 0.5
 
     @objc dynamic var isLiked = -1
     @objc dynamic var likeCount = -1
@@ -31,8 +32,9 @@ class RealmNews: Object {
         self.init()
         self.id = json["post_id"].intValue
         self.source = json["source_id"].intValue
-        let dateDouble = json["date"].doubleValue
-        self.date = Date(timeIntervalSince1970: dateDouble)
+//        let dateDouble = json["date"].doubleValue
+//        self.date = Date(timeIntervalSince1970: dateDouble)
+        self.date = json["date"].doubleValue
         self.text = json["text"].stringValue
         self.attachments = json["attachments"][0]["type"].stringValue
         
@@ -42,7 +44,7 @@ class RealmNews: Object {
             self.image = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["url"].stringValue
             let width = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["width"].intValue
             let height = json["attachments"][0]["photo"]["sizes"][sizesCount - 1]["height"].intValue
-            self.aspectRatio = width != 0 ? Float(height)/Float(width) : Float(0)
+            self.aspectRatio = width != 0 ? Float(height)/Float(width) : Float(0.5)
         case "album":
             let sizesCount = json["attachments"][0]["album"]["thumb"]["sizes"].count
             self.image = json["attachments"][0]["album"]["thumb"]["sizes"][sizesCount - 1]["url"].stringValue
