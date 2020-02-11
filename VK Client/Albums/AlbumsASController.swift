@@ -17,7 +17,7 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
 
-    public var ownerId = -39968672 //Int()
+    public var ownerId: Int
     //var albumId = Int()
     
     var albums = [Int]()
@@ -28,8 +28,8 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
     private lazy var realmAlbums: Results<RealmAlbums> = try! RealmService.get(RealmAlbums.self).filter("ownerId == %@", ownerId)
     //private lazy var realmOwner: Results<RealmUser> = try! RealmService.get(RealmUser.self).filter("id == %@", -ownerId)
 
-    init(/*realmService: RealmService*/) {
-        //self.realmService = realmService
+    init(ownerId: Int) {
+        self.ownerId = ownerId
         super.init(node: ASTableNode())
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
@@ -90,5 +90,9 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
         default:
             return { ASCellNode() }
         }
+    }
+
+    deinit {
+        notificationToken?.invalidate()
     }
 }

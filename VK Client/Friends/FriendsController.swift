@@ -116,11 +116,18 @@ class FriendsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let albumsVC = AlbumsASController()
+        if let indexPath = tableView.indexPathForSelectedRow {
+        //Выбираем друга для передачи
+        let firstChar = sortedFriends.keys.sorted()[indexPath.section]
+        let friends = sortedFriends[firstChar]!
+        let friend = friends[indexPath.row]
+        //Передаем id друга
+        let albumsVC = AlbumsASController(ownerId: friend.id)
         //newsVC.modalTransitionStyle = .crossDissolve
         //newsVC.modalPresentationStyle = .overFullScreen
         //present(newsVC, animated: false)
         navigationController?.pushViewController(albumsVC, animated: true)
+        }
     }
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

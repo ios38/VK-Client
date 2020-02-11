@@ -10,6 +10,17 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
+class Photo {
+    var url: String
+    var aspectRatio: Float
+
+    internal init(url: String, aspectRatio: Float) {
+        self.url = url
+        self.aspectRatio = aspectRatio
+    }
+
+}
+
 class RealmPhoto: Object {
     @objc dynamic var id = -1
     @objc dynamic var ownerId = -1
