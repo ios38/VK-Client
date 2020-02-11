@@ -7,10 +7,11 @@ target 'VK Client' do
 
   # Pods for VK Client
   pod 'Alamofire', '~> 4.9.1'
+  pod 'PromiseKit', '~> 6.13.1'
+  pod 'PromiseKit/Alamofire'
   pod 'Kingfisher', '~> 5.11.0'
   pod 'SwiftyJSON', '~> 5.0.0'
   pod 'RealmSwift', '~> 4.1.1'
-  pod 'PromiseKit', '~> 6.13.1'
-  pod 'PromiseKit/Alamofire'
-
+  pod 'Texture', '~> 2.8.1'
+  
 end
