@@ -11,49 +11,37 @@ import RealmSwift
 import AsyncDisplayKit
 
 class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTableDataSource {
-    // Создаем дополнительный интерфейс для обращения к корневой ноде
     var tableNode: ASTableNode {
         return node as! ASTableNode
     }
-    private lazy var photos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == 156700636")
-    var photo = RealmPhoto()
-    
-    init() {
-        // Инициализируемся с таблицей в качестве корневого View / Node
+    let realmService: RealmService
+    private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == 156700636")
+    var photos = [RealmPhoto]()
+
+    init(realmService: RealmService) {
+        self.realmService = realmService
         super.init(node: ASTableNode())
-        // Привязываем к себе методы делегата и дата-сорса
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
-        // По желанию кастомизируем корневую таблицу
         self.tableNode.allowsSelection = false
+        self.photos = Array(self.realmPhotos)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-        photo = photos.first!
-
-    }
-    
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 10
-    }
-    
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return photos.count
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         switch indexPath.row {
         case 0:
             let cellNodeBlock = { () -> ASCellNode in
-                let node = AlbumCellNode(photo: self.photo)
+                let node = AlbumCellNode(row: indexPath.row)
                 return node
             }
-            
             return cellNodeBlock
         default:
             return { ASCellNode() }

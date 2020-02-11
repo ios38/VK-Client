@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import RealmSwift
 import AsyncDisplayKit
 
 class AlbumCellNode: ASCellNode {
-    private let photo: RealmPhoto
+    private let row: Int
+    private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == 156700636")
+    private var photo = RealmPhoto()
     private let imageNode = ASNetworkImageNode()
     
-    init(photo: RealmPhoto) {
-        self.photo = photo
+    init(row: Int) {
+        self.row = row
+        
         super.init()
+        self.photo = Array(realmPhotos)[row]
         setupSubnodes()
     }
     
@@ -25,7 +30,6 @@ class AlbumCellNode: ASCellNode {
         imageNode.clipsToBounds = true
         imageNode.contentMode = .scaleAspectFill
         imageNode.shouldRenderProgressImages = true
-        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

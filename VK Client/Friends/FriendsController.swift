@@ -115,6 +115,14 @@ class FriendsController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let albumsVC = AlbumsASController(realmService: RealmService())
+        //newsVC.modalTransitionStyle = .crossDissolve
+        //newsVC.modalPresentationStyle = .overFullScreen
+        //present(newsVC, animated: false)
+        navigationController?.pushViewController(albumsVC, animated: true)
+    }
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Photos",
             let destination = segue.destination as? PhotosController,
@@ -126,7 +134,7 @@ class FriendsController: UITableViewController {
             //Передаем id друга
             destination.ownerId = friend.id
         }
-    }
+    }*/
 
     deinit {
         notificationToken?.invalidate()
