@@ -11,22 +11,28 @@ import RealmSwift
 import AsyncDisplayKit
 
 class AlbumCellNode: ASCellNode {
-    private let row: Int
-    private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == 156700636")
-    private var photo = RealmPhoto()
+    private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
     private let imageNode = ASNetworkImageNode()
+
+    private let owner: Int
+    private let album: Int
+
+    var photos = [RealmPhoto]()
+    private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", owner, album)
     
-    init(row: Int) {
-        self.row = row
-        
+    init(owner: Int, album: Int) {
+        self.owner = owner
+        self.album = album
+
         super.init()
-        self.photo = Array(realmPhotos)[row]
+        self.photos = Array(realmPhotos)
         setupSubnodes()
     }
     
     private func setupSubnodes() {
         addSubnode(imageNode)
-        imageNode.url = URL(string: photo.image)
+        imageNode.url = URL(string: photos.first?.image ?? "")
         imageNode.clipsToBounds = true
         imageNode.contentMode = .scaleAspectFill
         imageNode.shouldRenderProgressImages = true
@@ -34,7 +40,8 @@ class AlbumCellNode: ASCellNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let width = constrainedSize.max.width
-        imageNode.style.preferredSize = CGSize(width: width, height: width * CGFloat(photo.aspectRatio))
+        let aspectRatio = CGFloat(photos.first?.aspectRatio ?? 0)
+        imageNode.style.preferredSize = CGSize(width: width, height: width * aspectRatio)
         return ASWrapperLayoutSpec(layoutElement: imageNode)
     }
 }

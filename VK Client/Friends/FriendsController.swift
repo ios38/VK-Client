@@ -116,7 +116,7 @@ class FriendsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let albumsVC = AlbumsASController(realmService: RealmService())
+        let albumsVC = AlbumsASController()
         //newsVC.modalTransitionStyle = .crossDissolve
         //newsVC.modalPresentationStyle = .overFullScreen
         //present(newsVC, animated: false)

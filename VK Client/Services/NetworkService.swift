@@ -119,7 +119,7 @@ class NetworkService {
         let params: Parameters = [
             "access_token": Session.shared.accessToken,
             "owner_id": owner,
-            "count": 3,
+            "count": 5,
             "extended": 1,
             "v": "5.92"
         ]
