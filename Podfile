@@ -6,7 +6,7 @@ target 'VK Client' do
   use_frameworks!
 
   # Pods for VK Client
-  pod 'Alamofire'
+  pod 'Alamofire', '~> 4.9.1'
   pod 'Kingfisher', '~> 5.11.0'
   pod 'SwiftyJSON', '~> 5.0.0'
   pod 'RealmSwift', '~> 4.1.1'
