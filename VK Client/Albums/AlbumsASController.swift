@@ -20,7 +20,7 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
     public var ownerId: Int
     //var albumId = Int()
     
-    var albums = [Int]()
+    var albums = [String]()
     //var owner = [RealmUser]()
 
     //let realmService: RealmService
@@ -36,8 +36,9 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
         self.tableNode.allowsSelection = false
         tableNode.backgroundColor = .black
 
-        albums = realmAlbums.filter{ $0.size > 1}.map{ $0.id }
-        //albums.insert(0, at: 0)
+        albums = realmAlbums.filter{ $0.size > 1}.map{ String($0.id) }
+        albums.insert("wall", at: 0)
+        albums.insert("profile", at: 0)
         print("AlbumsASController: albums: \(albums)")
         //owner = Array(self.realmOwner)
     }
@@ -67,7 +68,9 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
                 break
             case .update(_, _, _, _):
                 //self.albums = Array(self.realmAlbums)
-                self.albums = self.realmAlbums.map{ $0.id }
+                self.albums = self.realmAlbums.filter{ $0.size > 1}.map{ String($0.id) }
+                self.albums.insert("wall", at: 0)
+                self.albums.insert("profile", at: 0)
                 self.tableNode.reloadData()
             case let .error(error):
                 print(error)

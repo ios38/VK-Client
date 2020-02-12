@@ -17,12 +17,12 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     private var collectionNode: ASCollectionNode
     
     private let owner: Int
-    private let album: Int
+    private let album: String
 
     private var photos = [Photo]()
     //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", owner, album)
     
-    init(owner: Int, album: Int) {
+    init(owner: Int, album: String) {
         self.owner = owner
         self.album = album
         

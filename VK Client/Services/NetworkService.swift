@@ -96,7 +96,7 @@ class NetworkService {
         }
     }
     
-    func loadAlbum(owner: Int, album: Int, completion: @escaping (Swift.Result<[Photo], Error>) -> Void) {
+    func loadAlbum(owner: Int, album: String, completion: @escaping (Swift.Result<[Photo], Error>) -> Void) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
 
