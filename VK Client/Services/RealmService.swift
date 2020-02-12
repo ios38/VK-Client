@@ -22,7 +22,27 @@ class RealmService {
             //print("RealmService: saved \(items.count) items")
         }
     }
-    
+    //https://realm.io/docs/cookbook/swift/object-to-background/
+    func saveAsync<T : ThreadConfined>(obj: T, errorHandler: @escaping ((_ error : Swift.Error) -> Void) = { _ in return }, block: @escaping ((Realm, T?) -> Void)) {
+        let wrappedObj = ThreadSafeReference(to: obj)
+        let configuration = RealmService.deleteIfMigration
+        DispatchQueue(label: "background").async {
+            autoreleasepool {
+                do {
+                    let realm = try Realm(configuration: configuration)
+                    let obj = realm.resolve(wrappedObj)
+
+                    try realm.write {
+                        block(realm, obj)
+                    }
+                }
+                catch {
+                    errorHandler(error)
+                }
+            }
+        }
+    }
+
     static func get<T: Object>(
         _ type: T.Type,
         configuration: Realm.Configuration = deleteIfMigration

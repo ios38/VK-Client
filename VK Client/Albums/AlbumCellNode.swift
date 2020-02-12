@@ -56,7 +56,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
             print(error)
             //self.show(error: error)
         }
-        /*
+        
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
@@ -64,12 +64,12 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
                 break
             case .update(_, _, _, _):
                 self.photos = self.realmPhotos.map{ $0.image}
-                self.aspects = self.realmPhotos.map{ $0.aspectRatio }
-                //self.albumView.reloadData()
+                //self.aspects = self.realmPhotos.map{ $0.aspectRatio }
+                self.collectionNode.reloadData()
             case let .error(error):
                 print(error)
             }
-        })*/
+        })
     }
     
     private func setupSubnodes() {
