@@ -96,7 +96,34 @@ class NetworkService {
         }
     }
     
-    static func loadAlbum(owner: Int, album: Int) -> Promise<Data> {
+    func loadAlbum(owner: Int, album: Int, completion: @escaping (Swift.Result<[Photo], Error>) -> Void) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/photos.get"
+
+        let params: Parameters = [
+            "access_token": Session.shared.accessToken,
+            "owner_id": owner,
+            "album_id": album,
+            "count": 10,
+            "extended": 1,
+            "v": "5.92"
+        ]
+
+        NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(data):
+                let json = JSON(data)
+                let itemsJSONs = json["response"]["items"].arrayValue
+                let items = itemsJSONs.map {Photo(from: $0)}
+                //print("NetworkService: searchGroups: \(groups)")
+                completion(.success(items))
+            case let .failure(error):
+                completion(.failure (error))
+            }
+        }
+    }
+
+    static func loadAlbumData(owner: Int, album: Int) -> Promise<Data> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
 

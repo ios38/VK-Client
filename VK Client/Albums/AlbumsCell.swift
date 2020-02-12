@@ -49,7 +49,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
         photos = Array(realmPhotos)
         
         NetworkService
-            .loadAlbum(owner: ownerId, album: albumId)
+            .loadAlbumData(owner: ownerId, album: albumId)
             .map(on: DispatchQueue.global()) { data in
                 try self.parsingService.parsingRealmPhotos(data)
             }.done { photos in

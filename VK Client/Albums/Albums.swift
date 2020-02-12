@@ -15,6 +15,7 @@ class RealmAlbums: Object {
     @objc dynamic var ownerId = -1
     @objc dynamic var date = Date.distantPast
     @objc dynamic var text = ""
+    @objc dynamic var size = -1
 
     convenience init(from json: JSON) {
         self.init()
@@ -23,7 +24,8 @@ class RealmAlbums: Object {
         let dateDouble = json["updated"].doubleValue
         self.date = Date(timeIntervalSince1970: dateDouble)
         self.text = json["title"].stringValue
-        
+        self.size = json["size"].intValue
+
         //self.albumId = json["attachments"][0]["album"]["id"].intValue
         //self.isLiked = json["likes"]["user_likes"].intValue
         //self.likeCount = json["likes"]["count"].intValue

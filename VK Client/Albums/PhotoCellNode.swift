@@ -33,8 +33,8 @@ class PhotoCellNode: ASCellNode {
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        //let width = constrainedSize.max.width
-        imageNode.style.preferredSize = CGSize(width: 200, height: 200)
+        let height = constrainedSize.max.height
+        imageNode.style.preferredSize = CGSize(width: height, height: height)
         return ASWrapperLayoutSpec(layoutElement: imageNode)
     }
 

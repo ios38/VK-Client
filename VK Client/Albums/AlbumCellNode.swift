@@ -7,12 +7,13 @@
 //
 
 import UIKit
-import RealmSwift
+//import RealmSwift
 import AsyncDisplayKit
 
 class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
-    private var notificationToken: NotificationToken?
-    private let parsingService = ParsingService()
+    //private var notificationToken: NotificationToken?
+    //private let parsingService = ParsingService()
+    private let networkService = NetworkService()
     private var collectionNode: ASCollectionNode
     
     private let owner: Int
@@ -27,7 +28,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.itemSize = CGSize(width: 200, height: 200)
+        //flowLayout.itemSize = CGSize(width: 200, height: 200)
         flowLayout.minimumLineSpacing = 1.0
         flowLayout.minimumInteritemSpacing = 1.0
         
@@ -45,33 +46,23 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     
     override func didLoad() {
         print("AlbumCellNode: didLoad: album: \(album)")
-        NetworkService
-            .loadAlbum(owner: owner, album: album)
-            .map(on: DispatchQueue.global()) { data in
-                try self.parsingService.parsingPhotos(data)
-        }.done { photos in
-            //try? RealmService.save(items: photos)
-            print("AlbumCellNode: didLoad: photos: \(photos.count)")
-        }.catch { error in
-            print(error)
-            //self.show(error: error)
-        }
-        /*
-        self.notificationToken = realmPhotos.observe({ [weak self] change in
-            guard let self = self else { return }
-            switch change {
-            case .initial:
-                break
-            case .update(_, _, _, _):
-                self.photos = self.realmPhotos.map{ $0.image}
-                //self.aspects = self.realmPhotos.map{ $0.aspectRatio }
-                self.collectionNode.reloadData()
-            case let .error(error):
-                print(error)
-            }
-        })*/
+        loadAlbum()
     }
     
+    private func loadAlbum() {
+        networkService.loadAlbum(owner: owner, album: album) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case let .success(photos):
+                self.photos = photos
+                self.collectionNode.reloadData()
+            case let .failure(error):
+                print(error)
+            }
+        }
+    }
+
     private func setupSubnodes() {
         addSubnode(collectionNode)
     }

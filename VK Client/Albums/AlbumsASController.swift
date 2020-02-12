@@ -34,7 +34,11 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
         self.tableNode.delegate = self
         self.tableNode.dataSource = self
         self.tableNode.allowsSelection = false
-        albums = realmAlbums.map{ $0.id }
+        tableNode.backgroundColor = .black
+
+        albums = realmAlbums.filter{ $0.size > 1}.map{ $0.id }
+        //albums.insert(0, at: 0)
+        print("AlbumsASController: albums: \(albums)")
         //owner = Array(self.realmOwner)
     }
     
