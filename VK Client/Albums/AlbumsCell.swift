@@ -51,7 +51,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
         NetworkService
             .loadAlbum(owner: ownerId, album: albumId)
             .map(on: DispatchQueue.global()) { data in
-                try self.parsingService.parsingPhotos(data)
+                try self.parsingService.parsingRealmPhotos(data)
             }.done { photos in
                 try? RealmService.save(items: photos)
             }.catch { error in

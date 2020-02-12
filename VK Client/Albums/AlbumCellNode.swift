@@ -18,8 +18,8 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     private let owner: Int
     private let album: Int
 
-    private var photos = [String]()
-    private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", owner, album)
+    private var photos = [Photo]()
+    //private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", owner, album)
     
     init(owner: Int, album: Int) {
         self.owner = owner
@@ -38,7 +38,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
         self.collectionNode.dataSource = self
         backgroundColor = .darkGray
 
-        self.photos = realmPhotos.map{ $0.image }
+        //self.photos = realmPhotos.map{ $0.image }
 
         setupSubnodes()
     }
@@ -50,13 +50,13 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
             .map(on: DispatchQueue.global()) { data in
                 try self.parsingService.parsingPhotos(data)
         }.done { photos in
-            try? RealmService.save(items: photos)
+            //try? RealmService.save(items: photos)
             print("AlbumCellNode: didLoad: photos: \(photos.count)")
         }.catch { error in
             print(error)
             //self.show(error: error)
         }
-        
+        /*
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
@@ -69,7 +69,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
             case let .error(error):
                 print(error)
             }
-        })
+        })*/
     }
     
     private func setupSubnodes() {
@@ -93,7 +93,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let photo = photos[indexPath.section]
         let cellNodeBlock = { () -> ASCellNode in
-            return PhotoCellNode(photo: photo)
+            return PhotoCellNode(photo: photo.image)
         }
         
         return cellNodeBlock

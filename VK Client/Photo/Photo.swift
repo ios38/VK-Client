@@ -11,14 +11,22 @@ import SwiftyJSON
 import RealmSwift
 
 class Photo {
-    var url: String
+    var image: String
     var aspectRatio: Float
 
-    internal init(url: String, aspectRatio: Float) {
-        self.url = url
-        self.aspectRatio = aspectRatio
+    init(from json: JSON) {
+        //self.id = json["id"].intValue
+        //self.ownerId = json["owner_id"].intValue
+        //self.albumId = json["album_id"].intValue
+        self.image = json["sizes"][json["sizes"].count - 1]["url"].stringValue
+        //self.isLiked = json["likes"]["user_likes"].intValue
+        //self.likeCount = json["likes"]["count"].intValue
+        
+        let width = json["sizes"][json["sizes"].count - 1]["width"].intValue
+        let height = json["sizes"][json["sizes"].count - 1]["height"].intValue
+        //self.type = width > height ? "landscape" : "portrait"
+        self.aspectRatio = width != 0 ? Float(height)/Float(width) : Float(0)
     }
-
 }
 
 class RealmPhoto: Object {

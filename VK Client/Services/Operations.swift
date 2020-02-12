@@ -51,7 +51,7 @@ class ParseData: Operation {
     override func main() {
         guard let getData = dependencies.first as? GetData, let data = getData.data else { return }
         do {
-            outputData = try self.parsingService.parsingPhotos(data)
+            outputData = try self.parsingService.parsingRealmPhotos(data)
             /*
             let json = try JSON(data: data)
             let postsJSONs = json["response"]["items"].arrayValue
