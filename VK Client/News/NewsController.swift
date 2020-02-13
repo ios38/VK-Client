@@ -116,8 +116,9 @@ class NewsController: UITableViewController {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTextCell", for: indexPath) as? NewsTextCell else { preconditionFailure("NewsTextCell cannot be dequeued") }
             cell.newsTextLabel.text = news[indexPath.section].text
-            //cell.sectionIndex = indexPath.section
-            //print("NewsController: newsTextHeight from cell at section \(indexPath.section): \(cell.newsTextHeight)")
+
+            let newsTextHeight = cell.bounds.height
+            print ("NewsController: newsTextHeight: \(newsTextHeight)")
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsImageCell", for: indexPath) as? NewsImageCell else { preconditionFailure("NewsImageCell cannot be dequeued") }
@@ -139,7 +140,11 @@ class NewsController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 1:
-            return newsTextSize(indexPath.section) + 10
+            if newsTextSize(indexPath.section) < 150 {
+                return newsTextSize(indexPath.section) + 10
+            } else {
+                return 150
+            }
         case 2:
             let aspectRatio = CGFloat(news[indexPath.section].aspectRatio)
             //let height = CGFloat(250) //aspectRatio * tableView.bounds.width
@@ -203,8 +208,14 @@ class NewsController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print("NewsController: News selected: \(indexPath.section)")
-        performSegue(withIdentifier: "ShowNewsDetails", sender: nil)
+        switch indexPath.row {
+        case 0, 2:
+            performSegue(withIdentifier: "ShowNewsDetails", sender: nil)
+        case 1:
+            print("News Controller: select NewsText")
+        default:
+            return
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -287,8 +298,8 @@ extension NewsController: UITableViewDataSourcePrefetching {
                 self.newsData(data)
                 self.nextFrom = nextFrom
                 self.refreshControl?.endRefreshing()
+                self.isLoading = false
             }
-            isLoading = false
         }
     }
 }
