@@ -15,7 +15,7 @@ class AlbumsController: UITableViewController {
     private let parsingService = ParsingService()
 
     public var ownerId = Int()
-    var albumId = Int()
+    var albumId = String()
     
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
@@ -88,7 +88,7 @@ class AlbumsController: UITableViewController {
         cell.ownerNameLabel.text = String(owner.first?.name ?? "")
         cell.albumDateLabel.text = dateFormatter.string(from: (albums[indexPath.section].date))
         cell.albumTextLabel.text = albums[indexPath.section].text
-        cell.updateCellWith(owner: albums[indexPath.section].ownerId, album: albums[indexPath.section].id)
+        cell.updateCellWith(owner: albums[indexPath.section].ownerId, album: String(albums[indexPath.section].id))
         
         return cell
     }

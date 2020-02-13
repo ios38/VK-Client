@@ -32,7 +32,7 @@ class Photo {
 class RealmPhoto: Object {
     @objc dynamic var id = -1
     @objc dynamic var ownerId = -1
-    @objc dynamic var albumId = -1
+    @objc dynamic var albumId = ""
     @objc dynamic var image = ""
     @objc dynamic var type = ""
     @objc dynamic var aspectRatio: Float = 0
@@ -45,7 +45,7 @@ class RealmPhoto: Object {
         self.init()
         self.id = json["id"].intValue
         self.ownerId = json["owner_id"].intValue
-        self.albumId = json["album_id"].intValue
+        self.albumId = json["album_id"].stringValue
         self.image = json["sizes"][json["sizes"].count - 1]["url"].stringValue
         self.isLiked = json["likes"]["user_likes"].intValue
         self.likeCount = json["likes"]["count"].intValue

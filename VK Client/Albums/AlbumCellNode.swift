@@ -12,7 +12,7 @@ import AsyncDisplayKit
 
 class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     //private var notificationToken: NotificationToken?
-    //private let parsingService = ParsingService()
+    private let parsingService = ParsingService()
     private let networkService = NetworkService()
     private var collectionNode: ASCollectionNode
     
@@ -45,22 +45,22 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     }
     
     override func didLoad() {
-        print("AlbumCellNode: didLoad: album: \(album)")
         loadAlbum()
     }
     
     private func loadAlbum() {
-        networkService.loadAlbum(owner: owner, album: album) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case let .success(photos):
+        NetworkService
+            .loadAlbumData(owner: owner, album: album)
+            .map(on: DispatchQueue.global()) { data in
+                try self.parsingService.parsingPhotos(data)
+            }.done { photos in
                 self.photos = photos
                 self.collectionNode.reloadData()
-            case let .failure(error):
+                //try? RealmService.save(items: photos)
+            }.catch { error in
                 print(error)
+                //self.show(error: error)
             }
-        }
     }
 
     private func setupSubnodes() {
@@ -69,7 +69,8 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let width = constrainedSize.max.width
-        collectionNode.style.preferredSize = CGSize(width: width, height: 200)
+        let height = constrainedSize.max.height
+        collectionNode.style.preferredSize = CGSize(width: width, height: height)
         return ASWrapperLayoutSpec(layoutElement: collectionNode)
     }
     
@@ -84,7 +85,7 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let photo = photos[indexPath.section]
         let cellNodeBlock = { () -> ASCellNode in
-            return PhotoCellNode(photo: photo.image)
+            return PhotoCellNode(photo: photo.image, aspectRatio: photo.aspectRatio)
         }
         
         return cellNodeBlock

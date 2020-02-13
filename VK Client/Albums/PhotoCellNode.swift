@@ -13,10 +13,12 @@ class PhotoCellNode: ASCellNode {
     private let imageNode = ASNetworkImageNode()
 
     private let photo: String
+    private let aspectRatio: Float
 
-    init(photo: String) {
+    init(photo: String, aspectRatio: Float) {
         self.photo = photo
-        
+        self.aspectRatio = aspectRatio
+
         super.init()
         
         backgroundColor = .darkGray
@@ -34,7 +36,8 @@ class PhotoCellNode: ASCellNode {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         let height = constrainedSize.max.height
-        imageNode.style.preferredSize = CGSize(width: height, height: height)
+        let width = height / CGFloat(aspectRatio)
+        imageNode.style.preferredSize = CGSize(width: width, height: height)
         return ASWrapperLayoutSpec(layoutElement: imageNode)
     }
 

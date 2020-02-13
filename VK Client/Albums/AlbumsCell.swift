@@ -23,7 +23,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
     @IBOutlet var albumView: UICollectionView!
     
     var ownerId = Int()
-    var albumId = Int()
+    var albumId = String()
     
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! Realm(configuration: RealmService.deleteIfMigration).objects(RealmPhoto.self).filter("ownerId == %@ AND albumId == %@", ownerId, albumId)
@@ -42,7 +42,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewD
         self.albumView.collectionViewLayout = flowLayout        
     }
 
-    func updateCellWith(owner: Int, album: Int) {
+    func updateCellWith(owner: Int, album: String) {
         self.ownerId = owner
         self.albumId = album
         //print(photos.count)

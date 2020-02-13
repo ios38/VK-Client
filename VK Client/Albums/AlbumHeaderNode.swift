@@ -25,7 +25,7 @@ class AlbumHeaderNode: ASCellNode {
     private var dateFormatter: DateFormatter = {
         let dt = DateFormatter()
         //dt.dateFormat = "dd MMMM yyyy" //nsdateformatter.com
-        dt.dateFormat = "dd.mm.yyyy." //nsdateformatter.com
+        dt.dateFormat = "dd.MM.yyyy." //nsdateformatter.com
         return dt
     }()
 

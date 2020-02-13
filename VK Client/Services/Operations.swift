@@ -13,7 +13,7 @@ import RealmSwift
 
 class GetData : AsyncOperation {
     private var ownerId: Int
-    private var albumId: Int?
+    private var albumId: String?
     var data: Data?
     
     override func main() {
@@ -38,7 +38,7 @@ class GetData : AsyncOperation {
         }*/
     }
 
-    init (ownerId: Int, albumId: Int?) {
+    init (ownerId: Int, albumId: String?) {
         self.ownerId = ownerId
         self.albumId = albumId
     }

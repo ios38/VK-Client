@@ -11,7 +11,7 @@ import SwiftyJSON
 import RealmSwift
 
 class RealmAlbum: Object {
-    @objc dynamic var id = -1
+    @objc dynamic var id = ""
     @objc dynamic var ownerId = -1
     @objc dynamic var date = Date.distantPast
     @objc dynamic var text = ""
@@ -19,7 +19,7 @@ class RealmAlbum: Object {
 
     convenience init(from json: JSON) {
         self.init()
-        self.id = json["id"].intValue
+        self.id = json["id"].stringValue
         self.ownerId = json["owner_id"].intValue
         let dateDouble = json["updated"].doubleValue
         self.date = Date(timeIntervalSince1970: dateDouble)
@@ -45,7 +45,7 @@ class Album {
     var size: Int
     
     init(from realmAlbum: RealmAlbum) {
-        self.id = String(realmAlbum.id)
+        self.id = realmAlbum.id
         self.ownerId = realmAlbum.ownerId
         self.date = realmAlbum.date
         self.text = realmAlbum.text

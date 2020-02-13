@@ -73,7 +73,7 @@ class NetworkService {
         return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
     
-    static func loadPhotos(owner: Int, album: Int?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
+    static func loadPhotos(owner: Int, album: String?, completion: ((Swift.Result<Data, Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.getAll"
         
@@ -124,7 +124,7 @@ class NetworkService {
         }
     }
 
-    static func loadAlbumData(owner: Int, album: Int) -> Promise<Data> {
+    static func loadAlbumData(owner: Int, album: String) -> Promise<Data> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/photos.get"
 
@@ -132,6 +132,7 @@ class NetworkService {
             "access_token": Session.shared.accessToken,
             "owner_id": owner,
             "album_id": album,
+            "rev": 1,
             "count": 10,
             "extended": 1,
             "v": "5.92"
@@ -147,7 +148,7 @@ class NetworkService {
         let params: Parameters = [
             "access_token": Session.shared.accessToken,
             "owner_id": owner,
-            "count": 10,
+            "count": 5,
             "extended": 1,
             "v": "5.92"
         ]
