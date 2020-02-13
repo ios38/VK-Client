@@ -12,6 +12,7 @@ import RealmSwift
 
 class RealmGroup: Object, Decodable {
     @objc dynamic var id = -1
+    @objc dynamic var my = 0
     @objc dynamic var name = ""
     @objc dynamic var image = ""
 
