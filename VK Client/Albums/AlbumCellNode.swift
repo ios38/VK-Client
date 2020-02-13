@@ -37,8 +37,8 @@ class AlbumCellNode: ASCellNode, ASCollectionDelegate, ASCollectionDataSource {
         super.init()
         self.collectionNode.delegate = self
         self.collectionNode.dataSource = self
-        backgroundColor = .darkGray
-
+        self.collectionNode.backgroundColor = .black
+        //backgroundColor = .darkGray
         //self.photos = realmPhotos.map{ $0.image }
 
         setupSubnodes()

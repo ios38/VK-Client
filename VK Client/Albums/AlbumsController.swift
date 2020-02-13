@@ -23,10 +23,10 @@ class AlbumsController: UITableViewController {
         return dt
     }()
 
-    var albums = [RealmAlbums]()
+    var albums = [RealmAlbum]()
     var owner = [RealmGroup]()
     
-    private lazy var realmAlbums: Results<RealmAlbums> = try! RealmService.get(RealmAlbums.self).filter("ownerId == %@", ownerId)
+    private lazy var realmAlbums: Results<RealmAlbum> = try! RealmService.get(RealmAlbum.self).filter("ownerId == %@", ownerId)
     private lazy var realmOwner: Results<RealmGroup> = try! RealmService.get(RealmGroup.self).filter("id == %@", -ownerId)
     
     override func viewDidLoad() {

@@ -132,8 +132,9 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             let indexPath = sourseController.tableView.indexPathForSelectedRow {
             let group = sourseController.groups[indexPath.row]
             if !groups.contains(where: {$0.id == group.id}) {
+                group.my = 1
                 groups.append(group)
-                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .modified)
                 self.searchBar(searchBar, textDidChange: searchBar.text ?? "")
             }
         }
@@ -150,6 +151,11 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             self.performSegue(withIdentifier: "Show Albums", sender: nil)
         case 1:
             if !groups.contains(where: {$0.id == group.id}) {
+                group.my = 1
+                groups.append(group)
+                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .modified)
+
+                /*
                 do {
                     let realm = try Realm()
                     try realm.write {
@@ -158,7 +164,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                     //print("Добавили \(group.name) в Realm")
                 } catch {
                     print(error)
-                }
+                }*/
             }
         default:
             return

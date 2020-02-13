@@ -20,12 +20,13 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
     public var ownerId: Int
     //var albumId = Int()
     
-    var albums = [String]()
+    //var albums = [String]()
+    var albums = [Album]()
     //var owner = [RealmUser]()
 
     //let realmService: RealmService
     
-    private lazy var realmAlbums: Results<RealmAlbums> = try! RealmService.get(RealmAlbums.self).filter("ownerId == %@", ownerId)
+    private lazy var realmAlbums: Results<RealmAlbum> = try! RealmService.get(RealmAlbum.self).filter("ownerId == %@", ownerId)
     //private lazy var realmOwner: Results<RealmUser> = try! RealmService.get(RealmUser.self).filter("id == %@", -ownerId)
 
     init(ownerId: Int) {
@@ -36,10 +37,8 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
         self.tableNode.allowsSelection = false
         tableNode.backgroundColor = .black
 
-        albums = realmAlbums.filter{ $0.size > 1}.map{ String($0.id) }
-        albums.insert("wall", at: 0)
-        albums.insert("profile", at: 0)
-        print("AlbumsASController: albums: \(albums)")
+        albums = realmAlbums.filter{ $0.size > 1}.map{ Album(from: $0) }
+        addWalltoAlbums()
         //owner = Array(self.realmOwner)
     }
     
@@ -67,10 +66,8 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
             case .initial:
                 break
             case .update(_, _, _, _):
-                //self.albums = Array(self.realmAlbums)
-                self.albums = self.realmAlbums.filter{ $0.size > 1}.map{ String($0.id) }
-                self.albums.insert("wall", at: 0)
-                self.albums.insert("profile", at: 0)
+                self.albums = self.realmAlbums.filter{ $0.size > 1}.map{ Album(from: $0) }
+                self.addWalltoAlbums()
                 self.tableNode.reloadData()
             case let .error(error):
                 print(error)
@@ -83,14 +80,36 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
     }
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, constrainedSizeForRowAt indexPath: IndexPath) -> ASSizeRange {
+        let width = tableNode.bounds.width
+        switch indexPath.row {
+        case 0:
+            let min = CGSize(width: width, height: 40)
+            let max = CGSize(width: width, height: 40)
+            return ASSizeRange(min: min, max: max)
+        case 1:
+            let min = CGSize(width: width, height: 200)
+            let max = CGSize(width: width, height: 200)
+            return ASSizeRange(min: min, max: max)            
+        default:
+            #warning ("Не нашел аналог UITableView.automaticDimension")
+            let min = CGSize(width: width, height: 0)
+            let max = CGSize(width: width, height: 0)
+            return ASSizeRange(min: min, max: max)
+        }
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         switch indexPath.row {
         case 0:
+            return { AlbumHeaderNode(album: self.albums[indexPath.section]) }
+        case 1:
             let cellNodeBlock = { () -> ASCellNode in
-                let node = AlbumCellNode(owner: self.ownerId, album: self.albums[indexPath.section])
+                let album = self.albums[indexPath.section].id
+                let node = AlbumCellNode(owner: self.ownerId, album: album)
                 return node
             }
             return cellNodeBlock
@@ -98,7 +117,25 @@ class AlbumsASController: ASViewController<ASDisplayNode>, ASTableDelegate, ASTa
             return { ASCellNode() }
         }
     }
-
+    func addWalltoAlbums() {
+        let wall = Album(
+            id: "wall",
+            ownerId: self.ownerId,
+            date: Date(),
+            text: "Фото со стены",
+            size: 0
+        )
+        let profile = Album(
+            id: "profile",
+            ownerId: self.ownerId,
+            date: Date(),
+            text: "Фото из профиля",
+            size: 0
+        )
+        self.albums.insert(wall, at: 0)
+        self.albums.insert(profile, at: 0)
+    }
+    
     deinit {
         notificationToken?.invalidate()
     }

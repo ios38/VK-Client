@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-class RealmAlbums: Object {
+class RealmAlbum: Object {
     @objc dynamic var id = -1
     @objc dynamic var ownerId = -1
     @objc dynamic var date = Date.distantPast
@@ -35,6 +35,30 @@ class RealmAlbums: Object {
         return "id"
     }
 
+}
+
+class Album {
+    var id: String
+    var ownerId: Int
+    var date: Date
+    var text: String
+    var size: Int
+    
+    init(from realmAlbum: RealmAlbum) {
+        self.id = String(realmAlbum.id)
+        self.ownerId = realmAlbum.ownerId
+        self.date = realmAlbum.date
+        self.text = realmAlbum.text
+        self.size = realmAlbum.size
+    }
+
+    internal init(id: String, ownerId: Int, date: Date, text: String, size: Int) {
+        self.id = id
+        self.ownerId = ownerId
+        self.date = date
+        self.text = text
+        self.size = size
+    }
 }
 
 /*

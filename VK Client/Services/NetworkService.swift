@@ -104,7 +104,8 @@ class NetworkService {
             "access_token": Session.shared.accessToken,
             "owner_id": owner,
             "album_id": album,
-            "count": 10,
+            "rev": 1,
+            //"count": 10,
             "extended": 1,
             "v": "5.92"
         ]
@@ -146,7 +147,7 @@ class NetworkService {
         let params: Parameters = [
             "access_token": Session.shared.accessToken,
             "owner_id": owner,
-            "count": 5,
+            "count": 10,
             "extended": 1,
             "v": "5.92"
         ]
