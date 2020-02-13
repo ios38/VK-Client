@@ -10,12 +10,14 @@ import UIKit
 
 class NewsTextCell: UITableViewCell {
     @IBOutlet var newsTextLabel: UILabel!
+    @IBOutlet weak var expandImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         newsTextLabel.numberOfLines = 0
         newsTextLabel.lineBreakMode = .byWordWrapping
         newsTextLabel.font = newsTextLabel.font.withSize(14)
+        expandImage.isHidden = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

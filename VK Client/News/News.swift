@@ -75,6 +75,15 @@ class RealmNews: Object {
 
 }
 
+class NewsTextSize {
+    var fitSize: CGFloat
+    var isExpand: Bool
+
+    internal init(fitSize: CGFloat, isExpand: Bool) {
+        self.fitSize = fitSize
+        self.isExpand = isExpand
+    }
+}
 /*
  {
      "response": {

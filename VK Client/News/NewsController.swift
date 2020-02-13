@@ -23,6 +23,7 @@ class NewsController: UITableViewController {
     var nextFromUrl: URL!
     var isLoading = false
     var indexSet = IndexSet()
+    var newsTextExpand = [Bool]()
     
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 
@@ -47,6 +48,8 @@ class NewsController: UITableViewController {
         tableView.prefetchDataSource = self
         
         news = Array(self.realmNews).sorted(by: { $0.date > $1.date })
+        newsTextExpand = Array(repeating: false, count: news.count)
+
         tableView.tableHeaderView = newsTableHeader
         print("NewsController: viewDidLoad: sources.count: \(newsSources(news).count)")
         newsTableHeader.sources = newsSources(news)
@@ -116,9 +119,7 @@ class NewsController: UITableViewController {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTextCell", for: indexPath) as? NewsTextCell else { preconditionFailure("NewsTextCell cannot be dequeued") }
             cell.newsTextLabel.text = news[indexPath.section].text
-
-            let newsTextHeight = cell.bounds.height
-            print ("NewsController: newsTextHeight: \(newsTextHeight)")
+            cell.expandImage.isHidden = hideExpandIcon(section: indexPath.section, height: cell.bounds.height)
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsImageCell", for: indexPath) as? NewsImageCell else { preconditionFailure("NewsImageCell cannot be dequeued") }
@@ -138,16 +139,21 @@ class NewsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let insets: CGFloat = 0
         switch indexPath.row {
         case 1:
-            if newsTextSize(indexPath.section) < 150 {
-                return newsTextSize(indexPath.section) + 10
-            } else {
-                return 150
+            switch newsTextExpand[indexPath.section] {
+            case true:
+                return newsTextFitSize(indexPath.section) + insets
+            case false:
+                if newsTextFitSize(indexPath.section) < 150 {
+                    return newsTextFitSize(indexPath.section) + insets
+                } else {
+                    return 150
+                }
             }
         case 2:
             let aspectRatio = CGFloat(news[indexPath.section].aspectRatio)
-            //let height = CGFloat(250) //aspectRatio * tableView.bounds.width
             return aspectRatio * tableView.bounds.width
         default:
             return UITableView.automaticDimension
@@ -212,7 +218,8 @@ class NewsController: UITableViewController {
         case 0, 2:
             performSegue(withIdentifier: "ShowNewsDetails", sender: nil)
         case 1:
-            print("News Controller: select NewsText")
+            newsTextExpand[indexPath.section].toggle()
+            tableView.reloadData()
         default:
             return
         }
@@ -268,12 +275,12 @@ class NewsController: UITableViewController {
         }
     }
 
-    func newsTextSize(_ sectionIndex: Int) -> CGFloat {
+    func newsTextFitSize(_ section: Int) -> CGFloat {
         let textLabel = UILabel()
         textLabel.numberOfLines = 0
         textLabel.lineBreakMode = .byWordWrapping
         textLabel.font = textLabel.font.withSize(14)
-        textLabel.text = news[sectionIndex].text
+        textLabel.text = news[section].text
         let maxSize: CGSize = CGSize(width: tableView.bounds.width - 20, height: 9999)
         let fitSize: CGSize = textLabel.sizeThatFits(maxSize)
         //print("NewsController: newsTextSize.heigth for section \(sectionIndex): \(fitSize.height) ")
@@ -282,6 +289,17 @@ class NewsController: UITableViewController {
     
     deinit {
         notificationToken?.invalidate()
+    }
+    
+    func hideExpandIcon(section: Int, height: CGFloat) -> Bool {
+        let insets: CGFloat = 0
+        guard height - insets < newsTextFitSize(section) else { return true }
+        switch newsTextExpand[section] {
+        case true:
+            return true
+        case false:
+            return false
+        }
     }
 
 }
