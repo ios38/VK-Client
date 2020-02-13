@@ -23,7 +23,7 @@ class NewsController: UITableViewController {
     var nextFromUrl: URL!
     var isLoading = false
     var indexSet = IndexSet()
-    var newsTextExpand = [Bool]()
+    var newsTextExpand = Array(repeating: false, count: 10)
     
     private lazy var realmNews: Results<RealmNews> = try! RealmService.get(RealmNews.self)
 

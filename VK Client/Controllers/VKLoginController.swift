@@ -34,7 +34,7 @@ class VKLoginController: UIViewController {
         components.host = "oauth.vk.com"
         components.path = "/authorize"
         components.queryItems = [
-            URLQueryItem(name: "client_id", value: "7232292"),
+            URLQueryItem(name: "client_id", value: "7319467"),
             URLQueryItem(name: "scope", value: "wall,photos,offline,friends,stories,status,groups"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
@@ -43,6 +43,7 @@ class VKLoginController: UIViewController {
         ]
         
         let request = URLRequest(url: components.url!)
+        print("\(request)")
         webView.load(request)
     }
 }
