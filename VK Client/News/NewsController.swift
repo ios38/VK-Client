@@ -86,6 +86,8 @@ class NewsController: UITableViewController {
                 //print("NewsController: notificationToken: sources.count: \(self.newsSources(self.news).count)")
                 self.newsTableHeader.sources = self.newsSources(self.news)
                 //self.tableView.reloadData()
+                let newsTextExpand = Array(repeating: false, count: self.indexSet.count)
+                self.newsTextExpand += newsTextExpand
                 self.tableView.insertSections(self.indexSet, with: .automatic)
                 self.newsTableHeader.collectionView.reloadData()
             case let .error(error):
@@ -139,15 +141,16 @@ class NewsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let insets: CGFloat = 0
+        let insets: CGFloat = 10
+        let fitSize = newsTextFitSize(indexPath.section)
         switch indexPath.row {
         case 1:
             switch newsTextExpand[indexPath.section] {
             case true:
-                return newsTextFitSize(indexPath.section) + insets
+                return fitSize + insets
             case false:
-                if newsTextFitSize(indexPath.section) < 150 {
-                    return newsTextFitSize(indexPath.section) + insets
+                if fitSize < 150 {
+                    return fitSize + insets
                 } else {
                     return 150
                 }
@@ -283,7 +286,7 @@ class NewsController: UITableViewController {
         textLabel.text = news[section].text
         let maxSize: CGSize = CGSize(width: tableView.bounds.width - 20, height: 9999)
         let fitSize: CGSize = textLabel.sizeThatFits(maxSize)
-        //print("NewsController: newsTextSize.heigth for section \(sectionIndex): \(fitSize.height) ")
+        //print("NewsController: newsTextFitSize heigth for section \(section): \(fitSize.height) ")
         return fitSize.height
     }
     
@@ -292,7 +295,7 @@ class NewsController: UITableViewController {
     }
     
     func hideExpandIcon(section: Int, height: CGFloat) -> Bool {
-        let insets: CGFloat = 0
+        let insets: CGFloat = 10
         guard height - insets < newsTextFitSize(section) else { return true }
         switch newsTextExpand[section] {
         case true:
