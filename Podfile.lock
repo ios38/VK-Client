@@ -58,7 +58,7 @@ PODS:
     - Texture/Core
 
 DEPENDENCIES:
-  - Alamofire (~> 4.9.1)
+  - Alamofire
   - Kingfisher (~> 5.11.0)
   - PromiseKit (~> 6.13.1)
   - PromiseKit/Alamofire
@@ -91,6 +91,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Texture: 8ecf6984065a1e54f06bf97b349ecca28582acd7
 
-PODFILE CHECKSUM: 54db85d2e86ef72a5a67f7c4d445b0d429e6cd63
+PODFILE CHECKSUM: d524c55b37af7a2a6107a8917b15989cc1ef1675
 
 COCOAPODS: 1.8.4

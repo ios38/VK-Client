@@ -10,6 +10,23 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+struct News {
+    let id: Int
+    let source: Int
+    let date: Date
+    let text: String
+
+    let imageLabel: String
+    let image: String
+    let aspectRatio: Float
+
+    let isLiked: Int
+    let likeCount: Int
+    let commentsCount: Int
+    let repostsCount: Int
+    let viewsCount: Int
+}
+
 class RealmNews: Object {
     @objc dynamic var id = -1
     @objc dynamic var source = -1

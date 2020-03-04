@@ -63,6 +63,7 @@
 		50BB6306238A6E8100758C16 /* PushPopTurnAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB6305238A6E8100758C16 /* PushPopTurnAnimator.swift */; };
 		50BB6308238A6F0D00758C16 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB6307238A6F0D00758C16 /* CustomNavigationController.swift */; };
 		50BB630A238A727C00758C16 /* CustomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BB6309238A727C00758C16 /* CustomSegue.swift */; };
+		50C3343D240F6F3E0022ACB2 /* NewsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3343C240F6F3E0022ACB2 /* NewsAdapter.swift */; };
 		50C9AB052368529900269405 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9AB042368529900269405 /* Photo.swift */; };
 		50D8355B23629863009C0295 /* MyGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355A23629863009C0295 /* MyGroupsController.swift */; };
 		50D8355D236298BC009C0295 /* AllGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355C236298BC009C0295 /* AllGroupsController.swift */; };
@@ -134,6 +135,7 @@
 		50BB6305238A6E8100758C16 /* PushPopTurnAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPopTurnAnimator.swift; sourceTree = "<group>"; };
 		50BB6307238A6F0D00758C16 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomNavigationController.swift; path = "VK Client/Controllers/CustomNavigationController.swift"; sourceTree = SOURCE_ROOT; };
 		50BB6309238A727C00758C16 /* CustomSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomSegue.swift; path = "VK Client/Helpers/CustomSegue.swift"; sourceTree = SOURCE_ROOT; };
+		50C3343C240F6F3E0022ACB2 /* NewsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAdapter.swift; sourceTree = "<group>"; };
 		50C9AB042368529900269405 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		50D8355A23629863009C0295 /* MyGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsController.swift; sourceTree = "<group>"; };
 		50D8355C236298BC009C0295 /* AllGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsController.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				50AE73A723D41B90007DA388 /* News.swift */,
+				50C3343C240F6F3E0022ACB2 /* NewsAdapter.swift */,
 				50AC189723E99490006F54A6 /* NewsSource.swift */,
 				50AE736923D2DFFF007DA388 /* NewsHeaderCell.swift */,
 				50AE736A23D2DFFF007DA388 /* NewsHeaderCell.xib */,
@@ -480,6 +483,7 @@
 				5097C7C72364375E008DE79B /* PhotoCell.swift in Sources */,
 				50AE73AA23D85381007DA388 /* NewsDetailsController.swift in Sources */,
 				50AE739D23D40B63007DA388 /* NewsTextCell.swift in Sources */,
+				50C3343D240F6F3E0022ACB2 /* NewsAdapter.swift in Sources */,
 				50517D472392936F002D7677 /* Account.swift in Sources */,
 				5082976E2396863B0006BB6E /* NetworkService.swift in Sources */,
 				50D8355B23629863009C0295 /* MyGroupsController.swift in Sources */,

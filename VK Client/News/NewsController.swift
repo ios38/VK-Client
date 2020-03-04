@@ -222,7 +222,8 @@ class NewsController: UITableViewController {
             performSegue(withIdentifier: "ShowNewsDetails", sender: nil)
         case 1:
             newsTextExpand[indexPath.section].toggle()
-            tableView.reloadData()
+            let indexSet = IndexSet(integersIn: indexPath.section..<indexPath.section)
+            tableView.reloadSections(indexSet, with: .automatic)
         default:
             return
         }
