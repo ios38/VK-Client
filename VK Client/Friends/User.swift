@@ -10,6 +10,14 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+struct User {
+    let id: Int
+    let my: Int
+    let firstName: String
+    let lastName: String
+    let photo: String
+}
+
 class RealmUser: Object {
     @objc dynamic var id = -1
     @objc dynamic var my = 0
@@ -18,7 +26,7 @@ class RealmUser: Object {
     @objc dynamic var photo = ""
     //@objc dynamic var online = -1
 
-    let photos = List<RealmPhoto>()
+    //let photos = List<RealmPhoto>()
 
     convenience init(from json: JSON) {
         self.init()

@@ -10,19 +10,29 @@ import UIKit
 import RealmSwift
 
 class FriendsController: UITableViewController {
-    private var notificationToken: NotificationToken?
-    private let parsingService = ParsingService()
+    //private var notificationToken: NotificationToken?
+    //private let parsingService = ParsingService()
 
-    private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self).filter("my == 1")
-    //private var friends: Results<RealmUser>?
-    private var sortedFriends = [Character: [RealmUser]]()
+    //private lazy var friends: Results<RealmUser> = try! RealmService.get(RealmUser.self).filter("my == 1")
+    //private var sortedFriends = [Character: [RealmUser]]()
+
+    private let userAdapter = UserAdapter()
+    private var friends = [User]()
+    private var sortedFriends = [Character: [User]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
-
-        sortedFriends = self.sort(friends: friends)
         
+        userAdapter.getUsers() { [weak self] users in
+            guard let self = self else { return }
+            self.sortedFriends = self.sort(friends: users)
+            self.tableView.reloadData()
+        }
+
+        //sortedFriends = self.sort(friends: friends)
+        
+        /*
         NetworkService
             .loadFriends()
             .map(on: DispatchQueue.global()) { data in
@@ -44,12 +54,14 @@ class FriendsController: UITableViewController {
             case let .error(error):
                 print(error)
             }
-        })
+        })*/
         
     }
     
-    private func sort(friends: Results<RealmUser>) -> [Character: [RealmUser]] {
-        var friendDict = [Character: [RealmUser]]()
+    //private func sort(friends: Results<RealmUser>) -> [Character: [RealmUser]] {
+    private func sort(friends: [User]) -> [Character: [User]] {
+        //var friendDict = [Character: [RealmUser]]()
+        var friendDict = [Character: [User]]()
 
         friends.forEach {friend in
             guard let firstChar = friend.lastName.first else { return }
@@ -91,13 +103,14 @@ class FriendsController: UITableViewController {
         
         let firstChar = sortedFriends.keys.sorted()[indexPath.section]
         let friends = sortedFriends[firstChar]!
-        let friend: RealmUser = friends[indexPath.row]
+        let friend = friends[indexPath.row]
         cell.configure(with: friend)
                 
         return cell
     }
     
     //Удаление друга и его фото
+    /*
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let firstChar = sortedFriends.keys.sorted()[indexPath.section]
@@ -113,7 +126,7 @@ class FriendsController: UITableViewController {
                 print(error)
             }
         }
-    }
+    }*/
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let indexPath = tableView.indexPathForSelectedRow {
@@ -142,9 +155,9 @@ class FriendsController: UITableViewController {
             destination.ownerId = friend.id
         }
     }*/
-
+    /*
     deinit {
         notificationToken?.invalidate()
-    }
+    }*/
 
 }

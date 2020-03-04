@@ -14,7 +14,8 @@ class FriendCell: UITableViewCell {
     @IBOutlet var cellImage: UIImageView!    
     @IBOutlet var cellLabel: UILabel!
     
-    public func configure(with friend: RealmUser) {
+//    public func configure(with friend: RealmUser) {
+    public func configure(with friend: User) {
         cellLabel.text = friend.lastName + " " + friend.firstName
         cellImage.kf.setImage(with: URL(string: friend.photo))
     }

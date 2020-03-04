@@ -39,7 +39,7 @@ class RealmPhoto: Object {
     @objc dynamic var isLiked = 0
     @objc dynamic var likeCount = 0
     
-    let friends = LinkingObjects(fromType: RealmUser.self, property: "photos")
+    //let friends = LinkingObjects(fromType: RealmUser.self, property: "photos")
 
     convenience init(from json: JSON) {
         self.init()
