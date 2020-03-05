@@ -66,6 +66,7 @@
 		50C3343D240F6F3E0022ACB2 /* NewsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3343C240F6F3E0022ACB2 /* NewsAdapter.swift */; };
 		50C3343F240FB15D0022ACB2 /* GroupAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3343E240FB15D0022ACB2 /* GroupAdapter.swift */; };
 		50C33443240FD1570022ACB2 /* UserAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C33442240FD1570022ACB2 /* UserAdapter.swift */; };
+		50C334452410910E0022ACB2 /* UserViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C334442410910E0022ACB2 /* UserViewModelFactory.swift */; };
 		50C9AB052368529900269405 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9AB042368529900269405 /* Photo.swift */; };
 		50D8355B23629863009C0295 /* MyGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355A23629863009C0295 /* MyGroupsController.swift */; };
 		50D8355D236298BC009C0295 /* AllGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355C236298BC009C0295 /* AllGroupsController.swift */; };
@@ -140,6 +141,7 @@
 		50C3343C240F6F3E0022ACB2 /* NewsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAdapter.swift; sourceTree = "<group>"; };
 		50C3343E240FB15D0022ACB2 /* GroupAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAdapter.swift; sourceTree = "<group>"; };
 		50C33442240FD1570022ACB2 /* UserAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAdapter.swift; sourceTree = "<group>"; };
+		50C334442410910E0022ACB2 /* UserViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModelFactory.swift; sourceTree = "<group>"; };
 		50C9AB042368529900269405 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		50D8355A23629863009C0295 /* MyGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsController.swift; sourceTree = "<group>"; };
 		50D8355C236298BC009C0295 /* AllGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsController.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 			children = (
 				5097C7CC2366F70C008DE79B /* User.swift */,
 				50C33442240FD1570022ACB2 /* UserAdapter.swift */,
+				50C334442410910E0022ACB2 /* UserViewModelFactory.swift */,
 				505965EF2371A6A70014B451 /* FriendView.swift */,
 				5097C7C223641495008DE79B /* FriendCell.swift */,
 				5097C7C023640802008DE79B /* FriendsController.swift */,
@@ -510,6 +513,7 @@
 				505965F02371A6A70014B451 /* FriendView.swift in Sources */,
 				5096DB5523F252E0005C8D48 /* AlbumCellNode.swift in Sources */,
 				500BB7D423AA60E700573861 /* NavigationController.swift in Sources */,
+				50C334452410910E0022ACB2 /* UserViewModelFactory.swift in Sources */,
 				501A18482377F14500BDE950 /* AlbumsController.swift in Sources */,
 				50F999C223F4E6AE00115203 /* AlbumHeaderNode.swift in Sources */,
 				5024E75C23EA5171004A077B /* PhotoWithFramesCell.swift in Sources */,

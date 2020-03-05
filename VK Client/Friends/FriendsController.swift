@@ -18,7 +18,9 @@ class FriendsController: UITableViewController {
 
     private let userAdapter = UserAdapter()
     private var friends = [User]()
-    private var sortedFriends = [Character: [User]]()
+    //private var sortedFriends = [Character: [User]]()
+    private var sortedFriends = [Character: [UserViewModel]]()
+    private let friendViewModelFactory = UserViewModelFactory()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,9 @@ class FriendsController: UITableViewController {
         
         userAdapter.getUsers() { [weak self] users in
             guard let self = self else { return }
-            self.sortedFriends = self.sort(friends: users)
+            let friendViewModels = self.friendViewModelFactory.constructViewModels(from: users)
+            //self.sortedFriends = self.sort(friends: users)
+            self.sortedFriends = self.sort(friends: friendViewModels)
             self.tableView.reloadData()
         }
 
@@ -59,12 +63,14 @@ class FriendsController: UITableViewController {
     }
     
     //private func sort(friends: Results<RealmUser>) -> [Character: [RealmUser]] {
-    private func sort(friends: [User]) -> [Character: [User]] {
+    //private func sort(friends: [User]) -> [Character: [User]] {
+    private func sort(friends: [UserViewModel]) -> [Character: [UserViewModel]] {
         //var friendDict = [Character: [RealmUser]]()
-        var friendDict = [Character: [User]]()
+        var friendDict = [Character: [UserViewModel]]()
 
         friends.forEach {friend in
-            guard let firstChar = friend.lastName.first else { return }
+            //guard let firstChar = friend.lastName.first else { return }
+            guard let firstChar = friend.name.first else { return }
             if var thisCharFriends = friendDict[firstChar] {
                 thisCharFriends.append(friend)
                 //print(thisCharFriends)

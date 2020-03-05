@@ -6,7 +6,7 @@
 //  Copyright © 2019 Maksim Romanov. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import SwiftyJSON
 import RealmSwift
 
@@ -16,6 +16,12 @@ struct User {
     let firstName: String
     let lastName: String
     let photo: String
+}
+
+struct UserViewModel {
+    let id: Int
+    let name: String
+    let photo: UIImage?
 }
 
 class RealmUser: Object {
