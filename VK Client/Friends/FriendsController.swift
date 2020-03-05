@@ -116,7 +116,7 @@ class FriendsController: UITableViewController {
     }
     
     //Удаление друга и его фото
-    /*
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let firstChar = sortedFriends.keys.sorted()[indexPath.section]
@@ -126,13 +126,14 @@ class FriendsController: UITableViewController {
                 let realm = try Realm()
                 try realm.write {
                     realm.delete(realm.objects(RealmPhoto.self).filter("ownerId == %@", friend.id))
-                    realm.delete(friend)
+                    //realm.delete(friend)
+                    realm.delete(realm.objects(RealmUser.self).filter("id == %@", friend.id))
                 }
             } catch {
                 print(error)
             }
         }
-    }*/
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let indexPath = tableView.indexPathForSelectedRow {
