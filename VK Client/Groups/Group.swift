@@ -10,8 +10,17 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
+struct Group {
+    let id = -1
+    let my = 0
+    let name = ""
+    let image = ""
+
+}
+
 class RealmGroup: Object, Decodable {
     @objc dynamic var id = -1
+    @objc dynamic var my = 0
     @objc dynamic var name = ""
     @objc dynamic var image = ""
 

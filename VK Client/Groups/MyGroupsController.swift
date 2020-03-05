@@ -18,12 +18,13 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
 
     private var notificationToken: NotificationToken?
+    private let parsingService = ParsingService()
     //private let networkService = NetworkService()
     var groups = [RealmGroup]()
     var currentGroups = [RealmGroup]()
     var globalGroups = [RealmGroup]()
 
-    private lazy var realmGroups: Results<RealmGroup> = try! RealmService.get(RealmGroup.self)
+    private lazy var realmGroups: Results<RealmGroup> = try! RealmService.get(RealmGroup.self).filter("my == 1")
 
     
     struct groupCategory {
@@ -46,8 +47,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             groupCategory(name: "", items: currentGroups),
             groupCategory(name: "Глобальный поиск", items: globalGroups)
         ]
-        
-        NetworkService.loadGroups(token: Session.shared.accessToken) { /*[weak self]*/ result in
+        /*
+        NetworkService.loadGroups() { /*[weak self]*/ result in
             //quard let self = self else {return}
             switch result {
             case let .success(groups):
@@ -55,14 +56,24 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             case let .failure(error):
                 print(error)
             }
-        }
-        
+        }*/
+
+        NetworkService
+            .loadGroups()
+            .map(on: DispatchQueue.global()) { data in
+                try self.parsingService.parsingGroups(data)
+            }.done { groups in
+                try? RealmService.save(items: groups)
+            }.catch { error in
+                self.show(error: error)
+            }
+
         self.notificationToken = realmGroups.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.searchBar(self.searchBar, textDidChange: self.searchBar.text ?? "")
             case let .error(error):
                 print(error)
@@ -121,8 +132,9 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
             let indexPath = sourseController.tableView.indexPathForSelectedRow {
             let group = sourseController.groups[indexPath.row]
             if !groups.contains(where: {$0.id == group.id}) {
+                group.my = 1
                 groups.append(group)
-                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .all)
+                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .modified)
                 self.searchBar(searchBar, textDidChange: searchBar.text ?? "")
             }
         }
@@ -136,18 +148,23 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
         let group = sections[indexPath.section].items[indexPath.row]
         switch indexPath.section {
         case 0:
-            self.performSegue(withIdentifier: "Show News", sender: nil)
+            self.performSegue(withIdentifier: "Show Albums", sender: nil)
         case 1:
             if !groups.contains(where: {$0.id == group.id}) {
+                group.my = 1
+                groups.append(group)
+                try? RealmService.save(items: groups, configuration: RealmService.deleteIfMigration, update: .modified)
+
+                /*
                 do {
                     let realm = try Realm()
                     try realm.write {
                         realm.add(group)
                     }
-                    print("Добавили \(group.name) в Realm")
+                    //print("Добавили \(group.name) в Realm")
                 } catch {
                     print(error)
-                }
+                }*/
             }
         default:
             return
@@ -155,8 +172,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Show News",
-            let destination = segue.destination as? NewsController,
+        if segue.identifier == "Show Albums",
+            let destination = segue.destination as? AlbumsController,
             let indexPath = tableView.indexPathForSelectedRow {
             //Выбираем группу для передачи
             guard indexPath.section == 0 else { return }
@@ -193,7 +210,7 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                         if !self.groups.contains(where: {$0.id == group.id}){
                             self.globalGroups.append(group)
                         } else {
-                            print ("Группа \(group.name) уже есть")
+                            //print ("Группа \(group.name) уже есть")
                         }
                     }
                     

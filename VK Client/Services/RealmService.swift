@@ -22,7 +22,7 @@ class RealmService {
             //print("RealmService: saved \(items.count) items")
         }
     }
-    
+
     static func get<T: Object>(
         _ type: T.Type,
         configuration: Realm.Configuration = deleteIfMigration
@@ -30,7 +30,7 @@ class RealmService {
         let realm = try Realm(configuration: configuration)
         return realm.objects(type)
     }
-    
+
     static func delete<T: Object>(
         _ object: T,
         configuration: Realm.Configuration = deleteIfMigration

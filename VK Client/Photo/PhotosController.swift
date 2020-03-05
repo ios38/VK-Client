@@ -17,25 +17,51 @@ class PhotosController: UICollectionViewController {
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == %@", ownerId)
     
+    private let photoQueue: OperationQueue = {
+        let q = OperationQueue()
+        q.name = "ru.romanov.vk-client.photo"
+        //q.maxConcurrentOperationCount = 1
+        //q.qualityOfService = .userInitiated
+        return q
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.register(PhotoWithFramesCell.self, forCellWithReuseIdentifier: "PhotoWithFramesCell")
+        
         photos = sort(Array(realmPhotos))
         
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: nil) { result in
+        let getData = GetData(ownerId: ownerId, albumId: nil)
+        //getData.completionBlock = {print ("2_PhotosController: getData.data: \(getData.data as Any)")}
+        photoQueue.addOperation(getData)
+
+        let parseData = ParseData()
+        parseData.addDependency(getData)
+        //parseData.completionBlock = {print ("4_PhotosController: parseData.outputData.count:\(parseData.outputData.count)")}
+        photoQueue.addOperation(parseData)
+        
+        let saveData = SaveData()
+        saveData.addDependency(parseData)
+        //saveData.completionBlock = {print ("6_PhotosController: saveData: data saved to Realm")}
+        photoQueue.addOperation(saveData)
+
+        /*
+        NetworkService.loadPhotos(owner: ownerId, album: nil) { result in
             switch result {
             case let .success(photos):
                 try? RealmService.save(items: photos)
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
         
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.photos = self.sort(Array(self.realmPhotos))
                 self.collectionView.reloadData()
             case let .error(error):
@@ -82,29 +108,40 @@ class PhotosController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoWithFramesCell", for: indexPath) as? PhotoWithFramesCell else {
             preconditionFailure("PhotoCell cannot be dequeued")
         }
         
-        cell.cellImage.kf.setImage(with: URL(string: photos[indexPath.row].image))
-        cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
-        cell.likeCount = photos[indexPath.row].likeCount
-        cell.isLiked = photos[indexPath.row].isLiked
-        cell.isLikedLabel.text = String(photos[indexPath.row].isLiked)
-        cell.photoId = photos[indexPath.row].id
+//        cell.cellImage.kf.setImage(with: URL(string: photos[indexPath.row].image))
+//        cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
+//        cell.likeCount = photos[indexPath.row].likeCount
+//        cell.isLiked = photos[indexPath.row].isLiked
+//        cell.photoId = photos[indexPath.row].id
         
+        cell.configure(with: photos[indexPath.row])
         cell.delegate = self
                
         return cell
     }
-    
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show Big Photo",
+            let selectedPhotoIndexPath = collectionView.indexPathsForSelectedItems?.first,
+            let destination = segue.destination as? BigPhotoController {
+            destination.bigPhotos = photos
+            destination.selectedPhotoIndex = selectedPhotoIndexPath.item
+            collectionView.deselectItem(at: selectedPhotoIndexPath, animated: true)
+        }
+    }
+
     deinit {
         notificationToken?.invalidate()
     }
 
 }
 
-extension PhotosController: PhotoCellDelegate {
+extension PhotosController: PhotoWithFramesCellDelegate {
+//extension PhotosController: PhotoCellDelegate {
     func likePhoto(photoId: Int, isLiked: Int, likeCount: Int) {
         //print("PhotosController: like tapped: \(photoId), likeCount: \(likeCount)")
         let photo = photos.first(where: { $0.id == photoId })!        
@@ -120,7 +157,7 @@ extension PhotosController: PhotoCellDelegate {
         }
     }
 }
-
+/*
 extension PhotosController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Big Photo",
@@ -131,4 +168,15 @@ extension PhotosController {
             collectionView.deselectItem(at: selectedPhotoIndexPath, animated: true)
         }
     }
+}*/
+
+extension PhotosController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: collectionView.frame.width/2, height: collectionView.frame.width/2)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+        
 }
