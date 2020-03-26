@@ -11,7 +11,7 @@ import Alamofire
 import SwiftyJSON
 import PromiseKit
 
-class NetworkService {
+class NetworkService: NetworkInterface {
     static let session: Alamofire.SessionManager = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 20
@@ -19,7 +19,7 @@ class NetworkService {
         return session
     }()
     
-    static func loadGroups() -> Promise<Data> {
+    func loadGroups() -> Promise<Data> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/groups.get"
         
@@ -182,7 +182,7 @@ class NetworkService {
         }
     }*/
     
-    static func loadNews() -> Promise<Data> {
+    func loadNews() -> Promise<Data> {
         let baseUrl = "https://api.vk.com"
         let path = "/method/newsfeed.get"
         
@@ -198,7 +198,7 @@ class NetworkService {
         return NetworkService.session.request(baseUrl + path, method: .get, parameters: params).responseData().map { $0.data }
     }
     
-    static func loadNewsWithStart(startTime: Double? = nil, startFrom: String? = nil, completion: @escaping ([RealmNews], Data, String) -> Void) {
+    func loadNewsWithStart(startTime: Double? = nil, startFrom: String? = nil, completion: @escaping ([RealmNews], Data, String) -> Void) {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.vk.com"

@@ -19,7 +19,8 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
 
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
-    //private let networkService = NetworkService()
+    private let networkService = NetworkService()
+    //private let networkProxy = NetworkProxy(networkService: networkService)
     var groups = [RealmGroup]()
     var currentGroups = [RealmGroup]()
     var globalGroups = [RealmGroup]()
@@ -57,8 +58,10 @@ class MyGroupsController: UITableViewController, UISearchBarDelegate {
                 print(error)
             }
         }*/
+        
+        let networkProxy = NetworkProxy(networkService: networkService)
 
-        NetworkService
+        networkProxy
             .loadGroups()
             .map(on: DispatchQueue.global()) { data in
                 try self.parsingService.parsingGroups(data)

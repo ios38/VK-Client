@@ -16,6 +16,7 @@ import Kingfisher
 class NewsController: UITableViewController {
     private var notificationToken: NotificationToken?
     private let parsingService = ParsingService()
+    private let networkService = NetworkService()
     var news = [RealmNews]()
     var newsSources = [NewsSource]()
     var newsTableHeader = NewsTableHeader()
@@ -60,8 +61,10 @@ class NewsController: UITableViewController {
             print(error)
         }
         //print("NewsController: viewDidLoad: nextFrom: \(nextFrom)")
+        
+        let networkProxy = NetworkProxy(networkService: networkService)
 
-        NetworkService
+        networkProxy
             .loadNews()
 //            .map(on: DispatchQueue.global()) { data in
 //                self.newsData(data)
@@ -272,7 +275,8 @@ class NewsController: UITableViewController {
     @objc private func refreshNews() {
         print("NewsController: Refresh News triggered")
         let startTime = news.first?.date ?? Date().timeIntervalSince1970
-        NetworkService.loadNewsWithStart(startTime: startTime + 1) { news, data, _ in
+        let networkProxy = NetworkProxy(networkService: networkService)
+        networkProxy.loadNewsWithStart(startTime: startTime + 1, startFrom: nil) { news, data, _ in
             print ("NewsController: refreshNews: news: \(news.count)")
             self.newsData(data)
             self.refreshControl?.endRefreshing()
@@ -314,7 +318,8 @@ extension NewsController: UITableViewDataSourcePrefetching {
         if maxSection > news.count - 2, !isLoading {
             //print ("NewsController: DataSourcePrefetching: *** started ***")
             isLoading = true
-            NetworkService.loadNewsWithStart(startFrom: nextFrom) { news, data, nextFrom in
+            let networkProxy = NetworkProxy(networkService: networkService)
+            networkProxy.loadNewsWithStart(startTime: nil, startFrom: nextFrom) { news, data, nextFrom in
                 print ("NewsController: DataSourcePrefetching: result: \(news.count)")
                 //print ("NewsController: DataSourcePrefetching: nextFrom: \(nextFrom)")
                 self.newsData(data)

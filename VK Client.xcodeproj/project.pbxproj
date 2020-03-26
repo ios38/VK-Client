@@ -31,6 +31,8 @@
 		50783C7823C7426C00623F66 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50783C7723C7426C00623F66 /* RealmService.swift */; };
 		50783C7B23C883ED00623F66 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50783C7923C883ED00623F66 /* AlbumCell.swift */; };
 		50783C7C23C883ED00623F66 /* AlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50783C7A23C883ED00623F66 /* AlbumCell.xib */; };
+		507D9656242B65E000D28C9C /* NetworkInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D9655242B65E000D28C9C /* NetworkInterface.swift */; };
+		507D9658242B67E100D28C9C /* NetworkProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D9657242B67E100D28C9C /* NetworkProxy.swift */; };
 		5082976C2396816C0006BB6E /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5082976B2396816C0006BB6E /* VKLoginController.swift */; };
 		5082976E2396863B0006BB6E /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5082976D2396863B0006BB6E /* NetworkService.swift */; };
 		508A4CED23DA884D00378922 /* ParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508A4CEC23DA884D00378922 /* ParsingService.swift */; };
@@ -106,6 +108,8 @@
 		50783C7723C7426C00623F66 /* RealmService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		50783C7923C883ED00623F66 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		50783C7A23C883ED00623F66 /* AlbumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCell.xib; sourceTree = "<group>"; };
+		507D9655242B65E000D28C9C /* NetworkInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterface.swift; sourceTree = "<group>"; };
+		507D9657242B67E100D28C9C /* NetworkProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProxy.swift; sourceTree = "<group>"; };
 		5082976B2396816C0006BB6E /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		5082976D2396863B0006BB6E /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		508A4CEC23DA884D00378922 /* ParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingService.swift; sourceTree = "<group>"; };
@@ -265,12 +269,14 @@
 		50783C7623C73AE000623F66 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				5082976D2396863B0006BB6E /* NetworkService.swift */,
 				508A4D1423DBF1A900378922 /* Operations.swift */,
 				50783C7723C7426C00623F66 /* RealmService.swift */,
 				508A4CEC23DA884D00378922 /* ParsingService.swift */,
 				508A4D1623DBF20100378922 /* AsyncOperation.swift */,
 				502F55DD23E3067A008DA333 /* PhotoService.swift */,
+				507D9657242B67E100D28C9C /* NetworkProxy.swift */,
+				5082976D2396863B0006BB6E /* NetworkService.swift */,
+				507D9655242B65E000D28C9C /* NetworkInterface.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -500,6 +506,7 @@
 				502F55DE23E3067A008DA333 /* PhotoService.swift in Sources */,
 				50D835612362F414009C0295 /* Group.swift in Sources */,
 				50BB6308238A6F0D00758C16 /* CustomNavigationController.swift in Sources */,
+				507D9658242B67E100D28C9C /* NetworkProxy.swift in Sources */,
 				508D26402378314600EAA5BA /* AlbumsCell.swift in Sources */,
 				50AE736B23D2DFFF007DA388 /* NewsHeaderCell.swift in Sources */,
 				50783C7B23C883ED00623F66 /* AlbumCell.swift in Sources */,
@@ -528,6 +535,7 @@
 				50BB62CA2388FFA600758C16 /* Animator.swift in Sources */,
 				50FCC82623EFE49E0006CCF5 /* NewsTextWithFramesCell.swift in Sources */,
 				501A181F2374516200BDE950 /* GroupCellXib.swift in Sources */,
+				507D9656242B65E000D28C9C /* NetworkInterface.swift in Sources */,
 				507675C6238E7EEC008448AA /* BigPhotoController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
