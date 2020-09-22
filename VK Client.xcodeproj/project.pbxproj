@@ -69,6 +69,7 @@
 		50C3343F240FB15D0022ACB2 /* GroupAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3343E240FB15D0022ACB2 /* GroupAdapter.swift */; };
 		50C33443240FD1570022ACB2 /* UserAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C33442240FD1570022ACB2 /* UserAdapter.swift */; };
 		50C334452410910E0022ACB2 /* UserViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C334442410910E0022ACB2 /* UserViewModelFactory.swift */; };
+		50C61D6D2519BB2500B63661 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C61D6C2519BB2400B63661 /* WebKit.framework */; };
 		50C9AB052368529900269405 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9AB042368529900269405 /* Photo.swift */; };
 		50D8355B23629863009C0295 /* MyGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355A23629863009C0295 /* MyGroupsController.swift */; };
 		50D8355D236298BC009C0295 /* AllGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D8355C236298BC009C0295 /* AllGroupsController.swift */; };
@@ -146,6 +147,7 @@
 		50C3343E240FB15D0022ACB2 /* GroupAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAdapter.swift; sourceTree = "<group>"; };
 		50C33442240FD1570022ACB2 /* UserAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAdapter.swift; sourceTree = "<group>"; };
 		50C334442410910E0022ACB2 /* UserViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModelFactory.swift; sourceTree = "<group>"; };
+		50C61D6C2519BB2400B63661 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		50C9AB042368529900269405 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		50D8355A23629863009C0295 /* MyGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsController.swift; sourceTree = "<group>"; };
 		50D8355C236298BC009C0295 /* AllGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGroupsController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50C61D6D2519BB2500B63661 /* WebKit.framework in Frameworks */,
 				E67ED83267EB9E38B30878E5 /* Pods_VK_Client.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +344,7 @@
 		C9215A3B50221C7449E188AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50C61D6C2519BB2400B63661 /* WebKit.framework */,
 				52B22502945CBB0E8657FC5D /* Pods_VK_Client.framework */,
 			);
 			name = Frameworks;
