@@ -34,8 +34,8 @@ class VKLoginController: UIViewController {
         components.host = "oauth.vk.com"
         components.path = "/authorize"
         components.queryItems = [
-            URLQueryItem(name: "client_id", value: "7232292"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "client_id", value: "7605050"),
+            URLQueryItem(name: "scope", value: "wall,photos,offline,friends,stories,status,groups"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "response_type", value: "token"),
@@ -43,6 +43,7 @@ class VKLoginController: UIViewController {
         ]
         
         let request = URLRequest(url: components.url!)
+        print("\(request)")
         webView.load(request)
     }
 }
@@ -74,7 +75,7 @@ extension VKLoginController: WKNavigationDelegate {
         Session.shared.accessToken = token
         
         print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
-
+        print(FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.absoluteString)
         performSegue(withIdentifier: "Login Segue", sender: nil)
         
         decisionHandler(.cancel)

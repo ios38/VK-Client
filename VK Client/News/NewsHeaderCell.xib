@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsHeaderCell" rowHeight="50" id="KGk-i7-Jjw" customClass="NewsHeaderCell" customModule="VK_Client" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rCT-1a-yGL" userLabel="NewsImageView">
+                        <rect key="frame" x="10" y="10" width="35" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="rCT-1a-yGL" secondAttribute="height" multiplier="1:1" id="8mp-2L-fxL"/>
+                            <constraint firstAttribute="height" priority="999" constant="40" id="RqY-OW-SpA"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NewsSourceLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aSD-6Y-ESR">
+                        <rect key="frame" x="55" y="10" width="255" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NewsDateLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z6x-mX-qIy">
+                        <rect key="frame" x="55" y="29" width="255" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="rCT-1a-yGL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="39j-xb-C2L"/>
+                    <constraint firstAttribute="trailing" secondItem="aSD-6Y-ESR" secondAttribute="trailing" constant="10" id="3Sg-Us-FX2"/>
+                    <constraint firstItem="aSD-6Y-ESR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="5qQ-li-YRD"/>
+                    <constraint firstItem="Z6x-mX-qIy" firstAttribute="top" secondItem="aSD-6Y-ESR" secondAttribute="bottom" constant="3" id="R1T-Bz-ktH"/>
+                    <constraint firstItem="aSD-6Y-ESR" firstAttribute="leading" secondItem="rCT-1a-yGL" secondAttribute="trailing" constant="10" id="YMT-KX-KDt"/>
+                    <constraint firstAttribute="bottom" secondItem="rCT-1a-yGL" secondAttribute="bottom" constant="5" id="cOW-6r-ivy"/>
+                    <constraint firstAttribute="bottom" secondItem="Z6x-mX-qIy" secondAttribute="bottom" constant="5" id="j54-2P-S7w"/>
+                    <constraint firstAttribute="trailing" secondItem="Z6x-mX-qIy" secondAttribute="trailing" constant="10" id="jEU-eP-Pg3"/>
+                    <constraint firstItem="rCT-1a-yGL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="ncY-WM-jo3"/>
+                    <constraint firstItem="aSD-6Y-ESR" firstAttribute="height" secondItem="Z6x-mX-qIy" secondAttribute="height" id="vbL-22-1LY"/>
+                    <constraint firstItem="Z6x-mX-qIy" firstAttribute="leading" secondItem="rCT-1a-yGL" secondAttribute="trailing" constant="10" id="ydQ-B0-cQU"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="newsDateLabel" destination="Z6x-mX-qIy" id="xJd-KP-Hdl"/>
+                <outlet property="newsImageView" destination="rCT-1a-yGL" id="roK-GW-FUQ"/>
+                <outlet property="newsSourceLabel" destination="aSD-6Y-ESR" id="8dh-dP-AWG"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="155.35714285714286"/>
+        </tableViewCell>
+    </objects>
+</document>
