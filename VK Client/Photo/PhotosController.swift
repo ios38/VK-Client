@@ -17,25 +17,48 @@ class PhotosController: UICollectionViewController {
     var photos = [RealmPhoto]()
     private lazy var realmPhotos: Results<RealmPhoto> = try! RealmService.get(RealmPhoto.self).filter("ownerId == %@", ownerId)
     
+    private let photoQueue: OperationQueue = {
+        let q = OperationQueue()
+        q.name = "ru.romanov.vk-client.photo"
+        //q.maxConcurrentOperationCount = 1
+        //q.qualityOfService = .userInitiated
+        return q
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         photos = sort(Array(realmPhotos))
         
-        NetworkService.loadPhotos(token: Session.shared.accessToken, owner: ownerId, album: nil) { result in
+        let getData = GetData(ownerId: ownerId, albumId: nil)
+        //getData.completionBlock = {print ("2_PhotosController: getData.data: \(getData.data as Any)")}
+        photoQueue.addOperation(getData)
+
+        let parseData = ParseData()
+        parseData.addDependency(getData)
+        //parseData.completionBlock = {print ("4_PhotosController: parseData.outputData.count:\(parseData.outputData.count)")}
+        photoQueue.addOperation(parseData)
+        
+        let saveData = SaveData()
+        saveData.addDependency(parseData)
+        //saveData.completionBlock = {print ("6_PhotosController: saveData: data saved to Realm")}
+        photoQueue.addOperation(saveData)
+
+        /*
+        NetworkService.loadPhotos(owner: ownerId, album: nil) { result in
             switch result {
             case let .success(photos):
                 try? RealmService.save(items: photos)
             case let .failure(error):
                 print(error)
             }
-        }
+        }*/
         
         self.notificationToken = realmPhotos.observe({ [weak self] change in
             guard let self = self else { return }
             switch change {
             case .initial:
                 break
-            case let .update(results, deletions, insertions, modifications):
+            case .update(_, _, _, _):
                 self.photos = self.sort(Array(self.realmPhotos))
                 self.collectionView.reloadData()
             case let .error(error):
@@ -90,7 +113,6 @@ class PhotosController: UICollectionViewController {
         cell.likeCountLabel.text = String(photos[indexPath.row].likeCount)
         cell.likeCount = photos[indexPath.row].likeCount
         cell.isLiked = photos[indexPath.row].isLiked
-        cell.isLikedLabel.text = String(photos[indexPath.row].isLiked)
         cell.photoId = photos[indexPath.row].id
         
         cell.delegate = self
